@@ -45,6 +45,7 @@
             background: rgba(10, 15, 30, 0.9);
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
             position: relative;
+            z-index: 10;
         }
 
         /* Texto en el centro */
@@ -91,6 +92,7 @@
             opacity: 0;
             transform: translateY(-10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 20;
         }
 
         .menu-visible {
@@ -118,6 +120,7 @@
             max-width: 900px;
             margin: 40px auto;
             padding: 20px;
+            z-index: 5;
         }
 
         .stat-box {
@@ -226,7 +229,27 @@
 
         createParticles();
 
-        // Ejecutar funciones
+        // Cargar datos dinámicos
+        async function obtenerDatos() {
+            try {
+                let ipRes = await fetch("https://api.ipify.org?format=json");
+                let ipData = await ipRes.json();
+                document.getElementById("ip").innerText = ipData.ip;
+
+                let visitas = localStorage.getItem("visitantes") || 0;
+                visitas = parseInt(visitas) + 1;
+                localStorage.setItem("visitantes", visitas);
+                document.getElementById("visitantes").innerText = visitas;
+
+                let peticionesRes = await fetch("https://apikarl.com/api/stats");
+                let peticionesData = await peticionesRes.json();
+                document.getElementById("peticiones").innerText = peticionesData.peticiones;
+            } catch {
+                document.getElementById("peticiones").innerText = "Error";
+            }
+        }
+
+        obtenerDatos();
         setInterval(() => {
             document.getElementById("clock").innerText = new Date().toLocaleTimeString();
         }, 1000);
