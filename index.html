@@ -6,23 +6,23 @@
     <title>API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Fondo degradado más oscuro y parecido al GIF */
+        /* Fondo degradado más azul y menos morado */
         body {
-            background: linear-gradient(135deg, #220b44, #0072ff);
+            background: linear-gradient(135deg, #0a0f6d, #0057ff);
             background-attachment: fixed;
             color: white;
         }
 
-        /* Navbar mejorado con tono más oscuro */
+        /* Navbar con mejor integración */
         .navbar {
-            background: rgba(30, 30, 60, 0.9);
-            backdrop-filter: blur(8px);
+            background: rgba(20, 25, 60, 0.9);
+            backdrop-filter: blur(10px);
             transition: background 0.3s ease-in-out;
         }
 
-        /* Menú hamburguesa con color mejorado */
+        /* Menú hamburguesa con color igual a API Karl */
         .menu-icon {
-            color: #00aaff;
+            color: white;
             font-size: 32px;
             transition: transform 0.2s ease-in-out;
         }
@@ -52,6 +52,13 @@
             padding: 15px;
             backdrop-filter: blur(10px);
         }
+
+        /* Texto con degradado azul + morado */
+        .gradient-text {
+            background: linear-gradient(90deg, #00aaff, #7300ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
 <body class="font-sans">
@@ -78,7 +85,7 @@
 
     <!-- Contenido Principal -->
     <div class="text-center mt-20 px-4">
-        <h2 class="text-3xl font-bold text-white">Bienvenido a API Karl</h2>
+        <h2 class="text-3xl font-bold gradient-text">Bienvenido a API Karl</h2>
         <p class="mt-4 text-lg text-gray-300">
             API Karl es una plataforma que ofrece múltiples APIs gratuitas y fáciles de integrar en tus proyectos y bots.
             Desde APIs de diversión hasta herramientas útiles, aquí encontrarás lo que necesitas.
@@ -107,7 +114,7 @@
             if (window.scrollY > 10) {
                 navbar.style.background = "rgba(20, 20, 50, 0.95)";
             } else {
-                navbar.style.background = "rgba(30, 30, 60, 0.9)";
+                navbar.style.background = "rgba(20, 25, 60, 0.9)";
             }
         });
     </script>
