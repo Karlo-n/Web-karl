@@ -7,9 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/night-owl.min.css">
+    
     <style>
         body {
-            background: linear-gradient(135deg, #250055, #38006b);
+            background: linear-gradient(135deg, #1a0033, #29004d);
             background-attachment: fixed;
             color: white;
             font-family: Arial, sans-serif;
@@ -19,37 +20,44 @@
         .navbar {
             background: rgba(20, 25, 60, 0.9);
             backdrop-filter: blur(10px);
-            transition: background 0.3s ease-in-out;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
 
-        /* Menú lateral */
+        /* Sidebar animada */
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
             width: 250px;
             height: 100%;
-            background: rgba(15, 15, 35, 0.95);
+            background: rgba(10, 10, 30, 0.95);
             padding: 20px;
             transition: transform 0.3s ease-in-out;
             overflow-y: auto;
+            border-right: 2px solid #7300ff;
         }
 
         .sidebar a {
             display: block;
-            padding: 10px;
+            padding: 12px;
+            font-size: 1rem;
             color: white;
             text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.2s;
+            border-radius: 5px;
         }
 
         .sidebar a:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(115, 0, 255, 0.3);
         }
 
         .content {
             margin-left: 270px;
             padding: 20px;
+            transition: margin-left 0.3s ease-in-out;
         }
 
         /* Botón de copiar código */
@@ -57,73 +65,82 @@
             background: #444;
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border-radius: 5px;
             cursor: pointer;
-            float: right;
+            transition: background 0.2s;
         }
 
         .copy-btn:hover {
-            background: #666;
+            background: #7300ff;
+        }
+
+        /* Animaciones */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
 
-    <!-- Menú lateral -->
+    <!-- Navbar -->
+    <div class="navbar">📄 Documentación API Karl</div>
+
+    <!-- Sidebar -->
     <div class="sidebar">
-        <h2 class="text-xl font-bold text-blue-400 mb-4">📄 Documentación</h2>
-        <a href="#introduccion">Introducción</a>
-        <a href="#autenticacion">Autenticación</a>
-        <a href="#primeros-pasos">Primeros pasos</a>
-        <a href="#endpoints">Endpoints</a>
-        <a href="#errores">Manejo de errores</a>
-        <a href="#ejemplos">Ejemplos prácticos</a>
-        <a href="#faq">Preguntas frecuentes</a>
+        <h2 class="text-lg font-bold text-purple-400 mb-4">Navegación</h2>
+        <a href="#introduccion">📜 Introducción</a>
+        <a href="#autenticacion">🔑 Autenticación</a>
+        <a href="#primeros-pasos">🚀 Primeros pasos</a>
+        <a href="#endpoints">🔹 Endpoints</a>
+        <a href="#errores">❌ Manejo de errores</a>
+        <a href="#ejemplos">📌 Ejemplos prácticos</a>
+        <a href="#faq">📢 Preguntas frecuentes</a>
     </div>
 
     <!-- Contenido principal -->
     <div class="content">
+        <h1 id="introduccion" class="text-3xl font-bold text-blue-300 fade-in">📜 Introducción</h1>
+        <p class="text-gray-300 mt-2 fade-in">API Karl ofrece múltiples servicios para bots de Discord, desde herramientas de moderación hasta comandos de entretenimiento.</p>
 
-        <h1 class="text-3xl font-bold text-blue-300">📌 Documentación API Karl</h1>
-        <p class="text-gray-300 mt-2">Aprende a usar la API de Karl para integrar potentes funcionalidades en tu bot.</p>
+        <h2 id="autenticacion" class="text-2xl font-bold mt-6 text-purple-300 fade-in">🔑 Autenticación</h2>
+        <p class="text-gray-300 mt-2 fade-in">Para usar la API, necesitas una API Key. Puedes solicitarla en nuestro panel de control.</p>
 
-        <h2 id="introduccion" class="text-2xl font-bold mt-6 text-purple-300">📜 Introducción</h2>
-        <p class="text-gray-300 mt-2">API Karl proporciona múltiples servicios para bots de Discord, permitiendo agregar comandos de diversión, herramientas de moderación y mucho más.</p>
+        <h2 id="primeros-pasos" class="text-2xl font-bold mt-6 text-purple-300 fade-in">🚀 Primeros pasos</h2>
+        <p class="text-gray-300 mt-2 fade-in">Aquí tienes un ejemplo en JavaScript para hacer una petición a la API:</p>
 
-        <h2 id="autenticacion" class="text-2xl font-bold mt-6 text-purple-300">🔑 Autenticación</h2>
-        <p class="text-gray-300 mt-2">Para acceder a la API, necesitas una API Key. Solicítala desde el panel de control.</p>
-
-        <h2 id="primeros-pasos" class="text-2xl font-bold mt-6 text-purple-300">🚀 Primeros pasos</h2>
-        <p class="text-gray-300 mt-2">Aquí tienes un ejemplo en JavaScript:</p>
-
-        <pre><code class="language-js">// Ejemplo de petición en JavaScript
+        <pre class="fade-in"><code class="language-js">// Ejemplo de petición en JavaScript
 fetch('https://apikarl.com/api/ejemplo', {
     headers: { 'Authorization': 'Bearer TU_API_KEY' }
 })
 .then(res => res.json())
 .then(data => console.log(data));</code></pre>
 
-        <button class="copy-btn" onclick="copyCode()">📋 Copiar código</button>
+        <button class="copy-btn fade-in" onclick="copyCode()">📋 Copiar código</button>
 
-        <h2 id="endpoints" class="text-2xl font-bold mt-6 text-purple-300">🔹 Endpoints</h2>
-        <p class="text-gray-300 mt-2">Lista de endpoints disponibles:</p>
-        <ul class="text-gray-300 list-disc pl-6">
+        <h2 id="endpoints" class="text-2xl font-bold mt-6 text-purple-300 fade-in">🔹 Endpoints</h2>
+        <ul class="text-gray-300 list-disc pl-6 fade-in">
             <li><b>/api/memes</b> – Devuelve imágenes de memes.</li>
             <li><b>/api/chistes</b> – Devuelve chistes aleatorios.</li>
-            <li><b>/api/moderacion</b> – Herramientas de moderación para Discord.</li>
+            <li><b>/api/moderacion</b> – Herramientas de moderación.</li>
         </ul>
 
-        <h2 id="errores" class="text-2xl font-bold mt-6 text-purple-300">❌ Manejo de errores</h2>
-        <p class="text-gray-300 mt-2">La API devuelve códigos de error en caso de problemas:</p>
-        <ul class="text-gray-300 list-disc pl-6">
+        <h2 id="errores" class="text-2xl font-bold mt-6 text-purple-300 fade-in">❌ Manejo de errores</h2>
+        <ul class="text-gray-300 list-disc pl-6 fade-in">
             <li><b>400</b> – Solicitud incorrecta.</li>
             <li><b>401</b> – API Key inválida o faltante.</li>
             <li><b>500</b> – Error del servidor.</li>
         </ul>
 
-        <h2 id="faq" class="text-2xl font-bold mt-6 text-purple-300">📢 Preguntas frecuentes</h2>
-        <p class="text-gray-300 mt-2">Aquí respondemos dudas comunes sobre la API.</p>
+        <h2 id="faq" class="text-2xl font-bold mt-6 text-purple-300 fade-in">📢 Preguntas frecuentes</h2>
+        <p class="text-gray-300 mt-2 fade-in">Consulta dudas comunes sobre nuestra API en nuestra comunidad.</p>
     </div>
 
     <script>
@@ -132,6 +149,18 @@ fetch('https://apikarl.com/api/ejemplo', {
             navigator.clipboard.writeText(code);
             alert("Código copiado al portapapeles!");
         }
+
+        // Animaciones de fade-in al hacer scroll
+        const elements = document.querySelectorAll(".fade-in");
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                }
+            });
+        });
+
+        elements.forEach(el => observer.observe(el));
     </script>
 
 </body>
