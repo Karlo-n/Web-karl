@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Karl - Dashboard</title>
+    <title>API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Favicon -->
@@ -16,6 +16,58 @@
             color: white;
             font-family: Arial, sans-serif;
             overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(10, 15, 30, 0.9);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Discord icon */
+        .discord-icon {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        /* Menú */
+        .menu {
+            display: inline-block;
+            position: relative;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: rgba(20, 20, 40, 0.95);
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            min-width: 120px;
+        }
+
+        .menu:hover .menu-content {
+            display: block;
+        }
+
+        .menu-content a {
+            display: block;
+            padding: 5px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .menu-content a:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         /* Contenedor de estadísticas */
@@ -53,8 +105,22 @@
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar flex justify-between items-center">
-        <h1 class="text-white text-xl font-bold">API Karl - Dashboard</h1>
+    <nav class="navbar">
+        <a href="https://discord.gg/KPU72TMdat" target="_blank">
+            <img src="discord.png" alt="Discord" class="discord-icon">
+        </a>
+
+        <div class="menu">
+            =
+            <div class="menu-content">
+                <b>API</b>
+                <a href="#">Utilidades</a>
+                <a href="#">Divertido</a>
+                <b>Info</b>
+                <a href="#">Casa</a>
+                <a href="docs/">Documentación</a>
+            </div>
+        </div>
     </nav>
 
     <!-- Contenedor de estadísticas -->
