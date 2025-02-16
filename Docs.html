@@ -3,136 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentación | API Karl</title>
+    <title>Documentación - API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/night-owl.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #250055, #38006b);
+            background: linear-gradient(135deg, #4b0082, #7300ff);
             background-attachment: fixed;
             color: white;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: rgba(20, 25, 60, 0.9);
-            backdrop-filter: blur(10px);
-            transition: background 0.3s ease-in-out;
-        }
-
-        /* Menú lateral */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            height: 100%;
-            background: rgba(15, 15, 35, 0.95);
-            padding: 20px;
-            transition: transform 0.3s ease-in-out;
-            overflow-y: auto;
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 10px;
-            color: white;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar a:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .content {
-            margin-left: 270px;
-            padding: 20px;
-        }
-
-        /* Botón de copiar código */
-        .copy-btn {
-            background: #444;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            float: right;
-        }
-
-        .copy-btn:hover {
-            background: #666;
+            text-align: center;
+            padding: 50px;
         }
     </style>
 </head>
 <body>
-
-    <!-- Menú lateral -->
-    <div class="sidebar">
-        <h2 class="text-xl font-bold text-blue-400 mb-4">📄 Documentación</h2>
-        <a href="#introduccion">Introducción</a>
-        <a href="#autenticacion">Autenticación</a>
-        <a href="#primeros-pasos">Primeros pasos</a>
-        <a href="#endpoints">Endpoints</a>
-        <a href="#errores">Manejo de errores</a>
-        <a href="#ejemplos">Ejemplos prácticos</a>
-        <a href="#faq">Preguntas frecuentes</a>
-    </div>
-
-    <!-- Contenido principal -->
-    <div class="content">
-
-        <h1 class="text-3xl font-bold text-blue-300">📌 Documentación API Karl</h1>
-        <p class="text-gray-300 mt-2">Aprende a usar la API de Karl para integrar potentes funcionalidades en tu bot.</p>
-
-        <h2 id="introduccion" class="text-2xl font-bold mt-6 text-purple-300">📜 Introducción</h2>
-        <p class="text-gray-300 mt-2">API Karl proporciona múltiples servicios para bots de Discord, permitiendo agregar comandos de diversión, herramientas de moderación y mucho más.</p>
-
-        <h2 id="autenticacion" class="text-2xl font-bold mt-6 text-purple-300">🔑 Autenticación</h2>
-        <p class="text-gray-300 mt-2">Para acceder a la API, necesitas una API Key. Solicítala desde el panel de control.</p>
-
-        <h2 id="primeros-pasos" class="text-2xl font-bold mt-6 text-purple-300">🚀 Primeros pasos</h2>
-        <p class="text-gray-300 mt-2">Aquí tienes un ejemplo en JavaScript:</p>
-
-        <pre><code class="language-js">// Ejemplo de petición en JavaScript
-fetch('https://apikarl.com/api/ejemplo', {
-    headers: { 'Authorization': 'Bearer TU_API_KEY' }
-})
-.then(res => res.json())
-.then(data => console.log(data));</code></pre>
-
-        <button class="copy-btn" onclick="copyCode()">📋 Copiar código</button>
-
-        <h2 id="endpoints" class="text-2xl font-bold mt-6 text-purple-300">🔹 Endpoints</h2>
-        <p class="text-gray-300 mt-2">Lista de endpoints disponibles:</p>
-        <ul class="text-gray-300 list-disc pl-6">
-            <li><b>/api/memes</b> – Devuelve imágenes de memes.</li>
-            <li><b>/api/chistes</b> – Devuelve chistes aleatorios.</li>
-            <li><b>/api/moderacion</b> – Herramientas de moderación para Discord.</li>
-        </ul>
-
-        <h2 id="errores" class="text-2xl font-bold mt-6 text-purple-300">❌ Manejo de errores</h2>
-        <p class="text-gray-300 mt-2">La API devuelve códigos de error en caso de problemas:</p>
-        <ul class="text-gray-300 list-disc pl-6">
-            <li><b>400</b> – Solicitud incorrecta.</li>
-            <li><b>401</b> – API Key inválida o faltante.</li>
-            <li><b>500</b> – Error del servidor.</li>
-        </ul>
-
-        <h2 id="faq" class="text-2xl font-bold mt-6 text-purple-300">📢 Preguntas frecuentes</h2>
-        <p class="text-gray-300 mt-2">Aquí respondemos dudas comunes sobre la API.</p>
-    </div>
-
-    <script>
-        function copyCode() {
-            let code = document.querySelector("pre code").innerText;
-            navigator.clipboard.writeText(code);
-            alert("Código copiado al portapapeles!");
-        }
-    </script>
-
+    <h1 class="text-3xl font-bold">📜 Bienvenido a la Documentación</h1>
+    <p class="mt-4">Aquí encontrarás información sobre cómo utilizar nuestras APIs.</p>
 </body>
 </html>
