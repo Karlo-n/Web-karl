@@ -26,6 +26,17 @@
             padding: 10px 20px;
             background: rgba(10, 15, 30, 0.9);
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        /* Texto en el centro */
+        .navbar-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         /* Discord icon */
@@ -36,27 +47,29 @@
         }
 
         /* Menú */
-        .menu {
-            display: inline-block;
-            position: relative;
-            font-size: 20px;
+        .menu-btn {
+            font-size: 24px;
             cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+        }
+
+        .menu-container {
+            position: relative;
+            display: inline-block;
         }
 
         .menu-content {
             display: none;
             position: absolute;
-            top: 30px;
-            left: 0;
+            top: 40px;
+            right: 0;
             background: rgba(20, 20, 40, 0.95);
             border-radius: 5px;
             padding: 10px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            min-width: 120px;
-        }
-
-        .menu:hover .menu-content {
-            display: block;
+            min-width: 140px;
         }
 
         .menu-content a {
@@ -68,6 +81,10 @@
 
         .menu-content a:hover {
             background: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-container:hover .menu-content {
+            display: block;
         }
 
         /* Contenedor de estadísticas */
@@ -100,6 +117,11 @@
             font-size: 20px;
             font-weight: bold;
         }
+
+        /* Cerrar menú al hacer clic fuera */
+        .menu-hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -110,9 +132,11 @@
             <img src="discord.png" alt="Discord" class="discord-icon">
         </a>
 
-        <div class="menu">
-            =
-            <div class="menu-content">
+        <span class="navbar-title">API Karl</span>
+
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">=</button>
+            <div id="menu" class="menu-content menu-hidden">
                 <b>API</b>
                 <a href="#">Utilidades</a>
                 <a href="#">Divertido</a>
@@ -157,6 +181,22 @@
     </div>
 
     <script>
+        // Toggle menú
+        function toggleMenu() {
+            let menu = document.getElementById("menu");
+            menu.classList.toggle("menu-hidden");
+        }
+
+        // Cerrar menú si se hace clic fuera
+        document.addEventListener("click", function(event) {
+            let menu = document.getElementById("menu");
+            let menuBtn = document.querySelector(".menu-btn");
+
+            if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
+                menu.classList.add("menu-hidden");
+            }
+        });
+
         // Obtener IP real (Solo IPv4)
         async function obtenerIP() {
             try {
