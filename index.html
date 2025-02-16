@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+
     <style>
         /* Fondo morado con mejor degradado */
         body {
@@ -138,16 +142,6 @@
             menu.classList.toggle("menu-hidden");
             menu.classList.toggle("menu-visible");
         }
-
-        // Agregar sombra a la navbar al hacer scroll
-        window.addEventListener("scroll", function () {
-            let navbar = document.getElementById("navbar");
-            if (window.scrollY > 10) {
-                navbar.style.background = "rgba(20, 20, 50, 0.95)";
-            } else {
-                navbar.style.background = "rgba(20, 25, 60, 0.9)";
-            }
-        });
     </script>
 
 </body>
