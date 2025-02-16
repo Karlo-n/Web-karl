@@ -2,11 +2,47 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Karl</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Bienvenido a API Karl</h1>
-    <p>Prueba mis APIs desde aquí.</p>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+    <!-- Barra de navegación -->
+    <nav class="bg-blue-500 p-4 flex justify-between items-center">
+        <h1 class="text-white text-2xl font-bold">API Karl</h1>
+        <button onclick="toggleMenu()" class="text-white text-3xl focus:outline-none">☰</button>
+    </nav>
+
+    <!-- Menú desplegable -->
+    <div id="menu" class="hidden absolute top-16 right-4 bg-white shadow-lg rounded-lg w-48">
+        <ul class="p-4">
+            <li class="text-lg font-semibold border-b pb-2">Categorías</li>
+            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Utilizar</a></li>
+            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Diversión</a></li>
+            <li class="text-lg font-semibold border-b pb-2 mt-4">Otras opciones</li>
+            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Inicio</a></li>
+            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Documentación</a></li>
+            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Reglamento</a></li>
+        </ul>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="text-center mt-10 px-4">
+        <h2 class="text-3xl font-bold text-blue-500">Bienvenido a API Karl</h2>
+        <p class="mt-4 text-lg text-gray-700">
+            Soy Karl, creador de esta plataforma de APIs para bots y proyectos.  
+            Aquí encontrarás diversas APIs para utilizar en tus desarrollos.
+        </p>
+    </div>
+
+    <!-- Script para el menú -->
+    <script>
+        function toggleMenu() {
+            let menu = document.getElementById("menu");
+            menu.classList.toggle("hidden");
+        }
+    </script>
+
 </body>
 </html>
