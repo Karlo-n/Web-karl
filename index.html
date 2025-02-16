@@ -89,8 +89,8 @@
             <li class="mt-2"><a href="#" class="block text-blue-400 hover:text-blue-600">Utilizar</a></li>
             <li class="mt-2"><a href="#" class="block text-blue-400 hover:text-blue-600">Diversión</a></li>
             <li class="text-lg font-semibold border-b pb-2 mt-4">Otras opciones</li>
-            <li class="mt-2"><a href="/" class="block text-blue-400 hover:text-blue-600">Inicio</a></li>
-            <li class="mt-2"><a href="d" class="block text-blue-400 hover:text-blue-600">Documentación</a></li>
+            <li class="mt-2"><a href="#" class="block text-blue-400 hover:text-blue-600">Inicio</a></li>
+            <li class="mt-2"><a href="/docs" class="block text-blue-400 hover:text-blue-600">Documentación</a></li>  <!-- FIX en Documentación -->
             <li class="mt-2"><a href="#" class="block text-blue-400 hover:text-blue-600">Reglamento</a></li>
         </ul>
     </div>
@@ -142,16 +142,6 @@
             menu.classList.toggle("menu-hidden");
             menu.classList.toggle("menu-visible");
         }
-
-        // Agregar sombra a la navbar al hacer scroll
-        window.addEventListener("scroll", function () {
-            let navbar = document.getElementById("navbar");
-            if (window.scrollY > 10) {
-                navbar.style.background = "rgba(20, 20, 50, 0.95)";
-            } else {
-                navbar.style.background = "rgba(20, 25, 60, 0.9)";
-            }
-        });
     </script>
 
 </body>
