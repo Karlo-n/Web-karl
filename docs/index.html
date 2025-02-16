@@ -201,3 +201,14 @@ fetch('https://apikarl.com/api/ejemplo', {
             } else {
                 sidebar.style.transform = "translateX(0px)";
             }
+        }
+
+        function copyCode() {
+            let code = document.querySelector("pre code").innerText;
+            navigator.clipboard.writeText(code);
+            alert("Código copiado al portapapeles!");
+        }
+    </script>
+
+</body>
+</html>
