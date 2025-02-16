@@ -3,212 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentación | API Karl</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/night-owl.min.css">
-    
-    <style>
-        body {
-            background: linear-gradient(135deg, #250055, #38006b);
-            background-attachment: fixed;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            height: 100%;
-            background: rgba(15, 15, 35, 0.95);
-            padding: 20px;
-            transition: transform 0.3s ease-in-out;
-            overflow-y: auto;
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 10px;
-            color: white;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 16px;
-        }
-
-        .sidebar a:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Ajustes responsivos */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-110%);
-                position: fixed;
-                z-index: 1000;
-                width: 200px;
-            }
-            .content {
-                margin-left: 0;
-                padding: 20px;
-            }
-            .menu-btn {
-                display: block;
-            }
-        }
-
-        @media (min-width: 769px) {
-            .menu-btn {
-                display: none;
-            }
-        }
-
-        /* Contenido */
-        .content {
-            margin-left: 270px;
-            padding: 20px;
-            max-width: 900px;
-        }
-
-        .section {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .section h2 {
-            font-size: 22px;
-        }
-
-        .section p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin-top: 8px;
-        }
-
-        /* Botón de menú */
-        .menu-btn {
-            font-size: 24px;
-            padding: 10px;
-            background: #220044;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1100;
-        }
-
-        .menu-btn:active {
-            transform: scale(1.1);
-        }
-
-        /* Copiar código */
-        .copy-btn {
-            background: #444;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            float: right;
-        }
-
-        .copy-btn:hover {
-            background: #666;
-        }
-    </style>
+    <title>API Karl - Bots de Discord</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-    <!-- Botón para abrir menú en móvil -->
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-
-    <!-- Menú lateral -->
-    <div id="sidebar" class="sidebar">
-        <h2 class="text-xl font-bold text-blue-400 mb-4">📄 Documentación</h2>
-        <a href="#introduccion">📜 Introducción</a>
-        <a href="#autenticacion">🔑 Autenticación</a>
-        <a href="#primeros-pasos">🚀 Primeros pasos</a>
-        <a href="#endpoints">🔹 Endpoints</a>
-        <a href="#errores">❌ Manejo de errores</a>
-        <a href="#faq">📢 Preguntas frecuentes</a>
-    </div>
-
-    <!-- Contenido principal -->
-    <div class="content">
-        <h1 class="text-3xl font-bold text-blue-300">📌 Documentación API Karl</h1>
-        <p class="text-gray-300 mt-2">Aprende a usar la API de Karl para integrar potentes funcionalidades en tu bot.</p>
-
-        <div id="introduccion" class="section">
-            <h2 class="text-2xl font-bold text-purple-300">📜 Introducción</h2>
-            <p class="text-gray-300">API Karl proporciona múltiples servicios para bots de Discord, permitiendo agregar comandos de diversión, herramientas de moderación y más.</p>
-        </div>
-
-        <div id="autenticacion" class="section">
-            <h2 class="text-2xl font-bold text-purple-300">🔑 Autenticación</h2>
-            <p class="text-gray-300">Para acceder a la API, necesitas una API Key. Solicítala desde el panel de control.</p>
-        </div>
-
-        <div id="primeros-pasos" class="section">
-            <h2 class="text-2xl font-bold text-purple-300">🚀 Primeros pasos</h2>
-            <p class="text-gray-300">Ejemplo en JavaScript:</p>
-
-            <pre><code class="language-js">// Ejemplo de petición en JavaScript
-fetch('https://apikarl.com/api/ejemplo', {
-    headers: { 'Authorization': 'Bearer TU_API_KEY' }
-})
-.then(res => res.json())
-.then(data => console.log(data));</code></pre>
-
-            <button class="copy-btn" onclick="copyCode()">📋 Copiar código</button>
-        </div>
-
-        <div id="endpoints" class="section">
-            <h2 class="text-2xl font-bold text-purple-300">🔹 Endpoints</h2>
-            <ul class="text-gray-300 list-disc pl-6">
-                <li><b>/api/memes</b> – Devuelve imágenes de memes.</li>
-                <li><b>/api/chistes</b> – Devuelve chistes aleatorios.</li>
-                <li><b>/api/moderacion</b> – Herramientas de moderación.</li>
+    <!-- Menú de Navegación -->
+    <header>
+        <div class="logo">API Karl</div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#caracteristicas">Características</a></li>
+                <li><a href="#documentacion">Documentación</a></li>
+                <li><a href="#contacto">Contacto</a></li>
             </ul>
+        </nav>
+    </header>
+
+    <!-- Sección Hero -->
+    <section id="inicio" class="hero">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1>🚀 Bienvenido a API Karl</h1>
+            <p>Crea bots de Discord útiles y divertidos con nuestra API fácil de usar.</p>
+            <a href="#documentacion" class="btn">Ver Documentación</a>
         </div>
+    </section>
 
-        <div id="errores" class="section">
-            <h2 class="text-2xl font-bold text-purple-300">❌ Manejo de errores</h2>
-            <ul class="text-gray-300 list-disc pl-6">
-                <li><b>400</b> – Solicitud incorrecta.</li>
-                <li><b>401</b> – API Key inválida o faltante.</li>
-                <li><b>500</b> – Error del servidor.</li>
-            </ul>
+    <!-- Sección Características -->
+    <section id="caracteristicas" class="features">
+        <h2>🔹 Características Principales</h2>
+        <div class="feature-list">
+            <div class="feature">
+                <img src="img/speed.png" alt="Velocidad">
+                <h3>⚡ Rápido y Estable</h3>
+                <p>Sin lag, sin esperas. Todo funciona al instante.</p>
+            </div>
+            <div class="feature">
+                <img src="img/fun.png" alt="Diversión">
+                <h3>🎮 Diversión Asegurada</h3>
+                <p>Comandos de juegos, chistes e imágenes.</p>
+            </div>
+            <div class="feature">
+                <img src="img/tools.png" alt="Herramientas">
+                <h3>🛠️ Herramientas Útiles</h3>
+                <p>Desde moderación hasta gestión de roles.</p>
+            </div>
         </div>
+    </section>
 
-        <div id="faq" class="section">
-            <h2 class="text-2xl font-bold text-purple-300">📢 Preguntas frecuentes</h2>
-            <p class="text-gray-300">Consulta dudas comunes sobre la API.</p>
-        </div>
-    </div>
+    <!-- Sección Documentación -->
+    <section id="documentacion" class="docs">
+        <h2>📚 Documentación</h2>
+        <p>Consulta nuestra documentación detallada y empieza a programar tu bot en minutos.</p>
+        <a href="#" class="btn">Ver Documentación</a>
+    </section>
 
-    <script>
-        function toggleMenu() {
-            let sidebar = document.getElementById("sidebar");
-            if (sidebar.style.transform === "translateX(0px)") {
-                sidebar.style.transform = "translateX(-110%)";
-            } else {
-                sidebar.style.transform = "translateX(0px)";
-            }
-        }
+    <!-- Sección Contacto -->
+    <section id="contacto" class="contact">
+        <h2>📩 Contacto</h2>
+        <p>¿Tienes preguntas? Contáctanos para obtener ayuda.</p>
+        <form>
+            <input type="email" placeholder="Tu correo" required>
+            <textarea placeholder="Tu mensaje"></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
 
-        function copyCode() {
-            let code = document.querySelector("pre code").innerText;
-            navigator.clipboard.writeText(code);
-            alert("Código copiado al portapapeles!");
-        }
-    </script>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 API Karl - Todos los derechos reservados.</p>
+    </footer>
 
 </body>
 </html>
