@@ -8,7 +8,7 @@
     <style>
         /* Animación del menú */
         .menu-hidden {
-            transform: translateX(100%);
+            transform: translateX(110%);
             transition: transform 0.3s ease-in-out;
         }
         .menu-visible {
@@ -21,6 +21,14 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             transition: box-shadow 0.3s ease-in-out;
         }
+
+        /* Ajustar el menú */
+        #menu {
+            top: 60px;
+            right: 0;
+            width: 220px;
+            height: auto;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
@@ -32,9 +40,9 @@
     </nav>
 
     <!-- Menú desplegable -->
-    <div id="menu" class="menu-hidden fixed top-0 right-0 h-full w-64 bg-white shadow-lg p-4">
-        <button onclick="toggleMenu()" class="text-black text-3xl absolute top-4 right-4">✕</button>
-        <ul class="mt-10">
+    <div id="menu" class="menu-hidden fixed bg-white shadow-lg p-4 rounded-lg">
+        <button onclick="toggleMenu()" class="text-black text-2xl absolute top-2 right-3">✕</button>
+        <ul class="mt-8">
             <li class="text-lg font-semibold border-b pb-2">Categorías</li>
             <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Utilizar</a></li>
             <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Diversión</a></li>
@@ -56,9 +64,9 @@
             Explora nuestras categorías, revisa la documentación y comienza a usar nuestras APIs hoy mismo. ¡Totalmente gratis y sin complicaciones!
         </p>
 
-        <!-- Imagen -->
+        <!-- Imagen GIF -->
         <div class="flex justify-center mt-6">
-            <img src="https://source.unsplash.com/400x250/?technology,code" alt="APIs" class="rounded-lg shadow-lg">
+            <img src="https://i.pinimg.com/originals/e7/ab/03/e7ab03bac23eb9b3f5bd67ba27ca7b08.gif" alt="APIs GIF" class="rounded-lg shadow-lg w-80">
         </div>
     </div>
 
