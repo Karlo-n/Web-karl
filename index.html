@@ -6,14 +6,33 @@
     <title>API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Fondo degradado de morado a azul */
+        /* Fondo degradado más oscuro y parecido al GIF */
         body {
-            background: linear-gradient(135deg, #6a0dad, #007bff);
+            background: linear-gradient(135deg, #220b44, #0072ff);
             background-attachment: fixed;
             color: white;
         }
 
-        /* Animación del menú */
+        /* Navbar mejorado con tono más oscuro */
+        .navbar {
+            background: rgba(30, 30, 60, 0.9);
+            backdrop-filter: blur(8px);
+            transition: background 0.3s ease-in-out;
+        }
+
+        /* Menú hamburguesa con color mejorado */
+        .menu-icon {
+            color: #00aaff;
+            font-size: 32px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* Efecto al tocar el botón */
+        .menu-icon:active {
+            transform: scale(1.1);
+        }
+
+        /* Menú animado */
         .menu-hidden {
             transform: translateX(110%);
             transition: transform 0.3s ease-in-out;
@@ -23,51 +42,48 @@
             transition: transform 0.3s ease-in-out;
         }
 
-        /* Sombra al hacer scroll */
-        .nav-shadow {
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            transition: box-shadow 0.3s ease-in-out;
-        }
-
-        /* Ajustar el menú */
+        /* Ajustes del menú */
         #menu {
-            top: 60px;
-            right: 0;
-            width: 220px;
-            height: auto;
+            top: 65px;
+            right: 10px;
+            width: 230px;
+            background: rgba(20, 20, 40, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
         }
     </style>
 </head>
 <body class="font-sans">
 
-    <!-- Barra de navegación -->
-    <nav id="navbar" class="bg-blue-500 p-4 flex justify-between items-center fixed top-0 w-full z-50">
+    <!-- Navbar con nuevo color -->
+    <nav id="navbar" class="navbar p-4 flex justify-between items-center fixed top-0 w-full z-50 shadow-md">
         <h1 class="text-white text-2xl font-bold">API Karl</h1>
-        <button onclick="toggleMenu()" class="text-white text-3xl focus:outline-none">☰</button>
+        <button onclick="toggleMenu()" class="menu-icon focus:outline-none">☰</button>
     </nav>
 
     <!-- Menú desplegable -->
-    <div id="menu" class="menu-hidden fixed bg-white shadow-lg p-4 rounded-lg">
-        <button onclick="toggleMenu()" class="text-black text-2xl absolute top-2 right-3">✕</button>
-        <ul class="mt-8 text-black">
+    <div id="menu" class="menu-hidden fixed shadow-lg">
+        <button onclick="toggleMenu()" class="text-gray-300 text-2xl absolute top-2 right-3">✕</button>
+        <ul class="mt-8 text-gray-200">
             <li class="text-lg font-semibold border-b pb-2">Categorías</li>
-            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Utilizar</a></li>
-            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Diversión</a></li>
+            <li class="mt-2"><a href="#" class="block text-blue-400 hover:text-blue-600">Utilizar</a></li>
+            <li class="mt-2"><a href="#" class="block text-blue-400 hover:text-blue-600">Diversión</a></li>
             <li class="text-lg font-semibold border-b pb-2 mt-4">Otras opciones</li>
-            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Inicio</a></li>
-            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Documentación</a></li>
-            <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Reglamento</a></li>
+            <li class="mt-2"><a href="#" class="block text-blue-400 hover:text-blue-600">Inicio</a></li>
+            <li class="mt-2"><a href="#" class="block text-blue-400 hover:text-blue-600">Documentación</a></li>
+            <li class="mt-2"><a href="#" class="block text-blue-400 hover:text-blue-600">Reglamento</a></li>
         </ul>
     </div>
 
     <!-- Contenido Principal -->
     <div class="text-center mt-20 px-4">
         <h2 class="text-3xl font-bold text-white">Bienvenido a API Karl</h2>
-        <p class="mt-4 text-lg text-gray-200">
+        <p class="mt-4 text-lg text-gray-300">
             API Karl es una plataforma que ofrece múltiples APIs gratuitas y fáciles de integrar en tus proyectos y bots.
             Desde APIs de diversión hasta herramientas útiles, aquí encontrarás lo que necesitas.
         </p>
-        <p class="mt-4 text-gray-300">
+        <p class="mt-4 text-gray-400">
             Explora nuestras categorías, revisa la documentación y comienza a usar nuestras APIs hoy mismo. ¡Totalmente gratis y sin complicaciones!
         </p>
 
@@ -89,9 +105,9 @@
         window.addEventListener("scroll", function () {
             let navbar = document.getElementById("navbar");
             if (window.scrollY > 10) {
-                navbar.classList.add("nav-shadow");
+                navbar.style.background = "rgba(20, 20, 50, 0.95)";
             } else {
-                navbar.classList.remove("nav-shadow");
+                navbar.style.background = "rgba(30, 30, 60, 0.9)";
             }
         });
     </script>
