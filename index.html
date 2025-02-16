@@ -5,18 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Animación del menú */
+        .menu-hidden {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .menu-visible {
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Sombra al hacer scroll */
+        .nav-shadow {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
 
     <!-- Barra de navegación -->
-    <nav class="bg-blue-500 p-4 flex justify-between items-center">
+    <nav id="navbar" class="bg-blue-500 p-4 flex justify-between items-center fixed top-0 w-full z-50">
         <h1 class="text-white text-2xl font-bold">API Karl</h1>
         <button onclick="toggleMenu()" class="text-white text-3xl focus:outline-none">☰</button>
     </nav>
 
     <!-- Menú desplegable -->
-    <div id="menu" class="hidden absolute top-16 right-4 bg-white shadow-lg rounded-lg w-48">
-        <ul class="p-4">
+    <div id="menu" class="menu-hidden fixed top-0 right-0 h-full w-64 bg-white shadow-lg p-4">
+        <button onclick="toggleMenu()" class="text-black text-3xl absolute top-4 right-4">✕</button>
+        <ul class="mt-10">
             <li class="text-lg font-semibold border-b pb-2">Categorías</li>
             <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Utilizar</a></li>
             <li class="mt-2"><a href="#" class="block text-blue-600 hover:text-blue-800">Diversión</a></li>
@@ -28,20 +46,39 @@
     </div>
 
     <!-- Contenido Principal -->
-    <div class="text-center mt-10 px-4">
+    <div class="text-center mt-20 px-4">
         <h2 class="text-3xl font-bold text-blue-500">Bienvenido a API Karl</h2>
         <p class="mt-4 text-lg text-gray-700">
-            Soy Karl, creador de esta plataforma de APIs para bots y proyectos.  
-            Aquí encontrarás diversas APIs para utilizar en tus desarrollos.
+            API Karl es una plataforma que ofrece múltiples APIs gratuitas y fáciles de integrar en tus proyectos y bots.
+            Desde APIs de diversión hasta herramientas útiles, aquí encontrarás lo que necesitas.
         </p>
+        <p class="mt-4 text-gray-600">
+            Explora nuestras categorías, revisa la documentación y comienza a usar nuestras APIs hoy mismo. ¡Totalmente gratis y sin complicaciones!
+        </p>
+
+        <!-- Imagen -->
+        <div class="flex justify-center mt-6">
+            <img src="https://source.unsplash.com/400x250/?technology,code" alt="APIs" class="rounded-lg shadow-lg">
+        </div>
     </div>
 
-    <!-- Script para el menú -->
+    <!-- Script para el menú y efectos -->
     <script>
         function toggleMenu() {
             let menu = document.getElementById("menu");
-            menu.classList.toggle("hidden");
+            menu.classList.toggle("menu-hidden");
+            menu.classList.toggle("menu-visible");
         }
+
+        // Agregar sombra a la navbar al hacer scroll
+        window.addEventListener("scroll", function () {
+            let navbar = document.getElementById("navbar");
+            if (window.scrollY > 10) {
+                navbar.classList.add("nav-shadow");
+            } else {
+                navbar.classList.remove("nav-shadow");
+            }
+        });
     </script>
 
 </body>
