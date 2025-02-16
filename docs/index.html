@@ -26,18 +26,19 @@
             font-weight: bold;
         }
 
-        /* Sidebar animada */
+        /* Sidebar con mejor diseño */
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 250px;
+            width: 270px;
             height: 100%;
-            background: rgba(10, 10, 30, 0.95);
+            background: rgba(10, 10, 30, 0.98);
             padding: 20px;
             transition: transform 0.3s ease-in-out;
             overflow-y: auto;
-            border-right: 2px solid #7300ff;
+            border-right: 3px solid #7300ff;
+            border-radius: 0 10px 10px 0;
         }
 
         .sidebar a {
@@ -46,18 +47,33 @@
             font-size: 1rem;
             color: white;
             text-decoration: none;
-            transition: background 0.2s;
-            border-radius: 5px;
+            transition: background 0.3s ease-in-out;
+            border-radius: 8px;
+            margin: 5px 0;
         }
 
         .sidebar a:hover {
-            background: rgba(115, 0, 255, 0.3);
+            background: rgba(115, 0, 255, 0.4);
         }
 
         .content {
-            margin-left: 270px;
-            padding: 20px;
+            margin-left: 300px;
+            padding: 30px;
             transition: margin-left 0.3s ease-in-out;
+        }
+
+        /* Tarjetas para organizar contenido */
+        .box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
         }
 
         /* Botón de copiar código */
@@ -75,7 +91,7 @@
             background: #7300ff;
         }
 
-        /* Animaciones */
+        /* Animaciones suaves */
         .fade-in {
             opacity: 0;
             transform: translateY(10px);
@@ -93,9 +109,9 @@
     <!-- Navbar -->
     <div class="navbar">📄 Documentación API Karl</div>
 
-    <!-- Sidebar -->
+    <!-- Sidebar con diseño mejorado -->
     <div class="sidebar">
-        <h2 class="text-lg font-bold text-purple-400 mb-4">Navegación</h2>
+        <h2 class="text-lg font-bold text-purple-400 mb-4">📑 Navegación</h2>
         <a href="#introduccion">📜 Introducción</a>
         <a href="#autenticacion">🔑 Autenticación</a>
         <a href="#primeros-pasos">🚀 Primeros pasos</a>
@@ -105,42 +121,54 @@
         <a href="#faq">📢 Preguntas frecuentes</a>
     </div>
 
-    <!-- Contenido principal -->
+    <!-- Contenido principal con mejor distribución -->
     <div class="content">
-        <h1 id="introduccion" class="text-3xl font-bold text-blue-300 fade-in">📜 Introducción</h1>
-        <p class="text-gray-300 mt-2 fade-in">API Karl ofrece múltiples servicios para bots de Discord, desde herramientas de moderación hasta comandos de entretenimiento.</p>
+        <div class="box fade-in">
+            <h1 id="introduccion" class="text-3xl font-bold text-blue-300">📜 Introducción</h1>
+            <p class="text-gray-300 mt-2">API Karl ofrece múltiples servicios para bots de Discord, desde herramientas de moderación hasta comandos de entretenimiento.</p>
+        </div>
 
-        <h2 id="autenticacion" class="text-2xl font-bold mt-6 text-purple-300 fade-in">🔑 Autenticación</h2>
-        <p class="text-gray-300 mt-2 fade-in">Para usar la API, necesitas una API Key. Puedes solicitarla en nuestro panel de control.</p>
+        <div class="box fade-in">
+            <h2 id="autenticacion" class="text-2xl font-bold text-purple-300">🔑 Autenticación</h2>
+            <p class="text-gray-300 mt-2">Para usar la API, necesitas una API Key. Puedes solicitarla en nuestro panel de control.</p>
+        </div>
 
-        <h2 id="primeros-pasos" class="text-2xl font-bold mt-6 text-purple-300 fade-in">🚀 Primeros pasos</h2>
-        <p class="text-gray-300 mt-2 fade-in">Aquí tienes un ejemplo en JavaScript para hacer una petición a la API:</p>
+        <div class="box fade-in">
+            <h2 id="primeros-pasos" class="text-2xl font-bold text-purple-300">🚀 Primeros pasos</h2>
+            <p class="text-gray-300 mt-2">Aquí tienes un ejemplo en JavaScript para hacer una petición a la API:</p>
 
-        <pre class="fade-in"><code class="language-js">// Ejemplo de petición en JavaScript
+            <pre><code class="language-js">// Ejemplo de petición en JavaScript
 fetch('https://apikarl.com/api/ejemplo', {
     headers: { 'Authorization': 'Bearer TU_API_KEY' }
 })
 .then(res => res.json())
 .then(data => console.log(data));</code></pre>
 
-        <button class="copy-btn fade-in" onclick="copyCode()">📋 Copiar código</button>
+            <button class="copy-btn" onclick="copyCode()">📋 Copiar código</button>
+        </div>
 
-        <h2 id="endpoints" class="text-2xl font-bold mt-6 text-purple-300 fade-in">🔹 Endpoints</h2>
-        <ul class="text-gray-300 list-disc pl-6 fade-in">
-            <li><b>/api/memes</b> – Devuelve imágenes de memes.</li>
-            <li><b>/api/chistes</b> – Devuelve chistes aleatorios.</li>
-            <li><b>/api/moderacion</b> – Herramientas de moderación.</li>
-        </ul>
+        <div class="box fade-in">
+            <h2 id="endpoints" class="text-2xl font-bold text-purple-300">🔹 Endpoints</h2>
+            <ul class="text-gray-300 list-disc pl-6">
+                <li><b>/api/memes</b> – Devuelve imágenes de memes.</li>
+                <li><b>/api/chistes</b> – Devuelve chistes aleatorios.</li>
+                <li><b>/api/moderacion</b> – Herramientas de moderación.</li>
+            </ul>
+        </div>
 
-        <h2 id="errores" class="text-2xl font-bold mt-6 text-purple-300 fade-in">❌ Manejo de errores</h2>
-        <ul class="text-gray-300 list-disc pl-6 fade-in">
-            <li><b>400</b> – Solicitud incorrecta.</li>
-            <li><b>401</b> – API Key inválida o faltante.</li>
-            <li><b>500</b> – Error del servidor.</li>
-        </ul>
+        <div class="box fade-in">
+            <h2 id="errores" class="text-2xl font-bold text-purple-300">❌ Manejo de errores</h2>
+            <ul class="text-gray-300 list-disc pl-6">
+                <li><b>400</b> – Solicitud incorrecta.</li>
+                <li><b>401</b> – API Key inválida o faltante.</li>
+                <li><b>500</b> – Error del servidor.</li>
+            </ul>
+        </div>
 
-        <h2 id="faq" class="text-2xl font-bold mt-6 text-purple-300 fade-in">📢 Preguntas frecuentes</h2>
-        <p class="text-gray-300 mt-2 fade-in">Consulta dudas comunes sobre nuestra API en nuestra comunidad.</p>
+        <div class="box fade-in">
+            <h2 id="faq" class="text-2xl font-bold text-purple-300">📢 Preguntas frecuentes</h2>
+            <p class="text-gray-300 mt-2">Consulta dudas comunes sobre nuestra API en nuestra comunidad.</p>
+        </div>
     </div>
 
     <script>
@@ -150,7 +178,7 @@ fetch('https://apikarl.com/api/ejemplo', {
             alert("Código copiado al portapapeles!");
         }
 
-        // Animaciones de fade-in al hacer scroll
+        // Animaciones suaves al hacer scroll
         const elements = document.querySelectorAll(".fade-in");
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
