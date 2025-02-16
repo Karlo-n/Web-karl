@@ -3,79 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Karl - Bots de Discord</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <title>Documentación | API Karl</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <style>
+        body {
+            background: #0a0f1a;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menú superior */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(10, 10, 20, 0.95);
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .menu {
+            background: rgba(20, 20, 40, 0.9);
+            position: absolute;
+            right: 10px;
+            top: 60px;
+            width: 200px;
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+        }
+
+        .menu a {
+            display: block;
+            padding: 8px;
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+
+        .section {
+            background: rgba(20, 25, 40, 0.8);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animaciones de entrada */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .img-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .img-container img {
+            width: 100px;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Menú de Navegación -->
-    <header>
-        <div class="logo">API Karl</div>
-        <nav>
+    <!-- Menú superior -->
+    <nav class="navbar">
+        <a href="https://discord.gg/KPU72TMdat">
+            <img src="discord.png" alt="Discord" width="40">
+        </a>
+        <h1 class="text-xl font-bold">API Karl</h1>
+        <button onclick="toggleMenu()">=</button>
+    </nav>
+
+    <!-- Menú desplegable -->
+    <div id="menu" class="menu">
+        <a href="#">API</a>
+        <a href="#">Utilidades</a>
+        <a href="#">Divertido</a>
+        <a href="#">Casa</a>
+        <a href="docs.html">Documentación</a>
+    </div>
+
+    <!-- Contenido de la documentación -->
+    <div class="content">
+        <div class="section fade-in">
+            <h2 class="text-xl font-bold">🔑 Autenticación</h2>
+            <p>Para acceder a la API, necesitas una API Key. Solicítala desde el panel de control.</p>
+            <div class="img-container">
+                <img src="candado.png" alt="Autenticación">
+            </div>
+        </div>
+
+        <div class="section fade-in">
+            <h2 class="text-xl font-bold">🔹 Endpoints</h2>
+            <p>Lista de endpoints disponibles:</p>
             <ul>
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#caracteristicas">Características</a></li>
-                <li><a href="#documentacion">Documentación</a></li>
-                <li><a href="#contacto">Contacto</a></li>
+                <li><b>/api/memes</b> – Devuelve imágenes de memes.</li>
+                <li><b>/api/chistes</b> – Devuelve chistes aleatorios.</li>
+                <li><b>/api/moderacion</b> – Herramientas de moderación para Discord.</li>
             </ul>
-        </nav>
-    </header>
-
-    <!-- Sección Hero -->
-    <section id="inicio" class="hero">
-        <div class="overlay"></div>
-        <div class="content">
-            <h1>🚀 Bienvenido a API Karl</h1>
-            <p>Crea bots de Discord útiles y divertidos con nuestra API fácil de usar.</p>
-            <a href="#documentacion" class="btn">Ver Documentación</a>
-        </div>
-    </section>
-
-    <!-- Sección Características -->
-    <section id="caracteristicas" class="features">
-        <h2>🔹 Características Principales</h2>
-        <div class="feature-list">
-            <div class="feature">
-                <img src="img/speed.png" alt="Velocidad">
-                <h3>⚡ Rápido y Estable</h3>
-                <p>Sin lag, sin esperas. Todo funciona al instante.</p>
-            </div>
-            <div class="feature">
-                <img src="img/fun.png" alt="Diversión">
-                <h3>🎮 Diversión Asegurada</h3>
-                <p>Comandos de juegos, chistes e imágenes.</p>
-            </div>
-            <div class="feature">
-                <img src="img/tools.png" alt="Herramientas">
-                <h3>🛠️ Herramientas Útiles</h3>
-                <p>Desde moderación hasta gestión de roles.</p>
+            <div class="img-container">
+                <img src="endpoint.png" alt="Endpoints">
             </div>
         </div>
-    </section>
 
-    <!-- Sección Documentación -->
-    <section id="documentacion" class="docs">
-        <h2>📚 Documentación</h2>
-        <p>Consulta nuestra documentación detallada y empieza a programar tu bot en minutos.</p>
-        <a href="#" class="btn">Ver Documentación</a>
-    </section>
+        <div class="section fade-in">
+            <h2 class="text-xl font-bold">❌ Manejo de errores</h2>
+            <p>La API devuelve códigos de error en caso de problemas:</p>
+            <ul>
+                <li><b>400</b> – Solicitud incorrecta.</li>
+                <li><b>401</b> – API Key inválida o faltante.</li>
+                <li><b>500</b> – Error del servidor.</li>
+            </ul>
+            <div class="img-container">
+                <img src="error.png" alt="Errores">
+            </div>
+        </div>
+    </div>
 
-    <!-- Sección Contacto -->
-    <section id="contacto" class="contact">
-        <h2>📩 Contacto</h2>
-        <p>¿Tienes preguntas? Contáctanos para obtener ayuda.</p>
-        <form>
-            <input type="email" placeholder="Tu correo" required>
-            <textarea placeholder="Tu mensaje"></textarea>
-            <button type="submit">Enviar</button>
-        </form>
-    </section>
+    <script>
+        function toggleMenu() {
+            let menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 API Karl - Todos los derechos reservados.</p>
-    </footer>
+        // Animaciones al hacer scroll
+        document.addEventListener("scroll", function() {
+            let sections = document.querySelectorAll(".fade-in");
+            sections.forEach(section => {
+                let position = section.getBoundingClientRect().top;
+                let windowHeight = window.innerHeight;
+                if (position < windowHeight - 100) {
+                    section.classList.add("visible");
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
