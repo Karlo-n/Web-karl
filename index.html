@@ -18,28 +18,6 @@
             overflow-x: hidden;
         }
 
-        /* Animación de copos de nieve */
-        .snowflake {
-            position: absolute;
-            color: #4dc0ff;
-            font-size: 12px;
-            opacity: 0.8;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(-10px); opacity: 0.8; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-
-        /* Navbar */
-        .navbar {
-            background: rgba(20, 25, 40, 0.9);
-            backdrop-filter: blur(10px);
-            transition: background 0.3s ease-in-out;
-            padding: 10px;
-        }
-
         /* Contenedor de estadísticas */
         .stats-container {
             display: grid;
@@ -111,7 +89,7 @@
     </div>
 
     <script>
-        // Obtener IP del usuario
+        // Obtener IP real del usuario
         async function obtenerIP() {
             try {
                 let respuesta = await fetch("https://api64.ipify.org?format=json");
@@ -122,10 +100,20 @@
             }
         }
 
-        // Simulación de visitantes y peticiones
-        function obtenerEstadisticas() {
-            document.getElementById("visitantes").innerText = Math.floor(Math.random() * 10000);
-            document.getElementById("peticiones").innerText = Math.floor(Math.random() * 1000000);
+        // Contador de visitantes reales con localStorage
+        function contarVisitantes() {
+            let visitantes = localStorage.getItem("visitantes") || 0;
+            visitantes = parseInt(visitantes) + 1;
+            localStorage.setItem("visitantes", visitantes);
+            document.getElementById("visitantes").innerText = visitantes;
+        }
+
+        // Contador de peticiones (puede enlazarse con un backend real)
+        function contarPeticiones() {
+            let peticiones = localStorage.getItem("peticiones") || 0;
+            peticiones = parseInt(peticiones) + 1;
+            localStorage.setItem("peticiones", peticiones);
+            document.getElementById("peticiones").innerText = peticiones;
         }
 
         // Reloj en tiempo real
@@ -137,9 +125,10 @@
             document.getElementById("clock").innerText = `${hora}:${minutos}:${segundos}`;
         }
 
-        // Llamadas iniciales
+        // Ejecutar funciones
         obtenerIP();
-        obtenerEstadisticas();
+        contarVisitantes();
+        contarPeticiones();
         setInterval(actualizarReloj, 1000);
     </script>
 
