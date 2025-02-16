@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <style>
-        /* Fondo oscuro con copos de nieve */
+        /* Fondo oscuro */
         body {
             background: #0a0f1a;
             color: white;
@@ -23,7 +23,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 40px auto;
             padding: 20px;
         }
@@ -89,10 +89,10 @@
     </div>
 
     <script>
-        // Obtener IP real del usuario
+        // Obtener IP real (Solo IPv4)
         async function obtenerIP() {
             try {
-                let respuesta = await fetch("https://api64.ipify.org?format=json");
+                let respuesta = await fetch("https://api.ipify.org?format=json");
                 let data = await respuesta.json();
                 document.getElementById("ip").innerText = data.ip;
             } catch (error) {
@@ -100,7 +100,7 @@
             }
         }
 
-        // Contador de visitantes reales con localStorage
+        // Contador de visitantes reales (se guarda en localStorage)
         function contarVisitantes() {
             let visitantes = localStorage.getItem("visitantes") || 0;
             visitantes = parseInt(visitantes) + 1;
@@ -108,12 +108,15 @@
             document.getElementById("visitantes").innerText = visitantes;
         }
 
-        // Contador de peticiones (puede enlazarse con un backend real)
-        function contarPeticiones() {
-            let peticiones = localStorage.getItem("peticiones") || 0;
-            peticiones = parseInt(peticiones) + 1;
-            localStorage.setItem("peticiones", peticiones);
-            document.getElementById("peticiones").innerText = peticiones;
+        // Contador de peticiones reales (debería integrarse con el backend)
+        async function contarPeticiones() {
+            try {
+                let respuesta = await fetch("https://apikarl.com/api/stats");
+                let data = await respuesta.json();
+                document.getElementById("peticiones").innerText = data.peticiones;
+            } catch (error) {
+                document.getElementById("peticiones").innerText = "Error";
+            }
         }
 
         // Reloj en tiempo real
