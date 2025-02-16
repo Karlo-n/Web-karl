@@ -40,125 +40,107 @@
             padding: 10px;
         }
 
-        /* Menú lateral */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            height: 100%;
-            background: rgba(15, 15, 25, 0.95);
+        /* Contenedor de estadísticas */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 40px auto;
             padding: 20px;
-            transition: transform 0.3s ease-in-out;
-            transform: translateX(-110%);
         }
 
-        .menu-visible {
-            transform: translateX(0);
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 10px;
-            color: white;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Tarjetas de información */
-        .info-card {
-            background: rgba(30, 40, 60, 0.9);
-            padding: 15px;
-            border-radius: 8px;
+        .stat-box {
+            background: rgba(20, 25, 40, 0.9);
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-box img {
+            width: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* Reloj */
+        .clock {
+            font-size: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
-<body class="font-sans">
-
-    <!-- Copos de nieve -->
-    <script>
-        function createSnowflakes() {
-            for (let i = 0; i < 20; i++) {
-                let snowflake = document.createElement("div");
-                snowflake.innerHTML = "❄";
-                snowflake.classList.add("snowflake");
-                snowflake.style.left = Math.random() * 100 + "vw";
-                snowflake.style.animationDuration = Math.random() * 3 + 2 + "s";
-                snowflake.style.fontSize = Math.random() * 8 + 10 + "px";
-                document.body.appendChild(snowflake);
-            }
-        }
-        createSnowflakes();
-    </script>
+<body>
 
     <!-- Navbar -->
-    <nav class="navbar flex justify-between items-center fixed top-0 w-full z-50 shadow-md">
-        <h1 class="text-white text-2xl font-bold">API Karl</h1>
-        <button onclick="toggleMenu()" class="text-white text-3xl">☰</button>
+    <nav class="navbar flex justify-between items-center">
+        <h1 class="text-white text-xl font-bold">API Karl - Dashboard</h1>
     </nav>
 
-    <!-- Menú lateral -->
-    <div id="sidebar" class="sidebar fixed top-0">
-        <a href="Docs">📄 Documentación</a>
-        <a href="#">💬 Soporte</a>
-        <a href="#">🔗 API Keys</a>
-        <a href="#">📜 Términos</a>
-    </div>
-
-    <!-- Contenido principal -->
-    <div class="container mx-auto mt-20 p-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="info-card">
-                <p class="text-blue-400">📡 Tu IP</p>
-                <p class="text-xl font-bold">187.189.148.131</p>
-            </div>
-            <div class="info-card">
-                <p class="text-blue-400">🕒 Reloj</p>
-                <p class="text-xl font-bold" id="clock">15:00:49</p>
-            </div>
-            <div class="info-card">
-                <p class="text-blue-400">👀 Visitantes</p>
-                <p class="text-xl font-bold">7797</p>
-            </div>
-            <div class="info-card">
-                <p class="text-blue-400">📊 Peticiones</p>
-                <p class="text-xl font-bold">942,949</p>
-            </div>
+    <!-- Contenedor de estadísticas -->
+    <div class="stats-container">
+        
+        <!-- Dirección IP -->
+        <div class="stat-box">
+            <img src="antena.png" alt="Antena">
+            <h2 class="text-blue-400">Tu IP</h2>
+            <p id="ip" class="text-gray-300">Cargando...</p>
         </div>
 
-        <div class="mt-6">
-            <h2 class="text-xl font-bold text-blue-400">🆕 Últimas Actualizaciones</h2>
-            <ul class="mt-2 text-gray-300">
-                <li>➕ Agregada nueva categoría de memes</li>
-                <li>➕ Mejorado el rendimiento de la API</li>
-                <li>➕ Soporte para más lenguajes</li>
-            </ul>
+        <!-- Visitantes -->
+        <div class="stat-box">
+            <img src="ojo.png" alt="Visitantes">
+            <h2 class="text-blue-400">Visitantes</h2>
+            <p id="visitantes" class="text-gray-300">Cargando...</p>
         </div>
 
-        <div class="mt-6">
-            <h2 class="text-xl font-bold text-blue-400">🙌 Agradecimientos</h2>
-            <ul class="mt-2 text-gray-300">
-                <li>💙 Usuarios de API Karl</li>
-                <li>💻 Desarrolladores</li>
-                <li>📡 Servidores confiables</li>
-            </ul>
+        <!-- Peticiones -->
+        <div class="stat-box">
+            <img src="estadisticas.png" alt="Peticiones">
+            <h2 class="text-blue-400">Peticiones</h2>
+            <p id="peticiones" class="text-gray-300">Cargando...</p>
         </div>
+
+        <!-- Reloj -->
+        <div class="stat-box">
+            <img src="reloj.png" alt="Reloj">
+            <h2 class="text-blue-400">Hora actual</h2>
+            <p id="clock" class="clock"></p>
+        </div>
+
     </div>
 
     <script>
-        function toggleMenu() {
-            let sidebar = document.getElementById("sidebar");
-            sidebar.classList.toggle("menu-visible");
+        // Obtener IP del usuario
+        async function obtenerIP() {
+            try {
+                let respuesta = await fetch("https://api64.ipify.org?format=json");
+                let data = await respuesta.json();
+                document.getElementById("ip").innerText = data.ip;
+            } catch (error) {
+                document.getElementById("ip").innerText = "No disponible";
+            }
         }
 
-        function updateClock() {
-            let now = new Date();
-            let timeString = now.toLocaleTimeString();
-            document.getElementById("clock").innerText = timeString;
+        // Simulación de visitantes y peticiones
+        function obtenerEstadisticas() {
+            document.getElementById("visitantes").innerText = Math.floor(Math.random() * 10000);
+            document.getElementById("peticiones").innerText = Math.floor(Math.random() * 1000000);
         }
-        setInterval(updateClock, 1000);
+
+        // Reloj en tiempo real
+        function actualizarReloj() {
+            let ahora = new Date();
+            let hora = ahora.getHours().toString().padStart(2, "0");
+            let minutos = ahora.getMinutes().toString().padStart(2, "0");
+            let segundos = ahora.getSeconds().toString().padStart(2, "0");
+            document.getElementById("clock").innerText = `${hora}:${minutos}:${segundos}`;
+        }
+
+        // Llamadas iniciales
+        obtenerIP();
+        obtenerEstadisticas();
+        setInterval(actualizarReloj, 1000);
     </script>
 
 </body>
