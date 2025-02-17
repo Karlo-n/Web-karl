@@ -22,7 +22,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px;
-            background: #14182b; /* Fondo oscuro sin transparencia */
+            background: #14182b;
             position: fixed;
             top: 0;
             width: 100%;
@@ -40,7 +40,13 @@
             padding: 10px;
             display: none;
             box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-            z-index: 1100; /* Se asegura que el menú esté siempre por encima */
+            z-index: 1100;
+        }
+
+        .menu .category {
+            font-weight: bold;
+            color: #00aaff;
+            padding: 5px 10px;
         }
 
         .menu a {
@@ -118,9 +124,11 @@
 
     <!-- Menú desplegable -->
     <div id="menu" class="menu">
-        <a href="#">API</a>
+        <div class="category">API</div>
         <a href="#">Utilidades</a>
         <a href="#">Divertido</a>
+
+        <div class="category">Otros</div>
         <a href="#">Casa</a>
         <a href="docs.html">Documentación</a>
     </div>
@@ -135,7 +143,7 @@
             <div class="img-container">
                 <img src="candado.png" alt="Autenticación">
             </div>
-            <a href="https://discord.gg/KPU72TMdat" class="btn">Solicitar API Key</a>
+            <a href="https://discord.gg/3Jm4tcr4yT" class="btn">Solicitar API Key</a>
         </div>
 
         <div class="section fade-in">
