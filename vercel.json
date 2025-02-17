@@ -5,6 +5,7 @@
     { "src": "^/$", "dest": "/index.html" },
     { "src": "^/docs$", "dest": "/docs.html" },
     { "src": "^/404$", "dest": "/404.html" },
+    { "src": "/(.*)", "dest": "/$1" },
     { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ]
 }
