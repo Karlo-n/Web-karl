@@ -1,6 +1,14 @@
 {
   "version": 2,
   "public": true,
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "docs.html", "use": "@vercel/static" },
+    { "src": "404.html", "use": "@vercel/static" },
+    { "src": "assets/**", "use": "@vercel/static" },
+    { "src": "imagenes/**", "use": "@vercel/static" },
+    { "src": "scripts/**", "use": "@vercel/static" }
+  ],
   "routes": [
     { "src": "^/$", "dest": "/index.html" },
     { "src": "^/docs$", "dest": "/docs.html" },
