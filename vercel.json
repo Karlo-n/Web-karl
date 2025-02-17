@@ -2,18 +2,18 @@
   "version": 2,
   "public": true,
   "routes": [
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "^/$", "dest": "/index.html" },
+    { "src": "^/docs$", "dest": "/docs.html" },
+    { "src": "/(.*)", "dest": "/$1" },
+    { "src": "/(.*)", "dest": "/404.html", "status": 404 }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" }
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     }
-  ],
-  "redirects": [
-    { "source": "/404", "destination": "/404.html", "statusCode": 404 }
   ]
 }
