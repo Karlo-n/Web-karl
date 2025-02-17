@@ -18,22 +18,6 @@
             position: relative;
         }
 
-        .particle {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background: white;
-            opacity: 0.6;
-            border-radius: 50%;
-            animation: floatAnimation 5s infinite ease-in-out;
-        }
-
-        @keyframes floatAnimation {
-            0% { transform: translateY(0px); opacity: 0.6; }
-            50% { transform: translateY(-20px); opacity: 0.9; }
-            100% { transform: translateY(0px); opacity: 0.6; }
-        }
-
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -122,9 +106,6 @@
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 1s forwards;
         }
 
         .stat-box img {
@@ -132,6 +113,11 @@
             height: 50px;
             margin-bottom: 10px;
             object-fit: contain;
+        }
+
+        .clock {
+            font-size: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -141,7 +127,9 @@
         <a href="https://discord.gg/KPU72TMdat" target="_blank">
             <img src="discord.png" alt="Discord" class="discord-icon">
         </a>
+
         <span class="navbar-title">API Karl</span>
+
         <div class="menu-container">
             <button class="menu-btn" onclick="toggleMenu()">=</button>
             <div id="menu" class="menu-content">
@@ -158,24 +146,33 @@
     <div class="stats-container">
         <div class="stat-box">
             <img src="antena.png" alt="Antena">
-            <h2>Tu IP</h2>
-            <p id="ip">Cargando...</p>
+            <h2 class="text-blue-400">Tu IP</h2>
+            <p id="ip" class="text-gray-300">Cargando...</p>
         </div>
+
         <div class="stat-box">
             <img src="ojo.png" alt="Visitantes">
-            <h2>Visitantes</h2>
-            <p id="visitantes">Cargando...</p>
+            <h2 class="text-blue-400">Visitantes</h2>
+            <p id="visitantes" class="text-gray-300">Cargando...</p>
         </div>
+
         <div class="stat-box">
             <img src="estadistica.png" alt="Peticiones">
-            <h2>Peticiones</h2>
-            <p id="peticiones">Cargando...</p>
+            <h2 class="text-blue-400">Peticiones</h2>
+            <p id="peticiones" class="text-gray-300">Cargando...</p>
+        </div>
+
+        <div class="stat-box">
+            <img src="reloj.png" alt="Reloj">
+            <h2 class="text-blue-400">Hora actual</h2>
+            <p id="clock" class="clock"></p>
         </div>
     </div>
 
     <script>
         function toggleMenu() {
-            document.getElementById("menu").classList.toggle("menu-visible");
+            let menu = document.getElementById("menu");
+            menu.classList.toggle("menu-visible");
         }
 
         async function obtenerDatos() {
@@ -183,20 +180,27 @@
                 let ipRes = await fetch("https://api.ipify.org?format=json");
                 let ipData = await ipRes.json();
                 document.getElementById("ip").innerText = ipData.ip;
-                
-                let visitasRes = await fetch("https://apikarl.com/api/visitantes");
+
+                // Obtener y actualizar visitas globales
+                let visitasRes = await fetch("https://apikarl.com/api/visitas");
                 let visitasData = await visitasRes.json();
-                document.getElementById("visitantes").innerText = visitasData.visitas;
-                
-                let petRes = await fetch("https://apikarl.com/api/stats");
-                let petData = await petRes.json();
-                document.getElementById("peticiones").innerText = petData.peticiones;
-            } catch (e) {
+                document.getElementById("visitantes").innerText = visitasData.total;
+
+                let peticionesRes = await fetch("https://apikarl.com/api/stats");
+                let peticionesData = await peticionesRes.json();
+                document.getElementById("peticiones").innerText = peticionesData.peticiones;
+            } catch {
                 document.getElementById("peticiones").innerText = "Error";
+                document.getElementById("visitantes").innerText = "Error";
             }
         }
+
         obtenerDatos();
+
+        setInterval(() => {
+            document.getElementById("clock").innerText = new Date().toLocaleTimeString();
+        }, 1000);
     </script>
+
 </body>
 </html>
-
