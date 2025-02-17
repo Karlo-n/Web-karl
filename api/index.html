@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué es una API? | API Karl</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <style>
+        /* Fondo con degradado animado */
+        @keyframes fondoAnimado {
+            0% { background: linear-gradient(135deg, #0a0f1a, #14182b); }
+            50% { background: linear-gradient(135deg, #14182b, #1d2140); }
+            100% { background: linear-gradient(135deg, #0a0f1a, #14182b); }
+        }
+
+        body {
+            animation: fondoAnimado 6s infinite alternate ease-in-out;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menú fijo */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #14182b;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .menu {
+            background: #1a1f33;
+            position: fixed;
+            right: 10px;
+            top: 55px;
+            width: 220px;
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+            z-index: 1100;
+            transform: scale(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .menu.show {
+            transform: scale(1);
+        }
+
+        .menu .category {
+            font-weight: bold;
+            color: #00aaff;
+            padding: 5px 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 8px;
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Contenido principal */
+        .content {
+            max-width: 900px;
+            margin: 100px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Tarjetas con efecto de rebote */
+        .info-card {
+            background: rgba(20, 25, 40, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .info-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Animación de rebote al hacer scroll */
+        .bounce-in {
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        }
+
+        .bounce-in.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Efecto de onda al tocar en móviles */
+        .ripple {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: scale(1);
+            opacity: 0;
+            animation: rippleEffect 0.6s linear;
+        }
+
+        @keyframes rippleEffect {
+            from {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            to {
+                transform: scale(6);
+                opacity: 0;
+            }
+        }
+
+        /* Estilos para imágenes */
+        .img-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .img-container img {
+            width: 250px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menú superior -->
+    <nav class="navbar">
+        <a href="https://discord.gg/KPU72TMdat">
+            <img src="discord.png" alt="Discord" width="40">
+        </a>
+        <h1 class="text-xl font-bold">API Karl</h1>
+        <button onclick="toggleMenu()">=</button>
+    </nav>
+
+    <!-- Menú desplegable -->
+    <div id="menu" class="menu">
+        <div class="category">API</div>
+        <a href="http://apikarl.com/api">Información</a>
+
+        <div class="category">Otros</div>
+        <a href="http://apikarl.com">Casa</a>
+        <a href="http://apikarl.com/docs">Documentación</a>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="content">
+        <h1 class="text-3xl font-bold">🔍 ¿Qué es una API?</h1>
+        <p class="text-gray-300 mt-2">Una API (Interfaz de Programación de Aplicaciones) permite que diferentes programas se comuniquen entre sí.</p>
+
+        <div class="img-container">
+            <img src="conexion.png" alt="Conexión API">
+        </div>
+
+        <div class="info-card bounce-in">
+            <h2>🤖 APIs en Discord</h2>
+            <p>Las APIs permiten que los bots de Discord obtengan información y realicen acciones automáticas.</p>
+        </div>
+
+        <div class="img-container">
+            <img src="diagrama-api.png" alt="Diagrama API">
+        </div>
+
+        <div class="info-card bounce-in">
+            <h2>🔧 Ejemplo de uso</h2>
+            <p>Un bot de Discord puede usar una API para obtener el clima, generar imágenes o moderar servidores.</p>
+        </div>
+
+        <div class="info-card bounce-in">
+            <h2>⚡ ¿Cómo funciona?</h2>
+            <p>Una API recibe una solicitud de datos y devuelve una respuesta en formato JSON, XML u otro formato.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            let menu = document.getElementById("menu");
+            menu.classList.toggle("show");
+        }
+
+        // Animaciones de rebote al hacer scroll
+        document.addEventListener("scroll", function() {
+            let sections = document.querySelectorAll(".bounce-in");
+            sections.forEach(section => {
+                let position = section.getBoundingClientRect().top;
+                let windowHeight = window.innerHeight;
+                if (position < windowHeight - 100) {
+                    section.classList.add("visible");
+                }
+            });
+        });
+
+        // Efecto de onda al tocar en móviles
+        document.addEventListener("click", function(e) {
+            let ripple = document.createElement("div");
+            ripple.classList.add("ripple");
+            document.body.appendChild(ripple);
+            ripple.style.left = `${e.clientX}px`;
+            ripple.style.top = `${e.clientY}px`;
+            setTimeout(() => ripple.remove(), 600);
+        });
+    </script>
+
+</body>
+</html>
