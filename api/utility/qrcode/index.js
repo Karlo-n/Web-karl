@@ -1,17 +1,22 @@
-import { NowRequest, NowResponse } from '@vercel/node';
 import QRCode from 'qrcode';
 
-export default async function (req = NowRequest, res = NowResponse) {
-    const { texto } = req.query;
-
-    if (!texto) {
-        return res.status(400).json({ error: "Falta el parámetro 'texto'" });
-    }
-
+export default async function handler(req, res) {
     try {
-        const qr = await QRCode.toDataURL(texto);
-        res.json({ qr });
+        const { texto } = req.query;
+
+        if (!texto) {
+            return res.status(400).json({ error: "Falta el parámetro 'texto'" });
+        }
+
+        // Genera el código QR en formato PNG
+        const qrImage = await QRCode.toBuffer(texto);
+
+        // Configura la cabecera para que el navegador interprete la imagen correctamente
+        res.setHeader('Content-Type', 'image/png');
+        res.send(qrImage);
+
     } catch (error) {
+        console.error("Error generando el código QR:", error);
         res.status(500).json({ error: "Error generando el código QR" });
     }
 }
