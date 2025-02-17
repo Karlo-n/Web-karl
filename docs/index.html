@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentación | API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
 
@@ -16,28 +16,30 @@
             font-family: Arial, sans-serif;
         }
 
-        /* Menú superior */
+        /* Menú fijo */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px;
-            background: rgba(10, 10, 20, 0.95);
-            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+            background: #14182b; /* Fondo oscuro sin transparencia */
             position: fixed;
+            top: 0;
             width: 100%;
             z-index: 1000;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
         }
 
         .menu {
-            background: rgba(20, 20, 40, 0.9);
-            position: absolute;
+            background: #1a1f33;
+            position: fixed;
             right: 10px;
-            top: 60px;
-            width: 200px;
+            top: 55px;
+            width: 220px;
             border-radius: 10px;
             padding: 10px;
             display: none;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
         }
 
         .menu a {
@@ -54,26 +56,22 @@
 
         .content {
             max-width: 800px;
-            margin: 80px auto;
+            margin: 100px auto;
             padding: 20px;
         }
 
         .section {
-            background: rgba(20, 25, 40, 0.8);
+            background: rgba(20, 25, 40, 0.9);
             padding: 20px;
             margin-bottom: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Animaciones de entrada */
-        .fade-in {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        .fade-in.visible {
+        .section.visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -114,7 +112,9 @@
     <div class="content">
         <div class="section fade-in">
             <h2 class="text-xl font-bold">🔑 Autenticación</h2>
-            <p>Para acceder a la API, necesitas una API Key. Solicítala desde el panel de control.</p>
+            <p>Para acceder a la API, necesitas una API Key. Puedes solicitarla desde nuestro panel de control.</p>
+            <p>Las API Keys son necesarias para garantizar que solo usuarios autorizados puedan acceder a las funciones avanzadas de la API.</p>
+            <p>Si intentas acceder sin una API Key válida, recibirás un error <b>401 Unauthorized</b>.</p>
             <div class="img-container">
                 <img src="candado.png" alt="Autenticación">
             </div>
@@ -122,11 +122,13 @@
 
         <div class="section fade-in">
             <h2 class="text-xl font-bold">🔹 Endpoints</h2>
-            <p>Lista de endpoints disponibles:</p>
+            <p>La API Karl ofrece múltiples endpoints para mejorar la funcionalidad de los bots en Discord.</p>
+            <p>Cada endpoint proporciona respuestas rápidas y optimizadas para diferentes necesidades, incluyendo:</p>
             <ul>
                 <li><b>/api/memes</b> – Devuelve imágenes de memes.</li>
                 <li><b>/api/chistes</b> – Devuelve chistes aleatorios.</li>
                 <li><b>/api/moderacion</b> – Herramientas de moderación para Discord.</li>
+                <li><b>/api/informacion</b> – Devuelve datos útiles sobre servidores y usuarios.</li>
             </ul>
             <div class="img-container">
                 <img src="endpoint.png" alt="Endpoints">
@@ -135,12 +137,15 @@
 
         <div class="section fade-in">
             <h2 class="text-xl font-bold">❌ Manejo de errores</h2>
-            <p>La API devuelve códigos de error en caso de problemas:</p>
+            <p>La API devuelve códigos de error para ayudar a los desarrolladores a diagnosticar problemas:</p>
             <ul>
-                <li><b>400</b> – Solicitud incorrecta.</li>
+                <li><b>400</b> – Solicitud incorrecta. Puede ser un parámetro mal escrito.</li>
                 <li><b>401</b> – API Key inválida o faltante.</li>
-                <li><b>500</b> – Error del servidor.</li>
+                <li><b>403</b> – No tienes permisos para acceder a este recurso.</li>
+                <li><b>404</b> – El endpoint solicitado no existe.</li>
+                <li><b>500</b> – Error interno del servidor.</li>
             </ul>
+            <p>Si recibes errores constantes, revisa la documentación para asegurarte de que estás enviando los parámetros correctos.</p>
             <div class="img-container">
                 <img src="error.png" alt="Errores">
             </div>
@@ -150,12 +155,23 @@
     <script>
         function toggleMenu() {
             let menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
         }
+
+        // Hacer que el menú siga al usuario al hacer scroll
+        window.addEventListener("scroll", function() {
+            let navbar = document.querySelector(".navbar");
+            navbar.style.position = "fixed";
+            navbar.style.top = "0";
+        });
 
         // Animaciones al hacer scroll
         document.addEventListener("scroll", function() {
-            let sections = document.querySelectorAll(".fade-in");
+            let sections = document.querySelectorAll(".section");
             sections.forEach(section => {
                 let position = section.getBoundingClientRect().top;
                 let windowHeight = window.innerHeight;
