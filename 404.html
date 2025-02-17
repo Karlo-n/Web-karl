@@ -2,11 +2,45 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="3;url=https://apikarl.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página no encontrada</title>
+    <style>
+        body {
+            background: #0a0f1a;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #0084ff;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background: #006fd6;
+        }
+    </style>
 </head>
 <body>
-    <h1>Error 404</h1>
-    <p>La página que buscas no existe. Serás redirigido en 3 segundos...</p>
+    <div class="container">
+        <h1>🚨 Error 404: Página no encontrada 🚨</h1>
+        <p>Lo sentimos, pero la página que buscas no existe.</p>
+        <p>Te redirigiremos automáticamente a la página principal.</p>
+        <script>
+            setTimeout(() => {
+                window.location.href = "https://apikarl.com";
+            }, 3000); // Redirige en 3 segundos
+        </script>
+        <a href="https://apikarl.com" class="btn">Volver al inicio</a>
+    </div>
 </body>
 </html>
