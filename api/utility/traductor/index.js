@@ -1,32 +1,32 @@
-import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
+    const { texto, idioma } = req.query;
+
+    if (!texto || !idioma) {
+        return res.status(400).json({ error: "Parámetros 'texto' e 'idioma' son requeridos." });
+    }
+
     try {
-        const { texto, idioma } = req.query;
-
-        if (!texto || !idioma) {
-            return res.status(400).json({ error: "Faltan los parámetros 'texto' y 'idioma'" });
-        }
-
-        const response = await fetch("https://libretranslate.com/translate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+        const response = await fetch('https://libretranslate.com/translate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
                 q: texto,
-                source: "auto",
-                target: idioma,
-                format: "text"
+                target: idioma
             })
         });
 
-        const data = await response.json();
-
-        if (data.error) {
-            return res.status(500).json({ error: "Error en la traducción" });
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de la API de LibreTranslate');
         }
 
-        res.json({ original: texto, traducido: data.translatedText, idioma });
+        const data = await response.json();
+        res.status(200).json({ traducción: data.translatedText });
     } catch (error) {
-        res.status(500).json({ error: "Error en el servidor" });
+        console.error('Error al traducir:', error);
+        res.status(500).json({ error: 'Error al procesar la traducción.' });
     }
-}
+};
