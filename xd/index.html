@@ -3,139 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Karl - Utility</title>
+    <title>API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
 
     <style>
+        /* Fondo oscuro con partículas */
         body {
             background: #0a0f1a;
             color: white;
             font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* Menú fijo */
+        /* Partículas flotantes */
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: white;
+            opacity: 0.6;
+            border-radius: 50%;
+            animation: floatAnimation 5s infinite ease-in-out;
+        }
+
+        @keyframes floatAnimation {
+            0% { transform: translateY(0px); opacity: 0.6; }
+            50% { transform: translateY(-20px); opacity: 0.9; }
+            100% { transform: translateY(0px); opacity: 0.6; }
+        }
+
+        /* Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background: #14182b;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            background: rgba(10, 15, 30, 0.9);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
         }
 
-        /* Contenedor principal */
-        .content {
+        /* Texto en el centro */
+        .navbar-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Discord icon */
+        .discord-icon {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        /* Menú */
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+        }
+
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: rgba(20, 20, 40, 0.95);
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            min-width: 140px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 20;
+        }
+
+        .menu-visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .menu-content a {
+            display: block;
+            padding: 5px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .menu-content a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Contenedor de estadísticas */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
             max-width: 900px;
-            margin: 100px auto;
+            margin: 40px auto;
             padding: 20px;
+            z-index: 5;
         }
 
-        /* Tarjetas de API */
-        .api-box {
+        .stat-box {
             background: rgba(20, 25, 40, 0.9);
             padding: 20px;
             border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .api-box:hover {
-            transform: scale(1.03);
-        }
-
-        .api-info {
-            flex-grow: 1;
-        }
-
-        .api-button {
-            background: #0084ff;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
             text-align: center;
-            text-decoration: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+        }
+
+        .stat-box img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+            object-fit: contain;
+        }
+
+        /* Animación para las estadísticas */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Reloj */
+        .clock {
+            font-size: 20px;
             font-weight: bold;
-            transition: background 0.3s ease-in-out;
         }
-
-        .api-button:hover {
-            background: #006fd6;
-        }
-
-        /* Etiquetas de Key */
-        .key-required {
-            color: #ff4444;
-            font-weight: bold;
-        }
-
-        .key-not-required {
-            color: #44ff44;
-            font-weight: bold;
-        }
-
     </style>
 </head>
 <body>
 
-    <!-- Menú superior -->
+    <!-- Navbar -->
     <nav class="navbar">
-        <a href="https://discord.gg/KPU72TMdat">
-            <img src="discord.png" alt="Discord" width="40">
+        <a href="https://discord.gg/KPU72TMdat" target="_blank">
+            <img src="discord.png" alt="Discord" class="discord-icon">
         </a>
-        <h1 class="text-xl font-bold">API Karl - Utility</h1>
-        <button onclick="toggleMenu()">=</button>
+
+        <span class="navbar-title">API Karl</span>
+
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">=</button>
+            <div id="menu" class="menu-content">
+                <b>API</b>
+                <a href="#">Utilidades</a>
+                <a href="#">Divertido</a>
+                <b>Info</b>
+                <a href="#">Casa</a>
+                <a href="docs/">Documentación</a>
+            </div>
+        </div>
     </nav>
 
-    <!-- Contenedor de APIs -->
-    <div class="content">
-
-        <h2 class="text-2xl font-bold mb-4">📌 APIs de Utilidad</h2>
-
-        <!-- API Traductor -->
-        <div class="api-box">
-            <div class="api-info">
-                <h3 class="text-xl font-bold">🌍 Traductor</h3>
-                <p>Traduce texto entre diferentes idiomas.</p>
-                <p><b>🔑 Requiere API Key:</b> <span class="key-not-required">No</span></p>
-                <p><b>📥 Parámetros:</b> <code>?texto=&idioma=</code></p>
-                <p><b>⏳ Tiempo de respuesta:</b> ~500ms</p>
-            </div>
-            <a href="https://apikarl.com/api/v1/utility/traductor" class="api-button">Ir a API</a>
+    <!-- Contenedor de estadísticas -->
+    <div class="stats-container">
+        
+        <!-- Dirección IP -->
+        <div class="stat-box">
+            <img src="antena.png" alt="Antena">
+            <h2 class="text-blue-400">Tu IP</h2>
+            <p id="ip" class="text-gray-300">Cargando...</p>
         </div>
 
-        <!-- API Bienvenidas -->
-        <div class="api-box">
-            <div class="api-info">
-                <h3 class="text-xl font-bold">👋 Bienvenidas</h3>
-                <p>Genera imágenes de bienvenida personalizadas.</p>
-                <p><b>🔑 Requiere API Key:</b> <span class="key-required">Sí</span></p>
-                <p><b>📥 Parámetros:</b> <code>?usuario=&servidor=</code></p>
-                <p><b>⏳ Tiempo de respuesta:</b> ~800ms</p>
-            </div>
-            <a href="https://apikarl.com/api/v1/utility/bienvenidas" class="api-button">Ir a API</a>
+        <!-- Visitantes -->
+        <div class="stat-box">
+            <img src="ojo.png" alt="Visitantes">
+            <h2 class="text-blue-400">Visitantes</h2>
+            <p id="visitantes" class="text-gray-300">Cargando...</p>
         </div>
 
-        <!-- API Boost -->
-        <div class="api-box">
-            <div class="api-info">
-                <h3 class="text-xl font-bold">🚀 Boost</h3>
-                <p>Verifica si un usuario tiene Nitro Boost en Discord.</p>
-                <p><b>🔑 Requiere API Key:</b> <span class="key-required">Sí</span></p>
-                <p><b>📥 Parámetros:</b> <code>?usuario=</code></p>
-                <p><b>⏳ Tiempo de respuesta:</b> ~300ms</p>
-            </div>
-            <a href="https://apikarl.com/api/v1/utility/boost" class="api-button">Ir a API</a>
+        <!-- Peticiones -->
+        <div class="stat-box">
+            <img src="estadistica.png" alt="Peticiones">
+            <h2 class="text-blue-400">Peticiones</h2>
+            <p id="peticiones" class="text-gray-300">Cargando...</p>
+        </div>
+
+        <!-- Reloj -->
+        <div class="stat-box">
+            <img src="reloj.png" alt="Reloj">
+            <h2 class="text-blue-400">Hora actual</h2>
+            <p id="clock" class="clock"></p>
         </div>
 
     </div>
@@ -143,12 +213,46 @@
     <script>
         function toggleMenu() {
             let menu = document.getElementById("menu");
-            if (menu.style.display === "block") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "block";
+            menu.classList.toggle("menu-visible");
+        }
+
+        // Partículas animadas
+        function createParticles() {
+            for (let i = 0; i < 20; i++) {
+                let particle = document.createElement("div");
+                particle.classList.add("particle");
+                particle.style.left = Math.random() * 100 + "vw";
+                particle.style.top = Math.random() * 100 + "vh";
+                document.body.appendChild(particle);
             }
         }
+
+        createParticles();
+
+        // Cargar datos dinámicos
+        async function obtenerDatos() {
+            try {
+                let ipRes = await fetch("https://api.ipify.org?format=json");
+                let ipData = await ipRes.json();
+                document.getElementById("ip").innerText = ipData.ip;
+
+                let visitas = localStorage.getItem("visitantes") || 0;
+                visitas = parseInt(visitas) + 1;
+                localStorage.setItem("visitantes", visitas);
+                document.getElementById("visitantes").innerText = visitas;
+
+                let peticionesRes = await fetch("https://apikarl.com/api/stats");
+                let peticionesData = await peticionesRes.json();
+                document.getElementById("peticiones").innerText = peticionesData.peticiones;
+            } catch {
+                document.getElementById("peticiones").innerText = "Error";
+            }
+        }
+
+        obtenerDatos();
+        setInterval(() => {
+            document.getElementById("clock").innerText = new Date().toLocaleTimeString();
+        }, 1000);
     </script>
 
 </body>
