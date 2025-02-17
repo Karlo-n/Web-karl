@@ -9,6 +9,17 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
 
+    <!-- Metadatos Open Graph -->
+    <meta property="og:title" content="API Karl">
+    <meta property="og:description" content="Explora API Karl, una plataforma con diversas utilidades y herramientas divertidas para desarrolladores y creadores.">
+    <meta property="og:image" content="https://apikarl.com/preview.png">
+    <meta property="og:url" content="https://apikarl.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="API Karl">
+    <meta name="twitter:description" content="Descubre herramientas avanzadas para desarrollo y entretenimiento con API Karl.">
+    <meta name="twitter:image" content="https://apikarl.com/preview.png">
+    
     <style>
         body {
             background: #0a0f1a;
@@ -176,29 +187,25 @@
         }
 
         async function obtenerDatos() {
-    try {
-        // Obtener la IP
-        let ipRes = await fetch("https://api.ipify.org?format=json");
-        let ipData = await ipRes.json();
-        document.getElementById("ip").innerText = ipData.ip;
+            try {
+                let ipRes = await fetch("https://api.ipify.org?format=json");
+                let ipData = await ipRes.json();
+                document.getElementById("ip").innerText = ipData.ip;
 
-        // Obtener visitas
-        let visitasRes = await fetch("https://apikarl.com/api/visitas");
-        let visitasData = await visitasRes.json();
-        document.getElementById("visitantes").innerText = visitasData.visitas || "Error";
+                let visitasRes = await fetch("https://apikarl.com/api/visitas");
+                let visitasData = await visitasRes.json();
+                document.getElementById("visitantes").innerText = visitasData.visitas || "Error";
 
-        // Obtener peticiones
-        let peticionesRes = await fetch("https://apikarl.com/api/stats");
-        let peticionesData = await peticionesRes.json();
-        document.getElementById("peticiones").innerText = peticionesData.peticiones || "Error";
-    } catch (error) {
-        document.getElementById("visitantes").innerText = "Error";
-        document.getElementById("peticiones").innerText = "Error";
-    }
-}
+                let peticionesRes = await fetch("https://apikarl.com/api/stats");
+                let peticionesData = await peticionesRes.json();
+                document.getElementById("peticiones").innerText = peticionesData.peticiones || "Error";
+            } catch (error) {
+                document.getElementById("visitantes").innerText = "Error";
+                document.getElementById("peticiones").innerText = "Error";
+            }
+        }
 
-// Ejecutar la función al cargar la página
-obtenerDatos();
+        obtenerDatos();
 
         setInterval(() => {
             document.getElementById("clock").innerText = new Date().toLocaleTimeString();
