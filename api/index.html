@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="/api/favicon.png">
 
     <style>
         /* Fondo con degradado animado */
@@ -54,6 +54,7 @@
 
         .menu.show {
             transform: scale(1);
+            display: block;
         }
 
         .menu .category {
@@ -150,7 +151,7 @@
     <!-- Menú superior -->
     <nav class="navbar">
         <a href="https://discord.gg/KPU72TMdat">
-            <img src="discord.png" alt="Discord" width="40">
+            <img src="/api/discord.png" alt="Discord" width="40">
         </a>
         <h1 class="text-xl font-bold">API Karl</h1>
         <button onclick="toggleMenu()">=</button>
@@ -172,7 +173,7 @@
         <p class="text-gray-300 mt-2">Una API (Interfaz de Programación de Aplicaciones) permite que diferentes programas se comuniquen entre sí.</p>
 
         <div class="img-container">
-            <img src="conexion.png" alt="Conexión API">
+            <img src="/api/conexion.png" alt="Conexión API">
         </div>
 
         <div class="info-card bounce-in">
@@ -181,7 +182,7 @@
         </div>
 
         <div class="img-container">
-            <img src="diagrama-api.png" alt="Diagrama API">
+            <img src="/api/diagrama-api.png" alt="Diagrama API">
         </div>
 
         <div class="info-card bounce-in">
@@ -198,7 +199,13 @@
     <script>
         function toggleMenu() {
             let menu = document.getElementById("menu");
-            menu.classList.toggle("show");
+            if (menu.classList.contains("show")) {
+                menu.classList.remove("show");
+                setTimeout(() => { menu.style.display = "none"; }, 300);
+            } else {
+                menu.style.display = "block";
+                setTimeout(() => { menu.classList.add("show"); }, 10);
+            }
         }
 
         // Animaciones de rebote al hacer scroll
