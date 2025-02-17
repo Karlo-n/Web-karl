@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export default async function handler(req, res) {
     try {
         const { texto, idioma } = req.query;
@@ -8,6 +6,9 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: "Faltan parámetros 'texto' e 'idioma'" });
         }
 
+        // Importación dinámica de node-fetch
+        const fetch = (await import("node-fetch")).default;
+
         const response = await fetch("https://libretranslate.com/translate", {
             method: "POST",
             body: JSON.stringify({
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
                 source: "auto",
                 target: idioma,
                 format: "text",
-                api_key: "" // LibreTranslate no requiere API key para pruebas
+                api_key: "" // LibreTranslate no requiere API key
             }),
             headers: { "Content-Type": "application/json" }
         });
