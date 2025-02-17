@@ -21,6 +21,8 @@
             animation: fondoAnimado 6s infinite alternate ease-in-out;
             color: white;
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         /* Menú fijo */
@@ -48,13 +50,15 @@
             display: none;
             box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
             z-index: 1100;
-            transform: scale(0);
-            transition: transform 0.3s ease-in-out;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
 
         .menu.show {
-            transform: scale(1);
             display: block;
+            opacity: 1;
+            transform: scale(1);
         }
 
         .menu .category {
@@ -143,6 +147,7 @@
         .img-container img {
             width: 250px;
             height: auto;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -154,7 +159,7 @@
             <img src="/api/discord.png" alt="Discord" width="40">
         </a>
         <h1 class="text-xl font-bold">API Karl</h1>
-        <button onclick="toggleMenu()">=</button>
+        <button onclick="toggleMenu()">☰</button>
     </nav>
 
     <!-- Menú desplegable -->
@@ -218,16 +223,6 @@
                     section.classList.add("visible");
                 }
             });
-        });
-
-        // Efecto de onda al tocar en móviles
-        document.addEventListener("click", function(e) {
-            let ripple = document.createElement("div");
-            ripple.classList.add("ripple");
-            document.body.appendChild(ripple);
-            ripple.style.left = `${e.clientX}px`;
-            ripple.style.top = `${e.clientY}px`;
-            setTimeout(() => ripple.remove(), 600);
         });
     </script>
 
