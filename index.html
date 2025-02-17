@@ -176,24 +176,24 @@
         }
 
         async function obtenerDatos() {
-            try {
-                let ipRes = await fetch("https://api.ipify.org?format=json");
-                let ipData = await ipRes.json();
-                document.getElementById("ip").innerText = ipData.ip;
+    try {
+        let ipRes = await fetch("https://api.ipify.org?format=json");
+        let ipData = await ipRes.json();
+        document.getElementById("ip").innerText = ipData.ip;
 
-                // Obtener y actualizar visitas globales
-                let visitasRes = await fetch("https://apikarl.com/api/visitas");
-                let visitasData = await visitasRes.json();
-                document.getElementById("visitantes").innerText = visitasData.total;
+        let visitasRes = await fetch("https://apikarl.com/api/visitas");
+        let visitasData = await visitasRes.json();
+        document.getElementById("visitantes").innerText = visitasData.visitas;
 
-                let peticionesRes = await fetch("https://apikarl.com/api/stats");
-                let peticionesData = await peticionesRes.json();
-                document.getElementById("peticiones").innerText = peticionesData.peticiones;
-            } catch {
-                document.getElementById("peticiones").innerText = "Error";
-                document.getElementById("visitantes").innerText = "Error";
-            }
-        }
+        let peticionesRes = await fetch("https://apikarl.com/api/stats");
+        let peticionesData = await peticionesRes.json();
+        document.getElementById("peticiones").innerText = peticionesData.peticiones;
+    } catch {
+        document.getElementById("visitantes").innerText = "Error";
+        document.getElementById("peticiones").innerText = "Error";
+    }
+}
+
 
         obtenerDatos();
 
