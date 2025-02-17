@@ -5,89 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Karl - Utility</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         body {
             background: #0a0f1a;
             color: white;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
         }
 
-        /* Navbar fija */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: #14182b;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 2000; /* Asegura que esté sobre todo */
-            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Menú desplegable */
-        .menu {
-            background: #1a1f33;
-            position: fixed;
-            top: 60px;
-            right: 10px;
-            width: 220px;
-            border-radius: 10px;
-            padding: 10px;
-            display: none;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-            z-index: 2100;
-        }
-
-        .menu .category {
-            font-weight: bold;
-            color: #00aaff;
-            padding: 5px 10px;
-        }
-
-        .menu a {
-            display: block;
-            padding: 8px;
-            color: white;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .menu a:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Contenedor de APIs */
         .container {
             max-width: 900px;
-            margin: 100px auto;
+            margin: 40px auto;
             padding: 20px;
         }
 
-        .api-box {
+        .api-card {
             background: rgba(20, 25, 40, 0.9);
             padding: 20px;
+            margin-bottom: 15px;
             border-radius: 10px;
-            margin-bottom: 20px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease-in-out;
         }
 
-        .api-box:hover {
-            transform: scale(1.03);
+        .api-card:hover {
+            transform: scale(1.02);
         }
 
-        .api-title {
-            font-size: 18px;
+        .api-name {
+            font-size: 1.2em;
             font-weight: bold;
             color: #00aaff;
         }
 
-        .btn {
+        .api-description {
+            margin: 10px 0;
+        }
+
+        .api-meta {
+            font-size: 0.9em;
+            color: #bbb;
+        }
+
+        .api-btn {
             display: inline-block;
             padding: 10px 15px;
             margin-top: 10px;
@@ -95,92 +55,82 @@
             color: white;
             font-weight: bold;
             border-radius: 5px;
-            text-align: center;
             text-decoration: none;
         }
 
-        .btn:hover {
+        .api-btn:hover {
             background: #006fd6;
         }
     </style>
 </head>
 <body>
 
-    <!-- Navbar superior -->
-    <nav class="navbar">
-        <a href="https://discord.gg/KPU72TMdat">
-            <img src="discord.png" alt="Discord" width="40">
-        </a>
-        <h1 class="text-xl font-bold">API Karl - Utility</h1>
-        <button onclick="toggleMenu()">=</button>
-    </nav>
-
-    <!-- Menú desplegable -->
-    <div id="menu" class="menu">
-        <div class="category">API</div>
-        <a href="/api/v1/utility">Utilidades</a>
-        <a href="/api/v1/divertido">Divertido</a>
-
-        <div class="category">Otros</div>
-        <a href="/">Casa</a>
-        <a href="/docs">Documentación</a>
-    </div>
-
-    <!-- Contenedor de APIs -->
     <div class="container">
-        <h2 class="text-2xl font-bold text-center">📌 Lista de APIs Utility</h2>
-
-        <!-- API: Traductor -->
-        <div class="api-box">
-            <h3 class="api-title">🌍 Traductor</h3>
-            <p>Traduce texto a diferentes idiomas en tiempo real.</p>
-            <p><b>Parámetros:</b> `texto`, `idioma_destino`</p>
-            <p><b>Requiere API Key:</b> ❌ No</p>
-            <p><b>Tiempo de respuesta:</b> ⚡ Instantáneo</p>
-            <a href="https://apikarl.com/api/v1/utility/traductor" class="btn">Probar API</a>
+        <h1 class="text-2xl font-bold mb-6">📌 API Karl - Utility</h1>
+        
+        <div class="api-card">
+            <div class="api-name">🚀 Boost Card</div>
+            <p class="api-description">Genera una imagen de un boost con detalles personalizables.</p>
+            <p class="api-meta">🔑 Requiere API Key: Sí | ⏳ Respuesta: 1-2s</p>
+            <p class="api-meta">📌 Parámetros: avatar,texto1,texto2,texto3,background (opcional: configurar la posicion de texto1,texto2,texto3 y avatar)</p>
+            <a href="https://apikarl.com/api/v1/utility/boost" class="api-btn">Ver API</a>
         </div>
-
-        <!-- API: Bienvenidas -->
-        <div class="api-box">
-            <h3 class="api-title">👋 Bienvenidas</h3>
-            <p>Genera imágenes de bienvenida personalizadas para tu servidor de Discord.</p>
-            <p><b>Parámetros:</b> `usuario`, `servidor`, `imagen_fondo`</p>
-            <p><b>Requiere API Key:</b> ✅ Sí</p>
-            <p><b>Tiempo de respuesta:</b> ⚡ 1-2 segundos</p>
-            <a href="https://apikarl.com/api/v1/utility/bienvenidas" class="btn">Probar API</a>
+        
+        <div class="api-card">
+            <div class="api-name">🌍 Traductor</div>
+            <p class="api-description">Convierte texto a diferentes idiomas en segundos.</p>
+            <p class="api-meta">🔑 Requiere API Key: No | ⏳ Respuesta: 1s</p>
+            <p class="api-meta">📌 Parámetros: texto, idioma</p>
+            <a href="https://apikarl.com/api/v1/utility/traductor" class="api-btn">Ver API</a>
         </div>
-
-        <!-- API: Boost -->
-        <div class="api-box">
-            <h3 class="api-title">🚀 Boost</h3>
-            <p>Verifica si un usuario ha dado boost a un servidor de Discord.</p>
-            <p><b>Parámetros:</b> `usuario_id`, `servidor_id`</p>
-            <p><b>Requiere API Key:</b> ✅ Sí</p>
-            <p><b>Tiempo de respuesta:</b> ⚡ Menos de 1 segundo</p>
-            <a href="https://apikarl.com/api/v1/utility/boost" class="btn">Probar API</a>
+        
+        <div class="api-card">
+            <div class="api-name">🎉 Bienvenida</div>
+            <p class="api-description">Crea una imagen de bienvenida para nuevos usuarios en tu servidor.</p>
+            <p class="api-meta">🔑 Requiere API Key: Sí | ⏳ Respuesta: 1-2s</p>
+            <p class="api-meta">📌 Parámetros: avatar,texto1,texto2,texto3,background (opcional: configurar la posicion de texto1,texto2,texto3 y avatar)</p> 
+            <a href="https://apikarl.com/api/v1/utility/bienvenida" class="api-btn">Ver API</a>
+        </div>
+        
+        <div class="api-card">
+            <div class="api-name">📌 Texto a QR</div>
+            <p class="api-description">Convierte cualquier texto en un código QR para compartir fácilmente.</p>
+            <p class="api-meta">🔑 Requiere API Key: No | ⏳ Respuesta: Instantánea</p>
+            <p class="api-meta">📌 Parámetros: texto</p>
+            <a href="https://apikarl.com/api/v1/utility/qrcode" class="api-btn">Ver API</a>
+        </div>
+        
+        <div class="api-card">
+            <div class="api-name">🏆 Carta Ranked</div>
+            <p class="api-description">Genera una tarjeta con estadísticas de nivel de usuario en juegos o servidores.</p>
+            <p class="api-meta">🔑 Requiere API Key: Sí | ⏳ Respuesta: 1-3s</p>
+            <p class="api-meta">📌 Parámetros: avatar, username,xp,maxxp,nivel,background</p> 
+            <a href="https://apikarl.com/api/v1/utility/ranked" class="api-btn">Ver API</a>
+        </div>
+        
+        <div class="api-card">
+            <div class="api-name">📈 Carta Subida Ranked</div>
+            <p class="api-description">Genera una imagen mostrando la subida de nivel o rango en un sistema de ranking.</p>
+            <p class="api-meta">🔑 Requiere API Key: Sí | ⏳ Respuesta: 1-3s</p>
+            <p class="api-meta">📌 Parámetros: avatar,username,nivel actual,nivel proximo,background</p> 
+            <a href="https://apikarl.com/api/v1/utility/subida-ranked" class="api-btn">Ver API</a>
+        </div>
+        
+        <div class="api-card">
+            <div class="api-name">🐦 Carta Twitter</div>
+            <p class="api-description">Crea una imagen simulando un tweet con avatar y contenido personalizado.</p>
+            <p class="api-meta">🔑 Requiere API Key: Si| ⏳ Respuesta: 1-2s</p> 
+            <p class="api-meta">📌 Parámetros: contenido,username,avatar</p> 
+            <a href="https://apikarl.com/api/v1/utility/twitter" class="api-btn">Ver API</a>
+        </div>
+        
+        <div class="api-card">
+            <div class="api-name">📸 Carta Instagram</div>
+            <p class="api-description">Genera una imagen imitando un post de Instagram con avatar y descripción.</p>
+            <p class="api-meta">🔑 Requiere API Key: Si| ⏳ Respuesta: 1-2s</p> 
+            <p class="api-meta">📌 Parámetros: texto</p> 
+            <a href="https://apikarl.com/api/v1/utility/instagram" class="api-btn">Ver API</a>
         </div>
     </div>
-
-    <script>
-        function toggleMenu() {
-            let menu = document.getElementById("menu");
-            if (menu.style.display === "block") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "block";
-            }
-        }
-
-        // Asegurar que el menú siga al usuario al hacer scroll
-        window.addEventListener("scroll", function() {
-            let navbar = document.querySelector(".navbar");
-            navbar.style.position = "fixed";
-            navbar.style.top = "0";
-        });
-
-        // Asegurar que el menú siempre esté sobre el contenido
-        document.getElementById("menu").style.zIndex = "2100";
-    </script>
-
 </body>
 </html>
