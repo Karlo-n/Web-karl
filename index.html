@@ -177,25 +177,28 @@
 
         async function obtenerDatos() {
     try {
+        // Obtener la IP
         let ipRes = await fetch("https://api.ipify.org?format=json");
         let ipData = await ipRes.json();
         document.getElementById("ip").innerText = ipData.ip;
 
+        // Obtener visitas
         let visitasRes = await fetch("https://apikarl.com/api/visitas");
         let visitasData = await visitasRes.json();
-        document.getElementById("visitantes").innerText = visitasData.visitas;
+        document.getElementById("visitantes").innerText = visitasData.visitas || "Error";
 
+        // Obtener peticiones
         let peticionesRes = await fetch("https://apikarl.com/api/stats");
         let peticionesData = await peticionesRes.json();
-        document.getElementById("peticiones").innerText = peticionesData.peticiones;
-    } catch {
+        document.getElementById("peticiones").innerText = peticionesData.peticiones || "Error";
+    } catch (error) {
         document.getElementById("visitantes").innerText = "Error";
         document.getElementById("peticiones").innerText = "Error";
     }
 }
 
-
-        obtenerDatos();
+// Ejecutar la función al cargar la página
+obtenerDatos();
 
         setInterval(() => {
             document.getElementById("clock").innerText = new Date().toLocaleTimeString();
