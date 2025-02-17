@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "public": true,
+  "routes": [
+    { "src": "/(.*)", "dest": "/$1" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    }
+  ],
+  "redirects": [
+    { "source": "/404", "destination": "/404.html", "statusCode": 404 }
+  ]
+}
