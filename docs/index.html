@@ -40,6 +40,7 @@
             padding: 10px;
             display: none;
             box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+            z-index: 1100; /* Se asegura que el menú esté siempre por encima */
         }
 
         .menu a {
@@ -86,6 +87,22 @@
             width: 100px;
             height: auto;
         }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            background: #0084ff;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #006fd6;
+        }
     </style>
 </head>
 <body>
@@ -113,39 +130,41 @@
         <div class="section fade-in">
             <h2 class="text-xl font-bold">🔑 Autenticación</h2>
             <p>Para acceder a la API, necesitas una API Key. Puedes solicitarla desde nuestro panel de control.</p>
-            <p>Las API Keys son necesarias para garantizar que solo usuarios autorizados puedan acceder a las funciones avanzadas de la API.</p>
-            <p>Si intentas acceder sin una API Key válida, recibirás un error <b>401 Unauthorized</b>.</p>
+            <p>Las API Keys garantizan el acceso seguro y limitado a la API. Solo los usuarios registrados pueden obtener una.</p>
+            <p>Si intentas hacer una petición sin una API Key válida, recibirás un error <b>401 Unauthorized</b>.</p>
             <div class="img-container">
                 <img src="candado.png" alt="Autenticación">
             </div>
+            <a href="https://discord.gg/KPU72TMdat" class="btn">Solicitar API Key</a>
         </div>
 
         <div class="section fade-in">
             <h2 class="text-xl font-bold">🔹 Endpoints</h2>
-            <p>La API Karl ofrece múltiples endpoints para mejorar la funcionalidad de los bots en Discord.</p>
-            <p>Cada endpoint proporciona respuestas rápidas y optimizadas para diferentes necesidades, incluyendo:</p>
+            <p>Los endpoints permiten acceder a distintas funciones de la API Karl.</p>
+            <p>A continuación, algunos ejemplos:</p>
             <ul>
-                <li><b>/api/memes</b> – Devuelve imágenes de memes.</li>
-                <li><b>/api/chistes</b> – Devuelve chistes aleatorios.</li>
-                <li><b>/api/moderacion</b> – Herramientas de moderación para Discord.</li>
-                <li><b>/api/informacion</b> – Devuelve datos útiles sobre servidores y usuarios.</li>
+                <li><b>/api/memes</b> – Devuelve imágenes de memes populares.</li>
+                <li><b>/api/chistes</b> – Responde con chistes aleatorios.</li>
+                <li><b>/api/moderacion</b> – Comandos de moderación para servidores de Discord.</li>
+                <li><b>/api/usuarios</b> – Obtiene información detallada de usuarios de Discord.</li>
             </ul>
             <div class="img-container">
                 <img src="endpoint.png" alt="Endpoints">
             </div>
+            <a href="https://apikarl.com/api" class="btn">Ver todos los Endpoints</a>
         </div>
 
         <div class="section fade-in">
             <h2 class="text-xl font-bold">❌ Manejo de errores</h2>
-            <p>La API devuelve códigos de error para ayudar a los desarrolladores a diagnosticar problemas:</p>
+            <p>Si algo sale mal, la API devolverá códigos de error:</p>
             <ul>
-                <li><b>400</b> – Solicitud incorrecta. Puede ser un parámetro mal escrito.</li>
+                <li><b>400</b> – Solicitud incorrecta. Verifica los parámetros.</li>
                 <li><b>401</b> – API Key inválida o faltante.</li>
-                <li><b>403</b> – No tienes permisos para acceder a este recurso.</li>
-                <li><b>404</b> – El endpoint solicitado no existe.</li>
+                <li><b>403</b> – No tienes permiso para acceder.</li>
+                <li><b>404</b> – El recurso solicitado no existe.</li>
                 <li><b>500</b> – Error interno del servidor.</li>
             </ul>
-            <p>Si recibes errores constantes, revisa la documentación para asegurarte de que estás enviando los parámetros correctos.</p>
+            <p>Para evitar errores, revisa la documentación antes de hacer peticiones.</p>
             <div class="img-container">
                 <img src="error.png" alt="Errores">
             </div>
@@ -168,6 +187,9 @@
             navbar.style.position = "fixed";
             navbar.style.top = "0";
         });
+
+        // Asegurar que el menú siempre esté por encima del contenido
+        document.getElementById("menu").style.zIndex = "1100";
 
         // Animaciones al hacer scroll
         document.addEventListener("scroll", function() {
