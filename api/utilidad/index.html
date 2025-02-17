@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Karl - Utility</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
 
     <style>
         body {
             background: #0a0f1a;
             color: white;
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Menú fijo */
+        /* Navbar fija */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -26,27 +25,55 @@
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 1000;
+            z-index: 2000; /* Asegura que esté sobre todo */
             box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
         }
 
-        /* Contenedor principal */
-        .content {
+        /* Menú desplegable */
+        .menu {
+            background: #1a1f33;
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            width: 220px;
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+            z-index: 2100;
+        }
+
+        .menu .category {
+            font-weight: bold;
+            color: #00aaff;
+            padding: 5px 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 8px;
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Contenedor de APIs */
+        .container {
             max-width: 900px;
             margin: 100px auto;
             padding: 20px;
         }
 
-        /* Tarjetas de API */
         .api-box {
             background: rgba(20, 25, 40, 0.9);
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             transition: transform 0.3s ease-in-out;
         }
 
@@ -54,41 +81,32 @@
             transform: scale(1.03);
         }
 
-        .api-info {
-            flex-grow: 1;
+        .api-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00aaff;
         }
 
-        .api-button {
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
             background: #0084ff;
             color: white;
-            padding: 10px 15px;
+            font-weight: bold;
             border-radius: 5px;
             text-align: center;
             text-decoration: none;
-            font-weight: bold;
-            transition: background 0.3s ease-in-out;
         }
 
-        .api-button:hover {
+        .btn:hover {
             background: #006fd6;
         }
-
-        /* Etiquetas de Key */
-        .key-required {
-            color: #ff4444;
-            font-weight: bold;
-        }
-
-        .key-not-required {
-            color: #44ff44;
-            font-weight: bold;
-        }
-
     </style>
 </head>
 <body>
 
-    <!-- Menú superior -->
+    <!-- Navbar superior -->
     <nav class="navbar">
         <a href="https://discord.gg/KPU72TMdat">
             <img src="discord.png" alt="Discord" width="40">
@@ -97,47 +115,50 @@
         <button onclick="toggleMenu()">=</button>
     </nav>
 
+    <!-- Menú desplegable -->
+    <div id="menu" class="menu">
+        <div class="category">API</div>
+        <a href="/api/v1/utility">Utilidades</a>
+        <a href="/api/v1/divertido">Divertido</a>
+
+        <div class="category">Otros</div>
+        <a href="/">Casa</a>
+        <a href="/docs">Documentación</a>
+    </div>
+
     <!-- Contenedor de APIs -->
-    <div class="content">
+    <div class="container">
+        <h2 class="text-2xl font-bold text-center">📌 Lista de APIs Utility</h2>
 
-        <h2 class="text-2xl font-bold mb-4">📌 APIs de Utilidad</h2>
-
-        <!-- API Traductor -->
+        <!-- API: Traductor -->
         <div class="api-box">
-            <div class="api-info">
-                <h3 class="text-xl font-bold">🌍 Traductor</h3>
-                <p>Traduce texto entre diferentes idiomas.</p>
-                <p><b>🔑 Requiere API Key:</b> <span class="key-not-required">No</span></p>
-                <p><b>📥 Parámetros:</b> <code>?texto=&idioma=</code></p>
-                <p><b>⏳ Tiempo de respuesta:</b> ~500ms</p>
-            </div>
-            <a href="https://apikarl.com/api/v1/utility/traductor" class="api-button">Ir a API</a>
+            <h3 class="api-title">🌍 Traductor</h3>
+            <p>Traduce texto a diferentes idiomas en tiempo real.</p>
+            <p><b>Parámetros:</b> `texto`, `idioma_destino`</p>
+            <p><b>Requiere API Key:</b> ❌ No</p>
+            <p><b>Tiempo de respuesta:</b> ⚡ Instantáneo</p>
+            <a href="https://apikarl.com/api/v1/utility/traductor" class="btn">Probar API</a>
         </div>
 
-        <!-- API Bienvenidas -->
+        <!-- API: Bienvenidas -->
         <div class="api-box">
-            <div class="api-info">
-                <h3 class="text-xl font-bold">👋 Bienvenidas</h3>
-                <p>Genera imágenes de bienvenida personalizadas.</p>
-                <p><b>🔑 Requiere API Key:</b> <span class="key-required">Sí</span></p>
-                <p><b>📥 Parámetros:</b> <code>?usuario=&servidor=</code></p>
-                <p><b>⏳ Tiempo de respuesta:</b> ~800ms</p>
-            </div>
-            <a href="https://apikarl.com/api/v1/utility/bienvenidas" class="api-button">Ir a API</a>
+            <h3 class="api-title">👋 Bienvenidas</h3>
+            <p>Genera imágenes de bienvenida personalizadas para tu servidor de Discord.</p>
+            <p><b>Parámetros:</b> `usuario`, `servidor`, `imagen_fondo`</p>
+            <p><b>Requiere API Key:</b> ✅ Sí</p>
+            <p><b>Tiempo de respuesta:</b> ⚡ 1-2 segundos</p>
+            <a href="https://apikarl.com/api/v1/utility/bienvenidas" class="btn">Probar API</a>
         </div>
 
-        <!-- API Boost -->
+        <!-- API: Boost -->
         <div class="api-box">
-            <div class="api-info">
-                <h3 class="text-xl font-bold">🚀 Boost</h3>
-                <p>Verifica si un usuario tiene Nitro Boost en Discord.</p>
-                <p><b>🔑 Requiere API Key:</b> <span class="key-required">Sí</span></p>
-                <p><b>📥 Parámetros:</b> <code>?usuario=</code></p>
-                <p><b>⏳ Tiempo de respuesta:</b> ~300ms</p>
-            </div>
-            <a href="https://apikarl.com/api/v1/utility/boost" class="api-button">Ir a API</a>
+            <h3 class="api-title">🚀 Boost</h3>
+            <p>Verifica si un usuario ha dado boost a un servidor de Discord.</p>
+            <p><b>Parámetros:</b> `usuario_id`, `servidor_id`</p>
+            <p><b>Requiere API Key:</b> ✅ Sí</p>
+            <p><b>Tiempo de respuesta:</b> ⚡ Menos de 1 segundo</p>
+            <a href="https://apikarl.com/api/v1/utility/boost" class="btn">Probar API</a>
         </div>
-
     </div>
 
     <script>
@@ -149,6 +170,16 @@
                 menu.style.display = "block";
             }
         }
+
+        // Asegurar que el menú siga al usuario al hacer scroll
+        window.addEventListener("scroll", function() {
+            let navbar = document.querySelector(".navbar");
+            navbar.style.position = "fixed";
+            navbar.style.top = "0";
+        });
+
+        // Asegurar que el menú siempre esté sobre el contenido
+        document.getElementById("menu").style.zIndex = "2100";
     </script>
 
 </body>
