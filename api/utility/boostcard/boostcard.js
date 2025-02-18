@@ -1,6 +1,5 @@
 const express = require('express');
 const Jimp = require('jimp');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,31 +16,30 @@ app.get('/api/utility/boostcard', async (req, res) => {
         const bgImage = await Jimp.read(background);
         const avatarImage = await Jimp.read(avatar);
 
-        // 📌 Cargar la fuente personalizada desde la carpeta /fonts
-        const fontPath = path.join(__dirname, 'fonts', 'NotoSans.fnt'); // Asegúrate de subir NotoSans.fnt y NotoSans.png
-        const font = await Jimp.loadFont(fontPath);
+        // 📌 Cargar fuente predeterminada (sin necesidad de subir archivos extra)
+        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE); // Usa la fuente incluida en Jimp
 
-        // Posiciones
+        // Posiciones predeterminadas
         const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
         const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [200, 250];
 
-        // Ajustar tamaño del avatar
+        // Redimensionar avatar
         avatarImage.resize(80, 80);
 
-        // Combinar imágenes
+        // Componer avatar sobre el fondo
         bgImage.composite(avatarImage, avatarX, avatarY);
 
-        // Configurar color del texto
-        let textColor = Jimp.cssColorToHex(color || "#FFFFFF");
+        // Definir color del texto
+        const textColor = color || '#FFFFFF'; // Color blanco por defecto
 
-        // Escribir texto
+        // Agregar texto
         bgImage.print(font, textX, textY, {
             text: username,
             alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
             alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
         }, 300, 50);
 
-        // Enviar imagen como respuesta
+        // Convertir a imagen PNG y enviar respuesta
         const buffer = await bgImage.getBufferAsync(Jimp.MIME_PNG);
         res.setHeader('Content-Type', 'image/png');
         res.send(buffer);
