@@ -8,8 +8,8 @@ app.use(express.json());
 app.use(cors());
 
 // IMPORTA CORRECTAMENTE BOOSTCARD
-const boostcardRouter = require('./boostcard'); // QUITA "/index"
-app.use('/api/utility/boostcard', boostcardRouter);
+const boostcard = require('./boostcard');
+app.use('/api/utility/boostcard', boostcard.router);
 
 app.get('/', (req, res) => {
     res.send('API de Traducción con Google Translate funcionando 🚀');
