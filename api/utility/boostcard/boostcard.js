@@ -10,7 +10,7 @@ const fontPath = path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.
 registerFont(fontPath, { family: 'Noto Sans' });
 
 app.get('/api/utility/boostcard', async (req, res) => {
-    const { avatar, username, background, avatarposicion, usernameposicion } = req.query;
+    const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
 
     if (!avatar || !username || !background || !avatarposicion || !usernameposicion) {
         return res.status(400).json({ error: "Faltan parámetros obligatorios" });
@@ -32,15 +32,21 @@ app.get('/api/utility/boostcard', async (req, res) => {
 
         // Configurar la fuente y tamaño
         ctx.font = '30px "Noto Sans"';
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = color || 'white'; // Usar el color definido o blanco por defecto
         ctx.textAlign = 'center';
 
-        // Definir posición del texto asegurando que no se salga del canvas
+        // Definir posición del texto asegurando que siempre sea visible
         let [textX, textY] = usernameposicion.split(',').map(Number);
 
         // Ajustar posición si el texto sale de los límites del canvas
         textX = Math.max(50, Math.min(canvas.width - 50, textX));
         textY = Math.max(50, Math.min(canvas.height - 50, textY));
+
+        // Agregar sombra para mayor visibilidad
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
 
         // Renderizar el username
         ctx.fillText(username, textX, textY);
