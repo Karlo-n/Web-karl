@@ -1,15 +1,13 @@
 const express = require('express');
+const router = express.Router();
 const { createCanvas, loadImage, registerFont } = require('canvas');
 const path = require('path');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Registrar la fuente
+// Cargar la fuente
 const fontPath = path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf');
 registerFont(fontPath, { family: 'NotoSans' });
 
-app.get('/api/utility/boostcard', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
         
@@ -20,17 +18,18 @@ app.get('/api/utility/boostcard', async (req, res) => {
         const canvas = createCanvas(600, 300);
         const ctx = canvas.getContext('2d');
 
-        // Cargar imagen de fondo
+        // Cargar la imagen de fondo
         const bgImage = await loadImage(background);
         ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
 
-        // Cargar avatar
+        // Cargar la imagen del avatar
         const avatarImage = await loadImage(avatar);
         const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
         ctx.drawImage(avatarImage, avatarX, avatarY, 80, 80);
 
-        // Configurar color del texto
-        ctx.fillStyle = color || '#FFFFFF';
+        // Configurar el color del texto
+        const textColor = color ? color : '#FFFFFF';
+        ctx.fillStyle = textColor;
         ctx.font = '30px NotoSans';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -47,6 +46,5 @@ app.get('/api/utility/boostcard', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+// Exportar el router correctamente
+module.exports = router;
