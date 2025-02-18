@@ -1,17 +1,20 @@
 const express = require('express');
-const boostCard = require('./boostcard');
+const cors = require('cors');
 
-const router = express.Router();
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-router.get('/', async (req, res) => {
-    try {
-        const imageBuffer = await boostCard(req.query);
-        res.setHeader('Content-Type', 'image/png');
-        res.send(imageBuffer);
-    } catch (error) {
-        console.error('Error generando la imagen:', error);
-        res.status(500).json({ error: 'Error generando la imagen' });
-    }
+app.use(express.json());
+app.use(cors());
+
+// IMPORTA EL BOOSTCARD CORRECTAMENTE
+const boostcardRouter = require('./utility/boostcard/index');
+app.use('/api/utility/boostcard', boostcardRouter);
+
+app.get('/', (req, res) => {
+    res.send('API de Traducción con Google Translate funcionando 🚀');
 });
 
-module.exports = router;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
