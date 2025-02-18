@@ -36,11 +36,11 @@ app.get('/api/utility/boostcard', async (req, res) => {
         ctx.textBaseline = 'middle';
 
         // Posición del texto
-        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [300, 250];
+        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [100, 100];
 
         // Agregar fondo detrás del texto para mejorar visibilidad
         const textWidth = ctx.measureText(username).width;
-        ctx.fillRect(textX - textWidth / 2 - 10, textY - 20, textWidth + 20, 40);
+        ctx.fillRect(textX - textWidth / 5 - 20, textY - 20, textWidth + 100, 100);
 
         // Dibujar el texto
         ctx.fillStyle = '#FFFFFF'; // Asegurar que el texto sea visible
