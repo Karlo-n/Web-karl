@@ -1,8 +1,9 @@
 const express = require('express');
-const generateBoostCard = require('./boostcard');
+const generateBoostCard = require('api/utility/boostcard'); // Importa correctamente
 
 const router = express.Router();
 
+// Definir la ruta correctamente
 router.get('/', async (req, res) => {
     try {
         const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
