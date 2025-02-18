@@ -1,9 +1,8 @@
 const express = require('express');
-const generateBoostCard = require('api/utility/boostcard'); // Importa correctamente
+const generateBoostCard = require('./boostcard'); // Importamos la función que genera la imagen
 
 const router = express.Router();
 
-// Definir la ruta correctamente
 router.get('/', async (req, res) => {
     try {
         const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
@@ -12,6 +11,7 @@ router.get('/', async (req, res) => {
             return res.status(400).json({ error: 'Faltan parámetros obligatorios' });
         }
 
+        // Generamos la imagen con los parámetros recibidos
         const imageBuffer = await generateBoostCard({ avatar, username, background, avatarposicion, usernameposicion, color });
 
         res.setHeader('Content-Type', 'image/png');
