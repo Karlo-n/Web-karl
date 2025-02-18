@@ -1,7 +1,14 @@
 const express = require('express');
 const Jimp = require('jimp');
+const { createCanvas, registerFont } = require('canvas');
+const path = require('path');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Registrar la fuente personalizada
+const fontPath = path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf');
+registerFont(fontPath, { family: 'NotoSans' });
 
 app.get('/api/utility/boostcard', async (req, res) => {
     try {
@@ -15,37 +22,32 @@ app.get('/api/utility/boostcard', async (req, res) => {
         const bgImage = await Jimp.read(background);
         const avatarImage = await Jimp.read(avatar);
 
-        // Redimensionar imágenes
-        avatarImage.resize(100, 100); // Ajusta tamaño del avatar
+        // Crear un canvas
+        const canvas = createCanvas(bgImage.bitmap.width, bgImage.bitmap.height);
+        const ctx = canvas.getContext('2d');
 
-        // Crear imagen base
-        const canvas = new Jimp(bgImage.getWidth(), bgImage.getHeight(), 0x00000000);
+        // Dibujar el fondo
+        ctx.drawImage(bgImage.bitmap.data, 0, 0, canvas.width, canvas.height);
 
-        // Fusionar imágenes
-        canvas.composite(bgImage, 0, 0);
+        // Dibujar el avatar
         const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
-        canvas.composite(avatarImage, avatarX, avatarY);
+        ctx.drawImage(avatarImage.bitmap.data, avatarX, avatarY, 80, 80);
 
-        // Cargar fuente personalizada (Jimp usa fuentes `.fnt`)
-        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE); // Fuente predeterminada
-
-        // Establecer color del texto
-        const textColor = color ? Jimp.cssColorToHex(color) : Jimp.cssColorToHex('#FFFFFF');
+        // Configurar el texto
+        ctx.fillStyle = color ? color : '#FFFFFF';
+        ctx.font = '30px NotoSans';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
 
         // Posición del texto
-        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [200, 200];
+        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [canvas.width / 2, canvas.height - 50];
+        ctx.fillText(username, textX, textY);
 
-        // Escribir texto
-        canvas.print(font, textX, textY, {
-            text: username,
-            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-            alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
-        });
+        // Convertir el canvas a buffer
+        const buffer = canvas.toBuffer('image/png');
 
-        // Enviar la imagen generada
         res.setHeader('Content-Type', 'image/png');
-        res.send(await canvas.getBufferAsync(Jimp.MIME_PNG));
-
+        res.send(buffer);
     } catch (error) {
         console.error('Error generando la imagen:', error);
         res.status(500).json({ error: 'Error generando la imagen' });
