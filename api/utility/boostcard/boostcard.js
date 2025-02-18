@@ -33,7 +33,7 @@ app.get('/api/utility/boostcard', async (req, res) => {
         ctx.fillStyle = textColor;
 
         // Establecer la fuente y verificar que se registre bien
-        ctx.font = '80px "NotoSans-Regular"';
+        ctx.font = '30px "NotoSans-Regular"';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
