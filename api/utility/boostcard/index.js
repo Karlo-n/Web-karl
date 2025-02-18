@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 // IMPORTA EL BOOSTCARD CORRECTAMENTE
-const boostcardRouter = require('./utility/boostcard/index');
+const boostcardRouter = require('/api/utility/boostcard/index');
 app.use('/api/utility/boostcard', boostcardRouter);
 
 app.get('/', (req, res) => {
