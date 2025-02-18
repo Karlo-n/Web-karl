@@ -1,12 +1,11 @@
 const express = require('express');
 const sharp = require('sharp');
 const axios = require('axios');
-const path = require('path');
-const fs = require('fs').promises;
 
-const router = express.Router();
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-router.get('/', async (req, res) => {
+app.get('/api/utility/boostcard', async (req, res) => {
     try {
         const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
 
@@ -14,41 +13,46 @@ router.get('/', async (req, res) => {
             return res.status(400).json({ error: 'Faltan parámetros obligatorios' });
         }
 
+        // Convertir posiciones a números
+        const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
+        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [300, 250];
+
         // Descargar imágenes
-        const avatarBuffer = await axios.get(avatar, { responseType: 'arraybuffer' }).then(res => res.data);
-        const backgroundBuffer = await axios.get(background, { responseType: 'arraybuffer' }).then(res => res.data);
+        const bgBuffer = (await axios.get(background, { responseType: 'arraybuffer' })).data;
+        const avatarBuffer = (await axios.get(avatar, { responseType: 'arraybuffer' })).data;
 
-        // Crear la imagen de fondo
-        let image = sharp(backgroundBuffer)
-            .resize(600, 300)
-            .composite([{ input: avatarBuffer, top: avatarposicion ? parseInt(avatarposicion.split(',')[1]) : 100, left: avatarposicion ? parseInt(avatarposicion.split(',')[0]) : 100 }]);
+        // Crear imagen de fondo
+        let img = sharp(bgBuffer).resize(600, 300);
 
-        // Agregar texto usando Sharp
-        const svgText = `
+        // Redimensionar avatar
+        let avatarResized = await sharp(avatarBuffer)
+            .resize(80, 80)
+            .toBuffer();
+
+        // Superponer avatar
+        img = img.composite([{ input: avatarResized, left: avatarX, top: avatarY }]);
+
+        // Crear imagen con texto
+        const textOverlay = Buffer.from(`
             <svg width="600" height="300">
-                <text x="${usernameposicion ? parseInt(usernameposicion.split(',')[0]) : 300}" 
-                      y="${usernameposicion ? parseInt(usernameposicion.split(',')[1]) : 250}" 
-                      font-size="30" 
-                      text-anchor="middle" 
-                      fill="${color || '#FFFFFF'}"
-                      font-family="Arial">
+                <text x="${textX}" y="${textY}" font-size="30" fill="${color || 'white'}" text-anchor="middle">
                     ${username}
                 </text>
             </svg>
-        `;
+        `);
 
-        const textBuffer = Buffer.from(svgText);
+        // Añadir texto
+        img = img.composite([{ input: textOverlay }]);
 
-        image = image.composite([{ input: textBuffer, left: 0, top: 0 }]);
-
-        const finalBuffer = await image.toBuffer();
-
+        // Convertir a PNG y enviar respuesta
         res.setHeader('Content-Type', 'image/png');
-        res.send(finalBuffer);
+        res.send(await img.png().toBuffer());
     } catch (error) {
-        console.error('❌ Error generando la imagen:', error);
+        console.error('Error generando la imagen:', error);
         res.status(500).json({ error: 'Error generando la imagen' });
     }
 });
 
-module.exports = router;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
