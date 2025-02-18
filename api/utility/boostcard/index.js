@@ -1,5 +1,5 @@
 const express = require('express');
-const { createBoostCard } = require('./boostCard');
+const { createBoostCard } = require('./boostcard');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
