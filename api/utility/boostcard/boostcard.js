@@ -15,27 +15,24 @@ app.get('/api/utility/boostcard', async (req, res) => {
         // Cargar imágenes
         const bgImage = await Jimp.read(background);
         const avatarImage = await Jimp.read(avatar);
-        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+        const font = await Jimp.loadFont(Jimp.FONT_SANS_64_WHITE); // Aumentamos tamaño de fuente
 
         // Ajustar tamaño del avatar
-        avatarImage.resize(80, 80);
+        avatarImage.resize(100, 100);
 
-        // Posiciones
+        // Posiciones del avatar y texto
         const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
-        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [300, 250];
+        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [bgImage.bitmap.width / 2, bgImage.bitmap.height - 50];
 
-        // Componer imágenes
+        // Componer avatar sobre la imagen
         bgImage.composite(avatarImage, avatarX, avatarY);
 
-        // Configurar color del texto
-        const textColor = color ? color : '#FFFFFF';
-
-        // Dibujar texto
+        // Configurar color del texto (Jimp no soporta HEX, usamos blanco por defecto)
         bgImage.print(font, textX, textY, {
             text: username,
             alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
             alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
-        }, 200, 50);
+        }, 500, 100); // Tamaño del área de texto
 
         // Convertir a buffer y responder
         const buffer = await bgImage.getBufferAsync(Jimp.MIME_PNG);
