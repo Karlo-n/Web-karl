@@ -1,20 +1,23 @@
 const express = require('express');
-const cors = require('cors');
+const router = express.Router();
+const generateBoostCard = require('./boostcard');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+router.get('/', async (req, res) => {
+    try {
+        const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
 
-app.use(express.json());
-app.use(cors());
+        if (!avatar || !username || !background) {
+            return res.status(400).json({ error: 'Faltan parámetros obligatorios' });
+        }
 
-app.get('/', (req, res) => {
-    res.send('🚀 API de Karl funcionando con Sharp 🚀');
+        const imageBuffer = await generateBoostCard(avatar, username, background, avatarposicion, usernameposicion, color);
+
+        res.setHeader('Content-Type', 'image/png');
+        res.send(imageBuffer);
+    } catch (error) {
+        console.error('Error generando la imagen:', error);
+        res.status(500).json({ error: 'Error generando la imagen' });
+    }
 });
 
-// Importar rutas de imágenes con Sharp
-const boostCard = require('./utility/boostcard');
-app.use('/api/utility/boostcard', boostCard);
-
-app.listen(PORT, () => {
-    console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
-});
+module.exports = router;
