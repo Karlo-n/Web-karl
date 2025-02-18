@@ -17,10 +17,9 @@ app.get('/api/utility/boostcard', async (req, res) => {
         const bgImage = await Jimp.read(background);
         const avatarImage = await Jimp.read(avatar);
 
-        // 📌 Cargar fuente personalizada
-        const fontPath = path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf');
-        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE); // Usa una fuente por defecto
-        // ⚠️ Jimp no soporta TTF directamente, pero se puede convertir a `.fnt` si es necesario
+        // 📌 Cargar la fuente personalizada desde la carpeta /fonts
+        const fontPath = path.join(__dirname, 'fonts', 'NotoSans.fnt'); // Asegúrate de subir NotoSans.fnt y NotoSans.png
+        const font = await Jimp.loadFont(fontPath);
 
         // Posiciones
         const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
@@ -31,7 +30,16 @@ app.get('/api/utility/boostcard', async (req, res) => {
 
         // Combinar imágenes
         bgImage.composite(avatarImage, avatarX, avatarY);
-        bgImage.print(font, textX, textY, username);
+
+        // Configurar color del texto
+        let textColor = Jimp.cssColorToHex(color || "#FFFFFF");
+
+        // Escribir texto
+        bgImage.print(font, textX, textY, {
+            text: username,
+            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+            alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
+        }, 300, 50);
 
         // Enviar imagen como respuesta
         const buffer = await bgImage.getBufferAsync(Jimp.MIME_PNG);
