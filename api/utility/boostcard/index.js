@@ -1,6 +1,7 @@
 const express = require('express');
-const router = express.Router();
 const generateBoostCard = require('./boostcard');
+
+const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
@@ -10,13 +11,13 @@ router.get('/', async (req, res) => {
             return res.status(400).json({ error: 'Faltan parámetros obligatorios' });
         }
 
-        const imageBuffer = await generateBoostCard(avatar, username, background, avatarposicion, usernameposicion, color);
+        const imageBuffer = await generateBoostCard({ avatar, username, background, avatarposicion, usernameposicion, color });
 
         res.setHeader('Content-Type', 'image/png');
         res.send(imageBuffer);
     } catch (error) {
         console.error('Error generando la imagen:', error);
-        res.status(500).json({ error: 'Error generando la imagen' });
+        res.status(500).json({ error: 'Error generando la imagen', detalle: error.message });
     }
 });
 
