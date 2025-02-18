@@ -1,58 +1,62 @@
-const express = require('express');
 const sharp = require('sharp');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const fontPath = path.join(__dirname, '..', '..', 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf');
 
-app.get('/api/utility/boostcard', async (req, res) => {
+async function generateBoostCard(avatar, username, background, avatarposicion, usernameposicion, color) {
     try {
-        const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
+        // Descargar imágenes
+        const avatarBuffer = (await axios.get(avatar, { responseType: 'arraybuffer' })).data;
+        const backgroundBuffer = (await axios.get(background, { responseType: 'arraybuffer' })).data;
 
-        if (!avatar || !username || !background) {
-            return res.status(400).json({ error: 'Faltan parámetros obligatorios' });
-        }
-
-        // Convertir posiciones a números
+        // Posiciones personalizadas
         const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
         const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [300, 250];
 
-        // Descargar imágenes
-        const bgBuffer = (await axios.get(background, { responseType: 'arraybuffer' })).data;
-        const avatarBuffer = (await axios.get(avatar, { responseType: 'arraybuffer' })).data;
+        // Procesar imagen de fondo
+        let backgroundImage = await sharp(backgroundBuffer)
+            .resize(600, 300)
+            .toBuffer();
 
-        // Crear imagen de fondo
-        let img = sharp(bgBuffer).resize(600, 300);
-
-        // Redimensionar avatar
-        let avatarResized = await sharp(avatarBuffer)
+        // Procesar avatar
+        const avatarImage = await sharp(avatarBuffer)
             .resize(80, 80)
             .toBuffer();
 
-        // Superponer avatar
-        img = img.composite([{ input: avatarResized, left: avatarX, top: avatarY }]);
+        // Añadir avatar sobre la imagen de fondo
+        let compositeImage = await sharp(backgroundImage)
+            .composite([
+                { input: avatarImage, left: avatarX, top: avatarY }
+            ])
+            .toBuffer();
 
-        // Crear imagen con texto
-        const textOverlay = Buffer.from(`
-            <svg width="600" height="300">
-                <text x="${textX}" y="${textY}" font-size="30" fill="${color || 'white'}" text-anchor="middle">
-                    ${username}
-                </text>
-            </svg>
-        `);
+        // Convertir la imagen en un buffer para texto
+        const finalImage = await sharp(compositeImage)
+            .composite([
+                {
+                    input: await sharp({
+                        create: {
+                            width: 600,
+                            height: 300,
+                            channels: 4,
+                            background: { r: 0, g: 0, b: 0, alpha: 0 }
+                        }
+                    })
+                    .png()
+                    .toBuffer(),
+                    left: 0,
+                    top: 0
+                }
+            ])
+            .toBuffer();
 
-        // Añadir texto
-        img = img.composite([{ input: textOverlay }]);
-
-        // Convertir a PNG y enviar respuesta
-        res.setHeader('Content-Type', 'image/png');
-        res.send(await img.png().toBuffer());
+        return finalImage;
     } catch (error) {
-        console.error('Error generando la imagen:', error);
-        res.status(500).json({ error: 'Error generando la imagen' });
+        console.error('Error generando la boostcard:', error);
+        throw new Error('No se pudo generar la boostcard.');
     }
-});
+}
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+module.exports = generateBoostCard;
