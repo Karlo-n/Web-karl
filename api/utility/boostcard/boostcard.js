@@ -1,14 +1,9 @@
 const express = require('express');
 const Jimp = require('jimp');
-const { createCanvas, registerFont } = require('canvas');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Registrar la fuente personalizada
-const fontPath = path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf');
-registerFont(fontPath, { family: 'NotoSans' });
 
 app.get('/api/utility/boostcard', async (req, res) => {
     try {
@@ -22,30 +17,24 @@ app.get('/api/utility/boostcard', async (req, res) => {
         const bgImage = await Jimp.read(background);
         const avatarImage = await Jimp.read(avatar);
 
-        // Crear un canvas
-        const canvas = createCanvas(bgImage.bitmap.width, bgImage.bitmap.height);
-        const ctx = canvas.getContext('2d');
+        // 📌 Cargar fuente personalizada
+        const fontPath = path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf');
+        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE); // Usa una fuente por defecto
+        // ⚠️ Jimp no soporta TTF directamente, pero se puede convertir a `.fnt` si es necesario
 
-        // Dibujar el fondo
-        ctx.drawImage(bgImage.bitmap.data, 0, 0, canvas.width, canvas.height);
-
-        // Dibujar el avatar
+        // Posiciones
         const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
-        ctx.drawImage(avatarImage.bitmap.data, avatarX, avatarY, 80, 80);
+        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [200, 250];
 
-        // Configurar el texto
-        ctx.fillStyle = color ? color : '#FFFFFF';
-        ctx.font = '30px NotoSans';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+        // Ajustar tamaño del avatar
+        avatarImage.resize(80, 80);
 
-        // Posición del texto
-        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [canvas.width / 2, canvas.height - 50];
-        ctx.fillText(username, textX, textY);
+        // Combinar imágenes
+        bgImage.composite(avatarImage, avatarX, avatarY);
+        bgImage.print(font, textX, textY, username);
 
-        // Convertir el canvas a buffer
-        const buffer = canvas.toBuffer('image/png');
-
+        // Enviar imagen como respuesta
+        const buffer = await bgImage.getBufferAsync(Jimp.MIME_PNG);
         res.setHeader('Content-Type', 'image/png');
         res.send(buffer);
     } catch (error) {
