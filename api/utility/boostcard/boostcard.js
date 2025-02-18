@@ -11,7 +11,7 @@ registerFont(fontPath, { family: 'NotoSans' });
 app.get('/api/utility/boostcard', async (req, res) => {
     try {
         const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
-        
+
         if (!avatar || !username || !background) {
             return res.status(400).json({ error: 'Faltan parámetros obligatorios' });
         }
@@ -28,8 +28,8 @@ app.get('/api/utility/boostcard', async (req, res) => {
         const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
         ctx.drawImage(avatarImage, avatarX, avatarY, 80, 80);
 
-        // Configurar el color del texto
-        const textColor = color ? color : '#FFFFFF';
+        // Asegurar el color del texto
+        const textColor = color ? (color.startsWith('#') ? color : `#${color}`) : '#FFFFFF';
         ctx.fillStyle = textColor;
         ctx.font = '30px NotoSans';
         ctx.textAlign = 'center';
@@ -37,6 +37,13 @@ app.get('/api/utility/boostcard', async (req, res) => {
 
         // Posición del texto
         const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [300, 250];
+
+        // Agregar fondo detrás del texto para mejorar visibilidad
+        const textWidth = ctx.measureText(username).width;
+        ctx.fillRect(textX - textWidth / 2 - 10, textY - 20, textWidth + 20, 40);
+
+        // Dibujar el texto
+        ctx.fillStyle = '#FFFFFF'; // Asegurar que el texto sea visible
         ctx.fillText(username, textX, textY);
 
         res.setHeader('Content-Type', 'image/png');
@@ -50,4 +57,3 @@ app.get('/api/utility/boostcard', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
-
