@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 // 📌 REGISTRAR UNA FUENTE UNIVERSAL
-registerFont(path.join(__dirname, 'fonts', 'NotoSans-Regular.ttf'), { family: 'Noto Sans' });
+registerFont(path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf'), { family: 'Noto Sans' });
 
 app.get('/', (req, res) => {
     res.send('API de Boost Card funcionando 🚀');
