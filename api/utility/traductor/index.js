@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
     res.send('API de Traducción con Google Translate funcionando 🚀');
 });
 
-app.all('/api/traducir', async (req, res) => {
+app.all(/api/utility/traductor', async (req, res) => {
     const { texto, idioma } = req.method === "GET" ? req.query : req.body;
 
     if (!texto || !idioma) {
