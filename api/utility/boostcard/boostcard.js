@@ -1,53 +1,32 @@
-const { createCanvas, loadImage } = require('canvas');
+const { createCanvas, loadImage, registerFont } = require('canvas');
+const path = require('path');
 
-async function createBoostCard(avatarURL, username, backgroundURL, avatarPos, usernamePos) {
-    const width = 800;
-    const height = 400;
-    const canvas = createCanvas(width, height);
+// Registrar la fuente desde la carpeta fonts
+registerFont(path.join(__dirname, 'fonts', 'NotoSans-Regular.ttf'), { family: 'Noto Sans' });
+
+async function generateBoostCard(avatarUrl, username, backgroundUrl, avatarPos, usernamePos) {
+    const canvas = createCanvas(800, 400);
     const ctx = canvas.getContext('2d');
 
-    // Verificar que los parámetros obligatorios estén presentes
-    if (!username || !avatarURL || !backgroundURL) {
-        throw new Error("Faltan parámetros obligatorios: avatar, username y background son requeridos.");
-    }
+    // Cargar el fondo
+    const background = await loadImage(backgroundUrl);
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-    // Cargar el fondo (imagen o color de respaldo)
-    try {
-        const background = await loadImage(backgroundURL);
-        ctx.drawImage(background, 0, 0, width, height);
-    } catch (error) {
-        console.error("No se pudo cargar la imagen de fondo:", error);
-        ctx.fillStyle = "#1a1a2e";
-        ctx.fillRect(0, 0, width, height);
-    }
+    // Cargar el avatar
+    const avatar = await loadImage(avatarUrl);
+    const [avatarX, avatarY] = avatarPos.split(',').map(Number);
+    ctx.drawImage(avatar, avatarX, avatarY, 100, 100);
 
-    // Posiciones por defecto si no se proporcionan
-    let [avatarX, avatarY] = avatarPos ? avatarPos.split(',').map(Number) : [50, height / 2 - 60];
-    let [usernameX, usernameY] = usernamePos ? usernamePos.split(',').map(Number) : [200, height / 2 + 15];
+    // Establecer la fuente correcta
+    ctx.font = 'bold 30px "Noto Sans"';
+    ctx.fillStyle = '#FFFFFF';
+    ctx.textAlign = 'center';
 
-    // Cargar y dibujar el avatar en forma circular
-    try {
-        const avatarImage = await loadImage(avatarURL);
-        const avatarSize = 120;
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(avatarImage, avatarX, avatarY, avatarSize, avatarSize);
-        ctx.restore();
-    } catch (error) {
-        console.error("No se pudo cargar el avatar:", error);
-    }
-
-    // Escribir el username en la posición personalizada
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "bold 40px Arial";
-    ctx.textAlign = "left";
-    ctx.fillText(username, usernameX, usernameY);
+    // Posicionar el username
+    const [textX, textY] = usernamePos.split(',').map(Number);
+    ctx.fillText(username, textX, textY);
 
     return canvas.toBuffer();
 }
 
-module.exports = { createBoostCard };
+module.exports = generateBoostCard;
