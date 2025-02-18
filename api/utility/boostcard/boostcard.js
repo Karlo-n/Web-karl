@@ -1,32 +1,58 @@
+const express = require('express');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 const path = require('path');
 
-// Registrar la fuente desde la carpeta fonts
-registerFont(path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf'), { family: 'Noto Sans' });
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-async function generateBoostCard(avatarUrl, username, backgroundUrl, avatarPos, usernamePos) {
+// Registrar la fuente
+const fontPath = path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf');
+registerFont(fontPath, { family: 'Noto Sans' });
+
+app.get('/api/utility/boostcard', async (req, res) => {
+    const { avatar, username, background, avatarposicion, usernameposicion } = req.query;
+
+    if (!avatar || !username || !background || !avatarposicion || !usernameposicion) {
+        return res.status(400).json({ error: "Faltan parámetros obligatorios" });
+    }
+
     const canvas = createCanvas(800, 400);
     const ctx = canvas.getContext('2d');
 
-    // Cargar el fondo
-    const background = await loadImage(backgroundUrl);
-    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    try {
+        // Cargar imagen de fondo
+        const bgImage = await loadImage(background);
+        ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
 
-    // Cargar el avatar
-    const avatar = await loadImage(avatarUrl);
-    const [avatarX, avatarY] = avatarPos.split(',').map(Number);
-    ctx.drawImage(avatar, avatarX, avatarY, 100, 100);
+        // Cargar avatar
+        const avatarImage = await loadImage(avatar);
+        const [avatarX, avatarY] = avatarposicion.split(',').map(Number);
+        const avatarSize = 100; // Tamaño del avatar
+        ctx.drawImage(avatarImage, avatarX, avatarY, avatarSize, avatarSize);
 
-    // Establecer la fuente correcta
-    ctx.font = 'bold 30px "Noto Sans"';
-    ctx.fillStyle = '#FFFFFF';
-    ctx.textAlign = 'center';
+        // Configurar la fuente y tamaño
+        ctx.font = '30px "Noto Sans"';
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'center';
 
-    // Posicionar el username
-    const [textX, textY] = usernamePos.split(',').map(Number);
-    ctx.fillText(username, textX, textY);
+        // Definir posición del texto asegurando que no se salga del canvas
+        let [textX, textY] = usernameposicion.split(',').map(Number);
 
-    return canvas.toBuffer();
-}
+        // Ajustar posición si el texto sale de los límites del canvas
+        textX = Math.max(50, Math.min(canvas.width - 50, textX));
+        textY = Math.max(50, Math.min(canvas.height - 50, textY));
 
-module.exports = generateBoostCard;
+        // Renderizar el username
+        ctx.fillText(username, textX, textY);
+
+        res.setHeader('Content-Type', 'image/png');
+        res.send(canvas.toBuffer());
+    } catch (error) {
+        console.error("Error generando la imagen:", error);
+        res.status(500).json({ error: "Error generando la imagen" });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
