@@ -7,8 +7,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// IMPORTA EL BOOSTCARD CORRECTAMENTE
-const boostcardRouter = require('/api/utility/boostcard/index');
+// IMPORTA CORRECTAMENTE BOOSTCARD
+const boostcardRouter = require('./utility/boostcard'); // QUITA "/index"
 app.use('/api/utility/boostcard', boostcardRouter);
 
 app.get('/', (req, res) => {
