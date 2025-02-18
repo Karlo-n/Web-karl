@@ -1,39 +1,32 @@
-import express from "express";
-import { pipeline } from "@xenova/transformers";
+const express = require('express');
+const cors = require('cors');
+const translateText = require('./traductor');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
+app.use(cors());
 
-// Inicializar el modelo de traducción por defecto (Inglés a Español)
-const defaultModel = "Helsinki-NLP/opus-mt-en-es";
-const translator = await pipeline("translation", defaultModel);
+app.get('/', (req, res) => {
+    res.send('API de Traducción con Google Translate funcionando 🚀');
+});
 
-app.get("/api/utility/traductor", async (req, res) => {
+app.all('/api/traducir', async (req, res) => {
+    const { texto, idioma } = req.method === "GET" ? req.query : req.body;
+
+    if (!texto || !idioma) {
+        return res.status(400).json({ error: "Faltan parámetros 'texto' o 'idioma'" });
+    }
+
     try {
-        const { texto, idioma } = req.query;
-        if (!texto || !idioma) {
-            return res.status(400).json({ error: "Falta el parámetro 'texto' o 'idioma'" });
-        }
-
-        // Definir el modelo adecuado según el idioma de destino
-        let modelo = `Helsinki-NLP/opus-mt-en-${idioma}`;
-        if (idioma === "en") modelo = `Helsinki-NLP/opus-mt-es-en`; // Español a Inglés
-
-        // Cargar el modelo de traducción correspondiente
-        const traductor = await pipeline("translation", modelo);
-        const resultado = await traductor(texto);
-
-        res.json({ traduccion: resultado[0].translation_text });
+        const resultado = await translateText(texto, idioma);
+        res.json({ resultado });
     } catch (error) {
-        console.error("Error en la traducción:", error);
-        res.status(500).json({ error: "Error en la traducción" });
+        res.status(500).json({ error: "Error en la traducción", detalle: error.message });
     }
 });
 
-// Iniciar el servidor solo si se ejecuta en local (Vercel maneja esto automáticamente)
-if (!process.env.VERCEL) {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
-}
-
-export default app;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
