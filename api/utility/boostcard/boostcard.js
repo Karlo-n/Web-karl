@@ -21,12 +21,11 @@ async function generateBoostCard({ avatar, username, background, avatarposicion,
             .resize(80, 80)
             .toBuffer();
 
-        // Añadir avatar sobre la imagen de fondo
+        // Componer la imagen final
         let compositeImage = await sharp(backgroundImage)
             .composite([{ input: avatarImage, left: avatarX, top: avatarY }])
             .toBuffer();
 
-        // Devolver la imagen generada
         return compositeImage;
     } catch (error) {
         console.error('Error generando la boostcard:', error);
