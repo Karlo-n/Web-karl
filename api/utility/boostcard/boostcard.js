@@ -5,9 +5,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Registrar la fuente
+// Registrar la fuente correctamente
 const fontPath = path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf');
-registerFont(fontPath, { family: 'Noto Sans' });
+registerFont(fontPath, { family: 'NotoSans' });
 
 app.get('/api/utility/boostcard', async (req, res) => {
     const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
@@ -27,28 +27,26 @@ app.get('/api/utility/boostcard', async (req, res) => {
         // Cargar avatar
         const avatarImage = await loadImage(avatar);
         const [avatarX, avatarY] = avatarposicion.split(',').map(Number);
-        const avatarSize = 100; // Tamaño del avatar
+        const avatarSize = 100;
         ctx.drawImage(avatarImage, avatarX, avatarY, avatarSize, avatarSize);
 
-        // Configurar la fuente y tamaño
-        ctx.font = '30px "Noto Sans"';
-        ctx.fillStyle = color || 'white'; // Usar el color definido o blanco por defecto
+        // Configurar la fuente asegurando que se use una de respaldo
+        ctx.font = 'bold 40px "NotoSans", sans-serif';
+        ctx.fillStyle = color || 'white'; // Usar color personalizado o blanco
         ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
 
-        // Definir posición del texto asegurando que siempre sea visible
+        // Ajustar posición del texto si se sale de los límites
         let [textX, textY] = usernameposicion.split(',').map(Number);
-
-        // Ajustar posición si el texto sale de los límites del canvas
         textX = Math.max(50, Math.min(canvas.width - 50, textX));
         textY = Math.max(50, Math.min(canvas.height - 50, textY));
 
-        // Agregar sombra para mayor visibilidad
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-        ctx.shadowBlur = 4;
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
+        // Dibujar un fondo negro detrás del texto para asegurar visibilidad
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect(textX - 60, textY - 25, 120, 50);
 
-        // Renderizar el username
+        // Dibujar el texto encima
+        ctx.fillStyle = color || 'white';
         ctx.fillText(username, textX, textY);
 
         res.setHeader('Content-Type', 'image/png');
