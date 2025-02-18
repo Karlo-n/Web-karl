@@ -1,10 +1,12 @@
 const express = require('express');
-const Jimp = require('jimp');
+const sharp = require('sharp');
+const axios = require('axios');
+const path = require('path');
+const fs = require('fs').promises;
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const router = express.Router();
 
-app.get('/api/utility/boostcard', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
 
@@ -12,43 +14,41 @@ app.get('/api/utility/boostcard', async (req, res) => {
             return res.status(400).json({ error: 'Faltan parámetros obligatorios' });
         }
 
-        // Cargar imágenes
-        const bgImage = await Jimp.read(background);
-        const avatarImage = await Jimp.read(avatar);
+        // Descargar imágenes
+        const avatarBuffer = await axios.get(avatar, { responseType: 'arraybuffer' }).then(res => res.data);
+        const backgroundBuffer = await axios.get(background, { responseType: 'arraybuffer' }).then(res => res.data);
 
-        // 📌 Cargar fuente predeterminada (sin necesidad de subir archivos extra)
-        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE); // Usa la fuente incluida en Jimp
+        // Crear la imagen de fondo
+        let image = sharp(backgroundBuffer)
+            .resize(600, 300)
+            .composite([{ input: avatarBuffer, top: avatarposicion ? parseInt(avatarposicion.split(',')[1]) : 100, left: avatarposicion ? parseInt(avatarposicion.split(',')[0]) : 100 }]);
 
-        // Posiciones predeterminadas
-        const [avatarX, avatarY] = avatarposicion ? avatarposicion.split(',').map(Number) : [50, 50];
-        const [textX, textY] = usernameposicion ? usernameposicion.split(',').map(Number) : [200, 250];
+        // Agregar texto usando Sharp
+        const svgText = `
+            <svg width="600" height="300">
+                <text x="${usernameposicion ? parseInt(usernameposicion.split(',')[0]) : 300}" 
+                      y="${usernameposicion ? parseInt(usernameposicion.split(',')[1]) : 250}" 
+                      font-size="30" 
+                      text-anchor="middle" 
+                      fill="${color || '#FFFFFF'}"
+                      font-family="Arial">
+                    ${username}
+                </text>
+            </svg>
+        `;
 
-        // Redimensionar avatar
-        avatarImage.resize(80, 80);
+        const textBuffer = Buffer.from(svgText);
 
-        // Componer avatar sobre el fondo
-        bgImage.composite(avatarImage, avatarX, avatarY);
+        image = image.composite([{ input: textBuffer, left: 0, top: 0 }]);
 
-        // Definir color del texto
-        const textColor = color || '#FFFFFF'; // Color blanco por defecto
+        const finalBuffer = await image.toBuffer();
 
-        // Agregar texto
-        bgImage.print(font, textX, textY, {
-            text: username,
-            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-            alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
-        }, 300, 50);
-
-        // Convertir a imagen PNG y enviar respuesta
-        const buffer = await bgImage.getBufferAsync(Jimp.MIME_PNG);
         res.setHeader('Content-Type', 'image/png');
-        res.send(buffer);
+        res.send(finalBuffer);
     } catch (error) {
-        console.error('Error generando la imagen:', error);
+        console.error('❌ Error generando la imagen:', error);
         res.status(500).json({ error: 'Error generando la imagen' });
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+module.exports = router;
