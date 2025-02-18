@@ -2,7 +2,7 @@ const { createCanvas, loadImage, registerFont } = require('canvas');
 const path = require('path');
 
 // Registrar la fuente desde la carpeta fonts
-registerFont(path.join(__dirname, 'fonts', 'NotoSans-Regular.ttf'), { family: 'Noto Sans' });
+registerFont(path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf'), { family: 'Noto Sans' });
 
 async function generateBoostCard(avatarUrl, username, backgroundUrl, avatarPos, usernamePos) {
     const canvas = createCanvas(800, 400);
