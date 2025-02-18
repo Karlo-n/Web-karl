@@ -1,62 +1,66 @@
-const express = require('express');
-const { createCanvas, loadImage, registerFont } = require('canvas');
-const path = require('path');
+from flask import Flask, request, send_file
+from PIL import Image, ImageDraw, ImageFont
+import requests
+from io import BytesIO
+import os
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+app = Flask(__name__)
 
-// Registrar la fuente correctamente
-const fontPath = path.join(__dirname, 'fonts', 'NotoSans-VariableFont_wdth,wght.ttf');
-registerFont(fontPath, { family: 'NotoSans' });
+# Asegurar que la carpeta de fuentes existe
+FONT_PATH = "api/utility/boostcard/fonts/NotoSans-VariableFont_wdth,wght.ttf"
+if not os.path.exists(FONT_PATH):
+    raise FileNotFoundError(f"La fuente no se encontró en {FONT_PATH}")
 
-app.get('/api/utility/boostcard', async (req, res) => {
-    const { avatar, username, background, avatarposicion, usernameposicion, color } = req.query;
+@app.route("/api/utility/boostcard")
+def boostcard():
+    # Obtener parámetros de la URL
+    avatar_url = request.args.get("avatar")
+    username = request.args.get("username", "Usuario")
+    background_url = request.args.get("background")
+    avatar_pos = request.args.get("avatarposicion", "50,50")
+    username_pos = request.args.get("usernameposicion", "300,300")
+    text_color = request.args.get("color", "#FFFFFF")
+    
+    # Convertir posiciones
+    try:
+        avatar_x, avatar_y = map(int, avatar_pos.split(","))
+        username_x, username_y = map(int, username_pos.split(","))
+    except ValueError:
+        return {"error": "Las posiciones deben ser en formato x,y"}, 400
+    
+    # Descargar imágenes
+    try:
+        background = Image.open(BytesIO(requests.get(background_url).content)) if background_url else Image.new("RGB", (600, 300), (30, 30, 30))
+        avatar = Image.open(BytesIO(requests.get(avatar_url).content)).convert("RGBA") if avatar_url else None
+    except Exception:
+        return {"error": "No se pudieron cargar las imágenes"}, 400
+    
+    # Redimensionar avatar
+    if avatar:
+        avatar = avatar.resize((100, 100))
+        background.paste(avatar, (avatar_x, avatar_y), avatar)
+    
+    # Dibujar texto
+    draw = ImageDraw.Draw(background)
+    try:
+        font = ImageFont.truetype(FONT_PATH, 40)
+    except IOError:
+        font = ImageFont.load_default()
+    
+    # Validar color en formato RGB
+    try:
+        text_color = tuple(int(text_color[i:i+2], 16) for i in (1, 3, 5))
+    except ValueError:
+        text_color = (255, 255, 255)  # Color por defecto blanco
+    
+    draw.text((username_x, username_y), username, fill=text_color, font=font)
+    
+    # Guardar la imagen resultante en un buffer
+    output = BytesIO()
+    background.save(output, format="PNG")
+    output.seek(0)
+    
+    return send_file(output, mimetype="image/png")
 
-    if (!avatar || !username || !background || !avatarposicion || !usernameposicion) {
-        return res.status(400).json({ error: "Faltan parámetros obligatorios" });
-    }
-
-    const canvas = createCanvas(800, 400);
-    const ctx = canvas.getContext('2d');
-
-    try {
-        // Cargar imagen de fondo
-        const bgImage = await loadImage(background);
-        ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-
-        // Cargar avatar
-        const avatarImage = await loadImage(avatar);
-        const [avatarX, avatarY] = avatarposicion.split(',').map(Number);
-        const avatarSize = 100;
-        ctx.drawImage(avatarImage, avatarX, avatarY, avatarSize, avatarSize);
-
-        // Configurar la fuente asegurando que se use una de respaldo
-        ctx.font = 'bold 40px "NotoSans", sans-serif';
-        ctx.fillStyle = color || 'white'; // Usar color personalizado o blanco
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
-        // Ajustar posición del texto si se sale de los límites
-        let [textX, textY] = usernameposicion.split(',').map(Number);
-        textX = Math.max(50, Math.min(canvas.width - 50, textX));
-        textY = Math.max(50, Math.min(canvas.height - 50, textY));
-
-        // Dibujar un fondo negro detrás del texto para asegurar visibilidad
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillRect(textX - 60, textY - 25, 120, 50);
-
-        // Dibujar el texto encima
-        ctx.fillStyle = color || 'white';
-        ctx.fillText(username, textX, textY);
-
-        res.setHeader('Content-Type', 'image/png');
-        res.send(canvas.toBuffer());
-    } catch (error) {
-        console.error("Error generando la imagen:", error);
-        res.status(500).json({ error: "Error generando la imagen" });
-    }
-});
-
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+if __name__ == "__main__":
+    app.run(debug=True)
