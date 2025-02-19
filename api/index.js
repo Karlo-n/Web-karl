@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 8080;
 
 // Importar y usar las rutas de las APIs
 app.use('/api/utility/traductor', require('./utility/traductor'));
-app.use('/api/utility/qr', require('./utility/qr'));
+app.use('/api/utility/qrcode', require('./utility/qrcode'));
 
 // Página de prueba
 app.get('/', (req, res) => {
