@@ -1,22 +1,20 @@
-import QRCode from 'qrcode';
+const express = require('express');
+const QRCode = require('qrcode');
 
-export default async function handler(req, res) {
-    try {
-        const { texto } = req.query;
+const app = express();
+app.use(express.json());
 
-        if (!texto) {
-            return res.status(400).json({ error: "Falta el parámetro 'texto'" });
-        }
-
-        // Genera el código QR en formato PNG
-        const qrImage = await QRCode.toBuffer(texto);
-
-        // Configura la cabecera para que el navegador interprete la imagen correctamente
-        res.setHeader('Content-Type', 'image/png');
-        res.send(qrImage);
-
-    } catch (error) {
-        console.error("Error generando el código QR:", error);
-        res.status(500).json({ error: "Error generando el código QR" });
+app.get('/', async (req, res) => {
+    const { text } = req.query;
+    if (!text) {
+        return res.status(400).json({ error: "Falta el parámetro 'text'" });
     }
-}
+    try {
+        const qr = await QRCode.toDataURL(text);
+        res.json({ qr });
+    } catch (error) {
+        res.status(500).json({ error: "Error generando el QR", detalle: error.message });
+    }
+});
+
+module.exports = app; // 🔹 Agregar esta línea
