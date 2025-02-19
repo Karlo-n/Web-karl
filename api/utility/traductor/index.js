@@ -1,24 +1,14 @@
 const express = require('express');
-const cors = require('cors');
-const translateText = require('./traductor');
+const translateText = require('./traductor'); // Asegúrate de que el archivo correcto se esté importando
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
 app.use(express.json());
-app.use(cors());
 
-app.get('/', (req, res) => {
-    res.send('API de Traducción con Google Translate funcionando 🚀');
-});
-
-app.all('/api/utility/traductor', async (req, res) => {
-    const { texto, idioma } = req.method === "GET" ? req.query : req.body;
-
+app.post('/', async (req, res) => {
+    const { texto, idioma } = req.body;
     if (!texto || !idioma) {
         return res.status(400).json({ error: "Faltan parámetros 'texto' o 'idioma'" });
     }
-
     try {
         const resultado = await translateText(texto, idioma);
         res.json({ resultado });
@@ -27,6 +17,4 @@ app.all('/api/utility/traductor', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+module.exports = app; // 🔹 Agregar esta línea
