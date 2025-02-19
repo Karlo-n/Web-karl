@@ -1,15 +1,22 @@
 const express = require('express');
+const path = require('path');
+
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Importar y usar las rutas de las APIs
-app.use('/api/utility/traductor', require('./utility/traductor'));
-app.use('/api/utility/qrcode', require('./utility/qrcode'));
+// Servir archivos estáticos desde la raíz del proyecto
+app.use(express.static(path.join(__dirname, '../public')));
 
-// Página de prueba
+// Servir el index.html cuando se acceda a la raíz del dominio
 app.get('/', (req, res) => {
-    res.send('API Karl funcionando 🚀');
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
+
+// API Traductor
+app.use('/api/utility/traductor', require('./utility/traductor/index'));
+
+// API QR
+app.use('/api/utility/qr', require('./utility/qr/index'));
 
 // Iniciar servidor
 app.listen(PORT, () => {
