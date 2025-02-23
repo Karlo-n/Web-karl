@@ -186,43 +186,28 @@
         </div>
     </div>
 
-    <script>
-        function toggleMenu() {
-            let menu = document.getElementById("menu");
-            menu.classList.toggle("menu-visible");
+<script>
+    async function obtenerDatos() {
+        try {
+            let ipRes = await fetch("https://api.ipify.org?format=json");
+            let ipData = await ipRes.json();
+            document.getElementById("ip").innerText = ipData.ip;
+
+            // 🔥 Aumentar visitantes en la API correctamente
+            let visitasRes = await fetch("https://apikarl.com/api/visitantes", { 
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            });
+            let visitasData = await visitasRes.json();
+            document.getElementById("visitantes").innerText = visitasData.visitantes || "Error";
+
+        } catch (error) {
+            document.getElementById("visitantes").innerText = "Error";
         }
+    }
 
-        async function obtenerDatos() {
-            try {
-                let ipRes = await fetch("https://api.ipify.org?format=json");
-                let ipData = await ipRes.json();
-                document.getElementById("ip").innerText = ipData.ip;
-
-                // 📌 CORRECCIÓN: Ahora visitantes se actualizará correctamente
-                let visitasRes = await fetch("https://api.apikarl.com/api/visitantes", { method: "POST" });
-                let visitasData = await visitasRes.json();
-                document.getElementById("visitantes").innerText = visitasData.visitantes || "Error";
-
-            } catch (error) {
-                document.getElementById("visitantes").innerText = "Error";
-            }
-        }
-
-        obtenerDatos();
-
-        // Tiempo activo persistente
-        let startTime = localStorage.getItem("startTime");
-        if (!startTime) {
-            startTime = Date.now();
-            localStorage.setItem("startTime", startTime);
-        }
-
-        setInterval(() => {
-            document.getElementById("clock").innerText = new Date().toLocaleTimeString();
-            let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-            document.getElementById("tiempoActivo").innerText = `${elapsedTime} segundos`;
-        }, 1000);
-    </script>
+    obtenerDatos();
+</script>
 
 </body>
 </html>
