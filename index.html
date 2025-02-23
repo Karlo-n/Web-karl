@@ -198,7 +198,7 @@
                 let ipData = await ipRes.json();
                 document.getElementById("ip").innerText = ipData.ip;
 
-                let visitasRes = await fetch("https://apikarl.com/api/visitantes");
+                let visitasRes = await fetch("https://apikarl.com/api/visitantes", { method: "POST" });
                 let visitasData = await visitasRes.json();
                 document.getElementById("visitantes").innerText = visitasData.visitantes || "Error";
 
@@ -209,7 +209,13 @@
 
         obtenerDatos();
 
-        let startTime = Date.now();
+        // Tiempo activo persistente
+        let startTime = localStorage.getItem("startTime");
+        if (!startTime) {
+            startTime = Date.now();
+            localStorage.setItem("startTime", startTime);
+        }
+
         setInterval(() => {
             document.getElementById("clock").innerText = new Date().toLocaleTimeString();
             let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
