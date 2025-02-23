@@ -198,23 +198,19 @@
                 let ipData = await ipRes.json();
                 document.getElementById("ip").innerText = ipData.ip;
 
-                // 🔥 CORREGIDO: "Visitantes" ya funciona sin errores
-                let visitasRes = await fetch("https://api.apikarl.com/api/visitantes", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" }
-                });
-
+                // 📌 CORRECCIÓN: Ahora visitantes se actualizará correctamente
+                let visitasRes = await fetch("https://api.apikarl.com/api/visitantes", { method: "POST" });
                 let visitasData = await visitasRes.json();
                 document.getElementById("visitantes").innerText = visitasData.visitantes || "Error";
 
             } catch (error) {
-                console.error("Error obteniendo visitantes:", error);
                 document.getElementById("visitantes").innerText = "Error";
             }
         }
 
         obtenerDatos();
 
+        // Tiempo activo persistente
         let startTime = localStorage.getItem("startTime");
         if (!startTime) {
             startTime = Date.now();
