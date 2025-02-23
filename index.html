@@ -1,216 +1,152 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Karl</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script><!-- Favicon -->
+<link rel="icon" type="image/png" href="favicon.png">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
+<!-- Metadatos Open Graph -->
+<meta property="og:title" content="API Karl">
+<meta property="og:description" content="Disfruta de APIKARL y sus apis.">
+<meta property="og:image" content="https://apikarl.com/preview.png">
+<meta property="og:url" content="https://apikarl.com">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="API Karl">
+<meta name="twitter:description" content="Descubre herramientas avanzadas para desarrollo y entretenimiento con API Karl.">
+<meta name="twitter:image" content="https://apikarl.com/preview.png">
 
-    <!-- Metadatos Open Graph -->
-    <meta property="og:title" content="API Karl">
-    <meta property="og:description" content="Disfruta de APIKARL y sus apis.">
-    <meta property="og:image" content="https://apikarl.com/preview.png">
-    <meta property="og:url" content="https://apikarl.com">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="API Karl">
-    <meta name="twitter:description" content="Descubre herramientas avanzadas para desarrollo y entretenimiento con API Karl.">
-    <meta name="twitter:image" content="https://apikarl.com/preview.png">
-    
-    <style>
-        body {
-            background: #0a0f1a;
-            color: white;
-            font-family: Arial, sans-serif;
-            overflow-x: hidden;
-            position: relative;
-        }
+<style>
+    body {
+        background: #0a0f1a;
+        color: white;
+        font-family: Arial, sans-serif;
+        overflow-x: hidden;
+        position: relative;
+    }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background: rgba(10, 15, 30, 0.9);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            position: relative;
-            z-index: 10;
-        }
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background: rgba(10, 15, 30, 0.9);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        position: relative;
+        z-index: 10;
+    }
 
-        .navbar-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+    .navbar-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: white;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 
-        .discord-icon {
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-        }
+    .discord-icon {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
 
-        .menu-btn {
-            font-size: 24px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: white;
-        }
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+        z-index: 5;
+    }
 
-        .menu-container {
-            position: relative;
-            display: inline-block;
-        }
+    .stat-box {
+        background: rgba(20, 25, 40, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
 
-        .menu-content {
-            display: none;
-            position: absolute;
-            top: 40px;
-            right: 0;
-            background: rgba(20, 20, 40, 0.95);
-            border-radius: 5px;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            min-width: 140px;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 20;
-        }
+    .stat-box img {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
+        object-fit: contain;
+    }
 
-        .menu-visible {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .clock {
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
 
-        .menu-content a {
-            display: block;
-            padding: 5px;
-            color: white;
-            text-decoration: none;
-        }
-
-        .menu-content a:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-            z-index: 5;
-        }
-
-        .stat-box {
-            background: rgba(20, 25, 40, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-box img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 10px;
-            object-fit: contain;
-        }
-
-        .clock {
-            font-size: 20px;
-            font-weight: bold;
-        }
-    </style>
 </head>
-<body>
+<body><audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mp3">
+</audio>
 
-    <nav class="navbar">
-        <a href="https://discord.gg/KPU72TMdat" target="_blank">
-            <img src="discord.png" alt="Discord" class="discord-icon">
-        </a>
+<nav class="navbar">
+    <a href="https://discord.gg/KPU72TMdat" target="_blank">
+        <img src="discord.png" alt="Discord" class="discord-icon">
+    </a>
+    <span class="navbar-title">API Karl</span>
+</nav>
 
-        <span class="navbar-title">API Karl</span>
-
-        <div class="menu-container">
-            <button class="menu-btn" onclick="toggleMenu()">=</button>
-            <div id="menu" class="menu-content">
-                <b>API</b>
-                <a href="https://apikarl.com/docs/utilidad">Utilidades</a>
-                <a href="https://apikarl.com/docs/diversion">Divertido</a>
-                <b>Info</b>
-                <a href="http://apikarl.com">Casa</a>
-                <a href="docs/">Documentación</a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="stats-container">
-        <div class="stat-box">
-            <img src="antena.png" alt="Antena">
-            <h2 class="text-blue-400">Tu IP</h2>
-            <p id="ip" class="text-gray-300">Cargando...</p>
-        </div>
-
-        <div class="stat-box">
-            <img src="ojo.png" alt="Visitantes">
-            <h2 class="text-blue-400">Visitantes</h2>
-            <p id="visitantes" class="text-gray-300">Cargando...</p>
-        </div>
-
-        <div class="stat-box">
-            <img src="estadistica.png" alt="Peticiones">
-            <h2 class="text-blue-400">Peticiones</h2>
-            <p id="peticiones" class="text-gray-300">Cargando...</p>
-        </div>
-
-        <div class="stat-box">
-            <img src="reloj.png" alt="Reloj">
-            <h2 class="text-blue-400">Hora actual</h2>
-            <p id="clock" class="clock"></p>
-        </div>
+<div class="stats-container">
+    <div class="stat-box">
+        <img src="antena.png" alt="Antena">
+        <h2 class="text-blue-400">Tu IP</h2>
+        <p id="ip" class="text-gray-300">Cargando...</p>
     </div>
 
-    <script>
-        function toggleMenu() {
-            let menu = document.getElementById("menu");
-            menu.classList.toggle("menu-visible");
+    <div class="stat-box">
+        <img src="ojo.png" alt="Visitantes">
+        <h2 class="text-blue-400">Visitantes</h2>
+        <p id="visitantes" class="text-gray-300">Cargando...</p>
+    </div>
+
+    <div class="stat-box">
+        <img src="estadistica.png" alt="Uptime">
+        <h2 class="text-blue-400">Tiempo Activo</h2>
+        <p id="uptime" class="text-gray-300">Cargando...</p>
+    </div>
+
+    <div class="stat-box">
+        <img src="reloj.png" alt="Reloj">
+        <h2 class="text-blue-400">Hora actual</h2>
+        <p id="clock" class="clock"></p>
+    </div>
+</div>
+
+<script>
+    async function obtenerDatos() {
+        try {
+            let ipRes = await fetch("https://api.ipify.org?format=json");
+            let ipData = await ipRes.json();
+            document.getElementById("ip").innerText = ipData.ip;
+
+            let visitasRes = await fetch("https://api.apikarl.com/api/visitas");
+            let visitasData = await visitasRes.json();
+            document.getElementById("visitantes").innerText = visitasData.visitas || "Error";
+
+            let uptimeRes = await fetch("https://api.apikarl.com/api/uptime");
+            let uptimeData = await uptimeRes.json();
+            document.getElementById("uptime").innerText = uptimeData.uptime || "Error";
+        } catch (error) {
+            document.getElementById("visitantes").innerText = "Error";
+            document.getElementById("uptime").innerText = "Error";
         }
+    }
 
-        async function obtenerDatos() {
-            try {
-                let ipRes = await fetch("https://api.ipify.org?format=json");
-                let ipData = await ipRes.json();
-                document.getElementById("ip").innerText = ipData.ip;
+    obtenerDatos();
 
-                let visitasRes = await fetch("https://apikarl.com/api/visitas");
-                let visitasData = await visitasRes.json();
-                document.getElementById("visitantes").innerText = visitasData.visitas || "Error";
-
-                let peticionesRes = await fetch("https://apikarl.com/api/stats");
-                let peticionesData = await peticionesRes.json();
-                document.getElementById("peticiones").innerText = peticionesData.peticiones || "Error";
-            } catch (error) {
-                document.getElementById("visitantes").innerText = "Error";
-                document.getElementById("peticiones").innerText = "Error";
-            }
-        }
-
-        obtenerDatos();
-
-        setInterval(() => {
-            document.getElementById("clock").innerText = new Date().toLocaleTimeString();
-        }, 1000);
-    </script>
+    setInterval(() => {
+        document.getElementById("clock").innerText = new Date().toLocaleTimeString();
+    }, 1000);
+</script>
 
 </body>
 </html>
