@@ -4,7 +4,7 @@ const path = require("path");
 const router = express.Router();
 
 // 📂 Archivo donde se almacenará el número de visitantes
-const VISITANTES_FILE = path.join(__dirname, "../../../data/visitantes.json");
+const VISITANTES_FILE = path.join(__dirname, "../../data/visitantes.json");
 
 // 🔄 Función para leer el número de visitantes desde el archivo
 const leerVisitantes = () => {
@@ -30,7 +30,13 @@ const guardarVisitantes = (visitantes) => {
     }
 };
 
-// 📌 Ruta para obtener y actualizar el número de visitantes
+// 📌 Ruta para obtener el número de visitantes (GET)
+router.get("/", (req, res) => {
+    const visitantes = leerVisitantes();
+    res.json({ visitantes });
+});
+
+// 📌 Ruta para aumentar el número de visitantes (POST)
 router.post("/", (req, res) => {
     let visitantes = leerVisitantes();
     visitantes += 1; // 🔥 Sumar un visitante
