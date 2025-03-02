@@ -5,77 +5,248 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentación | API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuentes de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
 
+    <!-- Metadatos Open Graph -->
+    <meta property="og:title" content="Documentación | API Karl">
+    <meta property="og:description" content="Documentación oficial de API Karl - Herramientas avanzadas para desarrollo y entretenimiento.">
+    <meta property="og:image" content="https://apikarl.com/preview.png">
+    <meta property="og:url" content="https://apikarl.com/docs">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Documentación | API Karl">
+    <meta name="twitter:description" content="Documentación oficial y recursos para implementar API Karl en tus proyectos.">
+    <meta name="twitter:image" content="https://apikarl.com/preview.png">
+
     <style>
-        body {
-            background: #0a0f1a;
-            color: white;
-            font-family: Arial, sans-serif;
+        :root {
+            --primary: #4deeea;
+            --secondary: #74ee15;
+            --accent: #ffe700;
+            --dark-bg: #0a0f1a;
+            --card-bg: rgba(20, 25, 40, 0.9);
+            --glow-primary: 0 0 10px rgba(77, 238, 234, 0.7);
+            --glow-secondary: 0 0 10px rgba(116, 238, 21, 0.7);
+            --glow-accent: 0 0 10px rgba(255, 231, 0, 0.7);
+            --card-shadow: 0 4px 20px rgba(77, 238, 234, 0.2);
+            --text-shadow: 0 0 5px rgba(77, 238, 234, 0.7);
         }
 
-        /* Menú fijo */
+        body {
+            background: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Fondo animado con partículas */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(20, 25, 40, 0.3) 10%, transparent 10%);
+            background-size: 30px 30px;
+            animation: backgroundAnimation 100s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundAnimation {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 1000px 1000px;
+            }
+        }
+
+        /* Líneas de malla futurista */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(rgba(77, 238, 234, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(77, 238, 234, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        /* Navbar mejorado */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background: #14182b;
+            padding: 15px 30px;
+            background: rgba(10, 15, 30, 0.95);
+            box-shadow: 0 0 20px rgba(77, 238, 234, 0.2);
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(77, 238, 234, 0.2);
         }
 
-        .menu {
-            background: #1a1f33;
-            position: fixed;
-            right: 10px;
-            top: 55px;
-            width: 220px;
-            border-radius: 10px;
-            padding: 10px;
-            display: none;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-            z-index: 1100;
-        }
-
-        .menu .category {
+        .navbar-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
             font-weight: bold;
-            color: #00aaff;
-            padding: 5px 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+            text-shadow: var(--text-shadow);
+            transition: all 0.3s ease;
         }
 
-        .menu a {
+        .discord-icon {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 2px var(--primary));
+        }
+
+        .discord-icon:hover {
+            transform: rotate(5deg) scale(1.1);
+            filter: drop-shadow(0 0 5px var(--primary));
+        }
+
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            transform: rotate(90deg);
+            color: var(--secondary);
+        }
+
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: rgba(20, 25, 40, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(77, 238, 234, 0.3);
+            min-width: 180px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 20;
+            border: 1px solid rgba(77, 238, 234, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .menu-visible {
             display: block;
-            padding: 8px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .menu-content b {
+            display: block;
+            color: var(--primary);
+            margin: 10px 0 5px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(77, 238, 234, 0.2);
+            padding-bottom: 3px;
+        }
+
+        .menu-content a {
+            display: block;
+            padding: 8px 10px;
             color: white;
             text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            margin: 2px 0;
         }
 
-        .menu a:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .menu-content a:hover {
+            background: rgba(77, 238, 234, 0.1);
+            transform: translateX(5px);
+            color: var(--primary);
         }
 
+        /* Contenido */
         .content {
-            max-width: 800px;
-            margin: 100px auto;
-            padding: 20px;
+            max-width: 1000px;
+            margin: 120px auto 40px;
+            padding: 0 20px;
+            z-index: 1;
         }
 
         .section {
-            background: rgba(20, 25, 40, 0.9);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            background: var(--card-bg);
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
+            border: 1px solid rgba(77, 238, 234, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent, 
+                rgba(77, 238, 234, 0.05), 
+                transparent 30%
+            );
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .section.visible {
@@ -83,134 +254,649 @@
             transform: translateY(0);
         }
 
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(77, 238, 234, 0.3);
+        }
+
+        .section h2 {
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+            transition: width 0.4s ease;
+        }
+
+        .section:hover h2::after {
+            width: 100%;
+        }
+
         .img-container {
             display: flex;
             justify-content: center;
-            margin-top: 10px;
+            margin: 25px 0;
+            transition: all 0.3s ease;
         }
 
         .img-container img {
-            width: 100px;
+            width: 120px;
             height: auto;
+            filter: drop-shadow(0 0 8px var(--primary));
+            transition: all 0.3s ease;
+        }
+
+        .section:hover .img-container img {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .btn {
             display: inline-block;
-            padding: 10px 15px;
-            margin-top: 10px;
-            background: #0084ff;
-            color: white;
+            padding: 12px 25px;
+            margin-top: 20px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--dark-bg);
             font-weight: bold;
-            border-radius: 5px;
+            border-radius: 30px;
             text-align: center;
             text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow-primary);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s ease;
         }
 
         .btn:hover {
-            background: #006fd6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(77, 238, 234, 0.4);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* Lista con mejor diseño */
+        .section ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .section li {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            background: rgba(77, 238, 234, 0.05);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 5px 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .section li:hover {
+            background: rgba(77, 238, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .section li b {
+            color: var(--accent);
+            margin-right: 5px;
+        }
+
+        /* Notificación */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(20, 25, 40, 0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(77, 238, 234, 0.3);
+            transform: translateX(200%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+            border-left: 4px solid var(--primary);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-icon {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        /* Secciones adicionales */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .info-card {
+            background: rgba(10, 15, 25, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(77, 238, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            background: rgba(10, 15, 25, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .info-card h3 {
+            color: var(--secondary);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .info-card i {
+            font-size: 30px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* Code block styling */
+        .code-block {
+            background: rgba(10, 15, 25, 0.8);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+
+        .code-lang {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--dark-bg);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .content {
+                padding: 0 15px;
+                margin-top: 100px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+            background: rgba(10, 15, 30, 0.8);
+            position: relative;
+            border-top: 1px solid rgba(77, 238, 234, 0.2);
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(77, 238, 234, 0.1);
+            color: var(--primary);
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            background: var(--primary);
+            color: var(--dark-bg);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Loader inicial */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(77, 238, 234, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s infinite ease;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-
-    <!-- Menú superior -->
-    <nav class="navbar">
-        <a href="https://discord.gg/KPU72TMdat">
-            <img src="discord.png" alt="Discord" width="40">
-        </a>
-        <h1 class="text-xl font-bold">API Karl</h1>
-        <button onclick="toggleMenu()">=</button>
-    </nav>
-
-    <!-- Menú desplegable -->
-    <div id="menu" class="menu">
-        <div class="category">API</div>
-        <a href="https://apikarl.com/docs/utilidad">Utilidades</a>
-        <a href="https://apikarl.com/docs/diversion">Divertido</a>
-
-        <div class="category">Otros</div>
-        <a href="http://apikarl.com">Casa</a>
-        <a href="http://apikarl.com/docs">Documentación</a>
+    <!-- Loader inicial -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <h2 style="margin-top: 20px; font-family: 'Orbitron', sans-serif; color: var(--primary);">DOCUMENTACIÓN</h2>
+        </div>
     </div>
+
+    <!-- Notificación -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="fas fa-info-circle notification-icon"></i>
+            <span id="notificationText">¡Documentación actualizada!</span>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="https://discord.gg/PvQvJ7JvEx" target="_blank" class="discord-link">
+            <img src="discord.png" alt="Discord" class="discord-icon">
+        </a>
+
+        <span class="navbar-title">API Karl - Documentación</span>
+
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+            <div id="menu" class="menu-content">
+                <b>API</b>
+                <a href="https://apikarl.com/docs/utilidad"><i class="fas fa-tools"></i> Utilidades</a>
+                <a href="https://apikarl.com/docs/diversion"><i class="fas fa-gamepad"></i> Divertido</a>
+                <b>Info</b>
+                <a href="http://apikarl.com"><i class="fas fa-home"></i> Casa</a>
+                <a href="docs/"><i class="fas fa-book"></i> Documentación</a>
+            </div>
+        </div>
+    </nav>
 
     <!-- Contenido de la documentación -->
     <div class="content">
         <div class="section fade-in">
-            <h2 class="text-xl font-bold">🔑 Autenticación</h2>
+            <h2><i class="fas fa-key"></i> Autenticación</h2>
             <p>Para acceder a la API, necesitas una API Key. Puedes solicitarla desde nuestro panel de control.</p>
             <p>Las API Keys garantizan el acceso seguro y limitado a la API. Solo los usuarios registrados pueden obtener una.</p>
             <p>Si intentas hacer una petición sin una API Key válida, recibirás un error <b>401 Unauthorized</b>.</p>
+            
+            <div class="code-block">
+                <span class="code-lang">JavaScript</span>
+                <pre>
+fetch('https://apikarl.com/api/memes', {
+  headers: {
+    'Authorization': 'Bearer TU_API_KEY_AQUI'
+  }
+})
+.then(response => response.json())
+.then(data => console.log(data));</pre>
+            </div>
+            
             <div class="img-container">
                 <img src="/docs/candado.png" alt="Autenticación">
             </div>
-            <a href="https://discord.gg/3Jm4tcr4yT" class="btn">Solicitar API Key</a>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Seguridad</h3>
+                    <p>Tu API Key es única y no debe compartirse. Guárdala de forma segura y nunca la incluyas en código cliente expuesto.</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <h3>Límites</h3>
+                    <p>Cada API Key tiene límites de uso para garantizar el servicio. Contacta para aumentar tus límites.</p>
+                </div>
+            </div>
+            
+            <a href="https://discord.gg/PvQvJ7JvEx" class="btn"><i class="fas fa-key"></i> Solicitar API Key</a>
         </div>
 
         <div class="section fade-in">
-            <h2 class="text-xl font-bold">🔹 Endpoints</h2>
-            <p>Los endpoints permiten acceder a distintas funciones de la API Karl.</p>
-            <p>A continuación, algunos ejemplos:</p>
+            <h2><i class="fas fa-plug"></i> Endpoints</h2>
+            <p>Los endpoints permiten acceder a distintas funciones de la API Karl. Cada endpoint está diseñado para una función específica y optimizado para un rendimiento máximo.</p>
+            <p>Todos los endpoints retornan datos en formato JSON y aceptan parámetros mediante query strings o en el cuerpo de la petición en formato JSON.</p>
+            
             <ul>
-                <li><b>/api/memes</b> – Devuelve imágenes de memes populares.</li>
-                <li><b>/api/chistes</b> – Responde con chistes aleatorios.</li>
-                <li><b>/api/moderacion</b> – Comandos de moderación para servidores de Discord.</li>
-                <li><b>/api/usuarios</b> – Obtiene información detallada de usuarios de Discord.</li>
+                <li><b>/api/memes</b> – Devuelve imágenes de memes populares con posibilidad de filtrar por categorías.</li>
+                <li><b>/api/chistes</b> – Responde con chistes aleatorios en diferentes idiomas y categorías.</li>
+                <li><b>/api/moderacion</b> – Comandos de moderación para servidores de Discord con opciones avanzadas.</li>
+                <li><b>/api/usuarios</b> – Obtiene información detallada de usuarios de Discord incluyendo estadísticas.</li>
+                <li><b>/api/anime</b> – Información y recursos sobre anime, incluyendo imágenes y datos.</li>
+                <li><b>/api/minigames</b> – Minijuegos integrados para diferentes plataformas.</li>
             </ul>
+            
+            <div class="code-block">
+                <span class="code-lang">Python</span>
+                <pre>
+import requests
+
+response = requests.get(
+    'https://apikarl.com/api/chistes',
+    headers={'Authorization': 'Bearer TU_API_KEY_AQUI'},
+    params={'categoria': 'tecnologia', 'idioma': 'es'}
+)
+
+data = response.json()
+print(data['chiste'])</pre>
+            </div>
+            
             <div class="img-container">
                 <img src="/docs/endpoint.png" alt="Endpoints">
             </div>
-            <a href="https://apikarl.com/docs/endpoint" class="btn">Ver todos los Endpoints</a>
+            
+            <a href="https://apikarl.com/docs/endpoint" class="btn"><i class="fas fa-sitemap"></i> Ver todos los Endpoints</a>
         </div>
 
         <div class="section fade-in">
-            <h2 class="text-xl font-bold">❌ Manejo de errores</h2>
-            <p>Si algo sale mal, la API devolverá códigos de error:</p>
+            <h2><i class="fas fa-exclamation-triangle"></i> Manejo de errores</h2>
+            <p>Si algo sale mal, la API devolverá códigos de error con mensajes descriptivos para facilitar la solución de problemas.</p>
+            
             <ul>
-                <li><b>400</b> – Solicitud incorrecta. Verifica los parámetros.</li>
-                <li><b>401</b> – API Key inválida o faltante.</li>
-                <li><b>403</b> – No tienes permiso para acceder.</li>
-                <li><b>404</b> – El recurso solicitado no existe.</li>
-                <li><b>500</b> – Error interno del servidor.</li>
+                <li><b>400</b> – Solicitud incorrecta. Verifica los parámetros y formato de la petición.</li>
+                <li><b>401</b> – API Key inválida o faltante. Revisa tu autenticación.</li>
+                <li><b>403</b> – No tienes permiso para acceder a este recurso con tu nivel actual.</li>
+                <li><b>404</b> – El recurso solicitado no existe o ha sido removido.</li>
+                <li><b>429</b> – Has excedido el límite de peticiones. Espera antes de intentar nuevamente.</li>
+                <li><b>500</b> – Error interno del servidor. Por favor repórtalo a nuestro equipo.</li>
             </ul>
-            <p>Para evitar errores, revisa la documentación antes de hacer peticiones.</p>
+            
+            <div class="code-block">
+                <span class="code-lang">JSON</span>
+                <pre>
+{
+  "error": true,
+  "codigo": 400,
+  "mensaje": "Parámetro 'categoria' no válido",
+  "sugerencias": ["tecnologia", "deportes", "general"],
+  "documentacion": "https://apikarl.com/docs/errores"
+}</pre>
+            </div>
+            
+            <p>Para evitar errores, revisa la documentación antes de hacer peticiones y siempre maneja los posibles errores en tu código.</p>
+            
             <div class="img-container">
                 <img src="/docs/error.png" alt="Errores">
             </div>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>Estado del Servicio</h3>
+                    <p>Puedes verificar el estado actual de nuestra API en tiempo real en nuestro panel de estado.</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>Soporte</h3>
+                    <p>¿Tienes problemas? Nuestro equipo de soporte está disponible 24/7 en nuestro servidor de Discord.</p>
+                </div>
+            </div>
+            
+            <a href="https://apikarl.com/docs/errores" class="btn"><i class="fas fa-bug"></i> Guía de Solución de Problemas</a>
+        </div>
+
+        <div class="section fade-in">
+            <h2><i class="fas fa-code"></i> Ejemplos de integración</h2>
+            <p>Implementa API Karl en tus proyectos con estos ejemplos prácticos en diferentes lenguajes.</p>
+            
+            <div class="code-block">
+                <span class="code-lang">Node.js</span>
+                <pre>
+const axios = require('axios');
+
+async function getRandomMeme() {
+  try {
+    const response = await axios.get('https://apikarl.com/api/memes/random', {
+      headers: {
+        'Authorization': 'Bearer TU_API_KEY_AQUI'
+      }
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error obteniendo meme:', error.response?.data || error.message);
+    return null;
+  }
+}
+
+// Uso
+getRandomMeme().then(meme => {
+  if (meme) {
+    console.log(`Título: ${meme.titulo}`);
+    console.log(`URL: ${meme.url}`);
+  }
+});</pre>
+            </div>
+            
+            <div class="img-container">
+                <img src="/docs/code.png" alt="Código de ejemplo">
+            </div>
+            
+            <p>Disponemos de librerías oficiales para integrar API Karl en diferentes plataformas y lenguajes:</p>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <i class="fab fa-js"></i>
+                    <h3>JavaScript</h3>
+                    <p>Instala con NPM: <code>npm install apikarl</code></p>
+                </div>
+                <div class="info-card">
+                    <i class="fab fa-python"></i>
+                    <h3>Python</h3>
+                    <p>Instala con PIP: <code>pip install apikarl</code></p>
+                </div>
+                <div class="info-card">
+                    <i class="fab fa-java"></i>
+                    <h3>Java</h3>
+                    <p>Disponible en Maven Central</p>
+                </div>
+                <div class="info-card">
+                    <i class="fab fa-php"></i>
+                    <h3>PHP</h3>
+                    <p>Instala con Composer: <code>composer require apikarl/apikarl</code></p>
+                </div>
+            </div>
+            
+            <a href="https://apikarl.com/docs/ejemplos" class="btn"><i class="fas fa-book-open"></i> Ver más ejemplos</a>
         </div>
     </div>
 
-    <script>
-        function toggleMenu() {
-            let menu = document.getElementById("menu");
-            if (menu.style.display === "block") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "block";
-            }
+    <!-- Footer -->
+<footer class="footer">
+    <div class="social-icons">
+        <a href="https://www.tiktok.com/@pixelrun" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
+        <a href="https://wa.me/523326811294?text=%F0%9F%8C%90-¡Hola!,%20me%20interesa%20tu%20bot%20o%20alguna%20información%20extra" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://discord.gg/PvQvJ7JvEx" target="_blank" class="social-icon"><i class="fab fa-discord"></i></a>
+    </div>
+    <p>© 2025 API Karl - Todos los derechos reservados</p>
+    <p>Plataforma desarrollada con <i class="fas fa-heart" style="color: var(--accent);"></i> para desarrolladores</p>
+</footer>
+
+<script>
+    // Mostrar loader inicial
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.getElementById('pageLoader').classList.add('loader-hidden');
+            showNotification("¡Documentación cargada correctamente!");
+        }, 1500);
+    });
+
+    // Función para mostrar notificaciones
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        document.getElementById('notificationText').textContent = message;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    // Función para el menú
+    function toggleMenu() {
+        let menu = document.getElementById("menu");
+        menu.classList.toggle("menu-visible");
+    }
+
+    // Cerrar el menú al hacer clic fuera de él
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('menu');
+        const menuBtn = document.querySelector('.menu-btn');
+        
+        if (!menu.contains(event.target) && !menuBtn.contains(event.target) && menu.classList.contains('menu-visible')) {
+            menu.classList.remove('menu-visible');
         }
-
-        // Hacer que el menú siga al usuario al hacer scroll
-        window.addEventListener("scroll", function() {
-            let navbar = document.querySelector(".navbar");
-            navbar.style.position = "fixed";
-            navbar.style.top = "0";
+    });
+    
+    // Animaciones al hacer scroll
+    function checkSections() {
+        let sections = document.querySelectorAll(".section");
+        sections.forEach(section => {
+            let position = section.getBoundingClientRect().top;
+            let windowHeight = window.innerHeight;
+            if (position < windowHeight - 100) {
+                section.classList.add("visible");
+            }
         });
-
-        // Asegurar que el menú siempre esté por encima del contenido
-        document.getElementById("menu").style.zIndex = "1100";
-
-        // Animaciones al hacer scroll
-        document.addEventListener("scroll", function() {
-            let sections = document.querySelectorAll(".section");
-            sections.forEach(section => {
-                let position = section.getBoundingClientRect().top;
-                let windowHeight = window.innerHeight;
-                if (position < windowHeight - 100) {
-                    section.classList.add("visible");
-                }
+    }
+    
+    // Comprobar secciones al cargar y al hacer scroll
+    window.addEventListener("load", checkSections);
+    window.addEventListener("scroll", checkSections);
+    
+    // Efecto hover para secciones
+    document.querySelectorAll('.section').forEach(section => {
+        section.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        section.addEventListener('mouseleave', function() {
+            if (this.classList.contains('visible')) {
+                this.style.transform = 'translateY(0)';
+            } else {
+                this.style.transform = 'translateY(30px)';
+            }
+        });
+    });
+    
+    // Hover effect para los info-cards
+    document.querySelectorAll('.info-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+    
+    // Copiar código al hacer clic en los bloques de código
+    document.querySelectorAll('.code-block').forEach(block => {
+        block.addEventListener('click', function() {
+            const code = this.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification("¡Código copiado al portapapeles!");
             });
         });
-    </script>
-
+        
+        // Agregar indicador de que se puede copiar
+        const copyIndicator = document.createElement('div');
+        copyIndicator.innerHTML = '<i class="fas fa-copy"></i>';
+        copyIndicator.style.position = 'absolute';
+        copyIndicator.style.top = '10px';
+        copyIndicator.style.right = '10px';
+        copyIndicator.style.color = 'var(--primary)';
+        copyIndicator.style.fontSize = '14px';
+        copyIndicator.style.cursor = 'pointer';
+        
+        block.style.position = 'relative';
+        block.appendChild(copyIndicator);
+    });
+</script>
 </body>
 </html>
