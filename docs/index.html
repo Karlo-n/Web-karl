@@ -434,28 +434,27 @@
 
         /* Code block styling */
         .code-block {
-            background: rgba(10, 15, 25, 0.8);
-            padding: 15px 20px;
-            border-radius: 10px;
-            font-family: monospace;
-            overflow-x: auto;
-            margin: 20px 0;
-            border-left: 3px solid var(--secondary);
-        }
-
-        .code-block pre {
-            margin: 0;
-        }
-
-        .code-lang {
-            display: inline-block;
-            background: var(--primary);
-            color: var(--dark-bg);
-            padding: 2px 8px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-        }
+        position: relative;
+    }
+    
+    .copy-indicator {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: var(--primary);
+        font-size: 14px;
+        cursor: pointer;
+        background: rgba(10, 15, 25, 0.7);
+        border-radius: 4px;
+        padding: 5px 8px;
+        z-index: 10; /* Asegurar que esté por encima */
+        transition: all 0.3s ease;
+    }
+    
+    .copy-indicator:hover {
+        background: var(--primary);
+        color: var(--dark-bg);
+    }
 
         /* Responsive */
         @media (max-width: 768px) {
