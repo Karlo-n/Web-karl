@@ -5,6 +5,7 @@
     { "src": "docs/**/*.html", "use": "@vercel/static" },
     { "src": "docs/**/*.png", "use": "@vercel/static" },
     { "src": "docs/utilidad/**/*.html", "use": "@vercel/static" },
+    { "src": "docs/diversion/**/*.html", "use": "@vercel/static" },
     { "src": "*.css", "use": "@vercel/static" },
     { "src": "*.js", "use": "@vercel/static" },
     { "src": "*.png", "use": "@vercel/static" },
