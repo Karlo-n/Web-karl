@@ -365,7 +365,7 @@
             margin-right: 5px;
         }
 
-        /* Notificación */
+        /* Notificación mejorada con z-index mayor */
         .notification {
             position: fixed;
             top: 20px;
@@ -377,7 +377,7 @@
             box-shadow: 0 0 15px rgba(77, 238, 234, 0.3);
             transform: translateX(200%);
             transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            z-index: 1000;
+            z-index: 10000; /* Z-index muy alto para estar por encima de todo */
             border-left: 4px solid var(--primary);
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
@@ -432,29 +432,57 @@
             display: block;
         }
 
-        /* Code block styling */
+        /* Code block styling mejorado */
         .code-block {
-        position: relative;
-    }
+            position: relative;
+            background: rgba(10, 15, 25, 0.8);
+            padding: 40px 20px 20px; /* Padding superior más alto para el título */
+            border-radius: 10px;
+            margin: 30px 0;
+            border-left: 3px solid var(--secondary);
+            font-family: 'Consolas', monospace;
+            overflow: hidden;
+        }
+        
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: var(--primary);
+            color: var(--dark-bg);
+            padding: 5px 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 0 0 10px 0;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-weight: bold;
+            color: #ffffff;
+        }
     
-    .copy-indicator {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        color: var(--primary);
-        font-size: 14px;
-        cursor: pointer;
-        background: rgba(10, 15, 25, 0.7);
-        border-radius: 4px;
-        padding: 5px 8px;
-        z-index: 10; /* Asegurar que esté por encima */
-        transition: all 0.3s ease;
-    }
+        .copy-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: var(--primary);
+            font-size: 14px;
+            cursor: pointer;
+            background: rgba(10, 15, 25, 0.7);
+            border-radius: 4px;
+            padding: 5px 8px;
+            z-index: 10; /* Asegurar que esté por encima */
+            transition: all 0.3s ease;
+        }
     
-    .copy-indicator:hover {
-        background: var(--primary);
-        color: var(--dark-bg);
-    }
+        .copy-indicator:hover {
+            background: var(--primary);
+            color: var(--dark-bg);
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -604,8 +632,7 @@
             <p>Las API Keys garantizan el acceso seguro y limitado a la API. Solo los usuarios registrados pueden obtener una.</p>
             <p>Si intentas hacer una petición sin una API Key válida, recibirás un error <b>401 Unauthorized</b>.</p>
             
-            <div class="code-block">
-                <span class="code-lang">JavaScript</span>
+            <div class="code-block" data-language="JavaScript">
                 <pre>
 fetch('https://apikarl.com/api/memes', {
   headers: {
@@ -650,8 +677,7 @@ fetch('https://apikarl.com/api/memes', {
                 <li><b>/api/minigames</b> – Minijuegos integrados para diferentes plataformas.</li>
             </ul>
             
-            <div class="code-block">
-                <span class="code-lang">Python</span>
+            <div class="code-block" data-language="Python">
                 <pre>
 import requests
 
@@ -685,8 +711,7 @@ print(data['chiste'])</pre>
                 <li><b>500</b> – Error interno del servidor. Por favor repórtalo a nuestro equipo.</li>
             </ul>
             
-            <div class="code-block">
-                <span class="code-lang">JSON</span>
+            <div class="code-block" data-language="JSON">
                 <pre>
 {
   "error": true,
@@ -723,8 +748,7 @@ print(data['chiste'])</pre>
             <h2><i class="fas fa-code"></i> Ejemplos de integración</h2>
             <p>Implementa API Karl en tus proyectos con estos ejemplos prácticos en diferentes lenguajes.</p>
             
-            <div class="code-block">
-                <span class="code-lang">Node.js</span>
+            <div class="code-block" data-language="Node.js">
                 <pre>
 const axios = require('axios');
 
@@ -1013,27 +1037,37 @@ getRandomMeme().then(meme => {
             });
         });
         
-        // Copiar código al hacer clic en los bloques de código
+        // Configuración de los bloques de código
         document.querySelectorAll('.code-block').forEach(block => {
-            // Agregar indicador de que se puede copiar
-            const copyIndicator = document.createElement('div');
-            copyIndicator.className = 'copy-indicator';
-            copyIndicator.innerHTML = '<i class="fas fa-copy"></i> Copiar';
-            block.appendChild(copyIndicator);
+            // Agregar el botón de copiar
+            const copyButton = document.createElement('div');
+            copyButton.className = 'copy-indicator';
+            copyButton.innerHTML = '<i class="fas fa-copy"></i> Copiar';
+            block.appendChild(copyButton);
             
-            // Evento para copiar código
-            copyIndicator.addEventListener('click', function(e) {
-                e.stopPropagation(); // Prevenir propagación al bloque
-                const code = block.querySelector('pre').innerText;
-                navigator.clipboard.writeText(code).then(() => {
-                    // Cambiar texto temporalmente
-                    copyIndicator.innerHTML = '<i class="fas fa-check"></i> Copiado';
-                    setTimeout(() => {
-                        copyIndicator.innerHTML = '<i class="fas fa-copy"></i> Copiar';
-                    }, 2000);
-                    
-                    showNotification("¡Código copiado al portapapeles!");
-                });
+            // Función para copiar el código
+            copyButton.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevenir eventos superiores
+                const code = block.querySelector('pre').textContent;
+                
+                // Usar la API de portapapeles
+                navigator.clipboard.writeText(code)
+                    .then(() => {
+                        // Cambiar el texto temporalmente
+                        copyButton.innerHTML = '<i class="fas fa-check"></i> Copiado';
+                        
+                        // Mostrar notificación
+                        showNotification("¡Código copiado al portapapeles!");
+                        
+                        // Restaurar el texto original después de 2 segundos
+                        setTimeout(() => {
+                            copyButton.innerHTML = '<i class="fas fa-copy"></i> Copiar';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Error al copiar el texto: ', err);
+                        showNotification("Error al copiar. Inténtalo de nuevo.");
+                    });
             });
         });
     </script>
