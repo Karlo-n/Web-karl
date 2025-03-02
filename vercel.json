@@ -11,6 +11,7 @@
     { "src": "*.png", "use": "@vercel/static" },
     { "src": "*.jpg", "use": "@vercel/static" },
     { "src": "*.svg", "use": "@vercel/static" },
+    { "src": "*.mp3", "use": "@vercel/static" },
     { "src": "*.json", "use": "@vercel/static" }
   ],
   "rewrites": [
