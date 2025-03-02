@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Karl</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuentes de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
@@ -21,38 +28,115 @@
     <meta name="twitter:image" content="https://apikarl.com/preview.png">
     
     <style>
-        body {
-            background: #0a0f1a;
-            color: white;
-            font-family: Arial, sans-serif;
-            overflow-x: hidden;
-            position: relative;
+        :root {
+            --primary: #4deeea;
+            --secondary: #74ee15;
+            --accent: #ffe700;
+            --dark-bg: #0a0f1a;
+            --card-bg: rgba(20, 25, 40, 0.9);
+            --glow-primary: 0 0 10px rgba(77, 238, 234, 0.7);
+            --glow-secondary: 0 0 10px rgba(116, 238, 21, 0.7);
+            --glow-accent: 0 0 10px rgba(255, 231, 0, 0.7);
+            --card-shadow: 0 4px 20px rgba(77, 238, 234, 0.2);
+            --text-shadow: 0 0 5px rgba(77, 238, 234, 0.7);
         }
 
+        body {
+            background: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Fondo animado con partículas */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(20, 25, 40, 0.3) 10%, transparent 10%);
+            background-size: 30px 30px;
+            animation: backgroundAnimation 100s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundAnimation {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 1000px 1000px;
+            }
+        }
+
+        /* Líneas de malla futurista */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(rgba(77, 238, 234, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(77, 238, 234, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        /* Navbar mejorado */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
-            background: rgba(10, 15, 30, 0.9);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            position: relative;
-            z-index: 10;
+            padding: 15px 30px;
+            background: rgba(10, 15, 30, 0.95);
+            box-shadow: 0 0 20px rgba(77, 238, 234, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(77, 238, 234, 0.2);
         }
 
         .navbar-title {
-            font-size: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
             font-weight: bold;
-            color: white;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            letter-spacing: 2px;
+            text-shadow: var(--text-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-title:hover {
+            transform: translateX(-50%) scale(1.05);
+            text-shadow: 0 0 10px var(--primary);
         }
 
         .discord-icon {
             width: 30px;
             height: 30px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 2px var(--primary));
+        }
+
+        .discord-icon:hover {
+            transform: rotate(5deg) scale(1.1);
+            filter: drop-shadow(0 0 5px var(--primary));
         }
 
         .menu-btn {
@@ -60,7 +144,13 @@
             cursor: pointer;
             background: none;
             border: none;
-            color: white;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            transform: rotate(90deg);
+            color: var(--secondary);
         }
 
         .menu-container {
@@ -73,15 +163,18 @@
             position: absolute;
             top: 40px;
             right: 0;
-            background: rgba(20, 20, 40, 0.95);
-            border-radius: 5px;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            min-width: 140px;
+            background: rgba(20, 25, 40, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(77, 238, 234, 0.3);
+            min-width: 180px;
             opacity: 0;
             transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             z-index: 20;
+            border: 1px solid rgba(77, 238, 234, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .menu-visible {
@@ -90,72 +183,443 @@
             transform: translateY(0);
         }
 
+        .menu-content b {
+            display: block;
+            color: var(--primary);
+            margin: 10px 0 5px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(77, 238, 234, 0.2);
+            padding-bottom: 3px;
+        }
+
         .menu-content a {
             display: block;
-            padding: 5px;
+            padding: 8px 10px;
             color: white;
             text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            margin: 2px 0;
         }
 
         .menu-content a:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(77, 238, 234, 0.1);
+            transform: translateX(5px);
+            color: var(--primary);
         }
 
+        /* Stats container con mejor diseño */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 900px;
-            margin: 40px auto;
+            gap: 25px;
+            max-width: 1100px;
+            margin: 60px auto;
             padding: 20px;
             z-index: 5;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .stat-box {
-            background: rgba(20, 25, 40, 0.9);
-            padding: 20px;
-            border-radius: 10px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(77, 238, 234, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent, 
+                rgba(77, 238, 234, 0.1), 
+                transparent 30%
+            );
+            animation: rotate 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(77, 238, 234, 0.3);
         }
 
         .stat-box img {
             width: 50px;
             height: 50px;
-            margin-bottom: 10px;
+            margin: 0 auto 15px;
             object-fit: contain;
+            filter: drop-shadow(0 0 5px var(--primary));
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover img {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .stat-box h2 {
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .stat-box h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.4s ease;
+        }
+
+        .stat-box:hover h2::after {
+            width: 100%;
+        }
+
+        .stat-box p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover p {
+            color: white;
+            text-shadow: 0 0 5px rgba(77, 238, 234, 0.7);
         }
 
         .clock {
-            font-size: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
             font-weight: bold;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-shadow: 0 0 5px rgba(255, 231, 0, 0.5);
+        }
+
+        /* Animación de carga */
+        .loading {
+            position: relative;
+        }
+
+        .loading::after {
+            content: '...';
+            display: inline-block;
+            animation: dots 1.5s infinite;
+            width: 20px;
+            text-align: left;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* Barra de progreso para tiempo activo */
+        .progress-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s linear;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(255, 255, 255, 0.5),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Efectos de pulso para los valores */
+        .pulse-value {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Footer con información adicional */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+            background: rgba(10, 15, 30, 0.8);
+            position: relative;
+            border-top: 1px solid rgba(77, 238, 234, 0.2);
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(77, 238, 234, 0.1);
+            color: var(--primary);
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            background: var(--primary);
+            color: var(--dark-bg);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Menú hamburguesa para móviles */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .navbar-title {
+                font-size: 20px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+                margin: 40px auto;
+                padding: 15px;
+            }
+        }
+
+        /* Animación de carga inicial */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(77, 238, 234, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s infinite ease;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Botón de volumen para música */
+        .volume-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(20, 25, 40, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(77, 238, 234, 0.2);
+            border: 1px solid rgba(77, 238, 234, 0.1);
+        }
+
+        .volume-control:hover {
+            background: rgba(77, 238, 234, 0.2);
+            transform: scale(1.1);
+        }
+
+        .volume-control i {
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        /* Notificación de nuevos datos */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(20, 25, 40, 0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(77, 238, 234, 0.3);
+            transform: translateX(200%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+            border-left: 4px solid var(--primary);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-icon {
+            color: var(--primary);
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
+    <!-- Loader inicial -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <h2 style="margin-top: 20px; font-family: 'Orbitron', sans-serif; color: var(--primary);">APIKARL</h2>
+        </div>
+    </div>
 
     <nav class="navbar">
-        <a href="https://discord.gg/KPU72TMdat" target="_blank">
+        <a href="https://discord.gg/KPU72TMdat" target="_blank" class="discord-link">
             <img src="discord.png" alt="Discord" class="discord-icon">
         </a>
 
         <span class="navbar-title">API Karl</span>
 
         <div class="menu-container">
-            <button class="menu-btn" onclick="toggleMenu()">=</button>
+            <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
             <div id="menu" class="menu-content">
                 <b>API</b>
-                <a href="https://apikarl.com/docs/utilidad">Utilidades</a>
-                <a href="https://apikarl.com/docs/diversion">Divertido</a>
+                <a href="https://apikarl.com/docs/utilidad"><i class="fas fa-tools"></i> Utilidades</a>
+                <a href="https://apikarl.com/docs/diversion"><i class="fas fa-gamepad"></i> Divertido</a>
                 <b>Info</b>
-                <a href="http://apikarl.com">Casa</a>
-                <a href="docs/">Documentación</a>
+                <a href="http://apikarl.com"><i class="fas fa-home"></i> Casa</a>
+                <a href="docs/"><i class="fas fa-book"></i> Documentación</a>
             </div>
         </div>
     </nav>
 
+    <!-- Notificación -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="fas fa-info-circle notification-icon"></i>
+            <span id="notificationText">¡Datos actualizados!</span>
+        </div>
+    </div>
+
+    <!-- Control de volumen -->
+    <div class="volume-control" id="volumeControl">
+        <i class="fas fa-volume-up" id="volumeIcon"></i>
+    </div>
+
     <!-- Música de fondo -->
-    <audio autoplay loop>
+    <audio id="bgMusic" loop>
         <source src="music.mp3" type="audio/mpeg">
         Tu navegador no soporta el elemento de audio.
     </audio>
@@ -164,52 +628,162 @@
         <div class="stat-box">
             <img src="antena.png" alt="Antena">
             <h2 class="text-blue-400">Tu IP</h2>
-            <p id="ip" class="text-gray-300">Cargando...</p>
+            <p id="ip" class="text-gray-300 loading">Cargando</p>
         </div>
 
         <div class="stat-box">
             <img src="ojo.png" alt="Visitantes">
             <h2 class="text-blue-400">Visitantes</h2>
-            <p id="visitantes" class="text-gray-300">Cargando...</p>
+            <p id="visitantes" class="text-gray-300 loading pulse-value">Cargando</p>
         </div>
 
         <div class="stat-box">
             <img src="reloj.png" alt="Tiempo Activo">
             <h2 class="text-blue-400">Tiempo Activo</h2>
-            <p id="tiempoActivo" class="text-gray-300">Cargando...</p>
+            <p id="tiempoActivo" class="text-gray-300">Cargando</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
         </div>
 
         <div class="stat-box">
             <img src="reloj.png" alt="Reloj">
             <h2 class="text-blue-400">Hora actual</h2>
-            <p id="clock" class="clock"></p>
+            <p id="clock" class="clock">00:00:00</p>
         </div>
     </div>
 
+    <!-- Sección de características -->
+    <div class="stats-container">
+        <div class="stat-box">
+            <i class="fas fa-rocket" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
+            <h2>API de Alta Velocidad</h2>
+            <p>Accede a nuestros servicios con respuestas ultrarrápidas y alta disponibilidad.</p>
+        </div>
+
+        <div class="stat-box">
+            <i class="fas fa-shield-alt" style="font-size: 40px; color: var(--secondary); margin-bottom: 15px;"></i>
+            <h2>Seguridad Garantizada</h2>
+            <p>Todas las peticiones están protegidas con encriptación de nivel militar.</p>
+        </div>
+
+        <div class="stat-box">
+            <i class="fas fa-code" style="font-size: 40px; color: var(--accent); margin-bottom: 15px;"></i>
+            <h2>Fácil Integración</h2>
+            <p>Documentación completa y ejemplos prácticos para implementación rápida.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+        </div>
+        <p>© 2025 API Karl - Todos los derechos reservados</p>
+        <p>Plataforma desarrollada con <i class="fas fa-heart" style="color: var(--accent);"></i> para desarrolladores</p>
+    </footer>
+
     <script>
+        // Mostrar loader inicial
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('pageLoader').classList.add('loader-hidden');
+            }, 1500);
+        });
+
+        // Función para mostrar notificaciones
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            document.getElementById('notificationText').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Control de volumen
+        const volumeControl = document.getElementById('volumeControl');
+        const volumeIcon = document.getElementById('volumeIcon');
+        const bgMusic = document.getElementById('bgMusic');
+        let isMuted = true;
+
+        volumeControl.addEventListener('click', function() {
+            if (isMuted) {
+                bgMusic.play();
+                volumeIcon.classList.remove('fa-volume-up');
+                volumeIcon.classList.add('fa-volume-mute');
+                isMuted = false;
+            } else {
+                bgMusic.pause();
+                volumeIcon.classList.remove('fa-volume-mute');
+                volumeIcon.classList.add('fa-volume-up');
+                isMuted = true;
+            }
+        });
+
+        // Función para el menú
         function toggleMenu() {
             let menu = document.getElementById("menu");
             menu.classList.toggle("menu-visible");
         }
 
+        // Cerrar el menú al hacer clic fuera de él
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('menu');
+            const menuBtn = document.querySelector('.menu-btn');
+            
+            if (!menu.contains(event.target) && !menuBtn.contains(event.target) && menu.classList.contains('menu-visible')) {
+                menu.classList.remove('menu-visible');
+            }
+        });
+
+        // Obtener datos
         async function obtenerDatos() {
             try {
+                // Quitar clase de carga después de obtener datos
+                document.getElementById("ip").classList.add('loading');
+                document.getElementById("visitantes").classList.add('loading');
+                
                 let ipRes = await fetch("https://api.ipify.org?format=json");
                 let ipData = await ipRes.json();
-                document.getElementById("ip").innerText = ipData.ip;
-
-                // 🔄 CORRECCIÓN: Ahora incrementa correctamente los visitantes
+                document.getElementById("ip").textContent = ipData.ip;
+                document.getElementById("ip").classList.remove('loading');
+                
+                // Incrementar visitantes
                 let visitasRes = await fetch("https://apikarl.com/api/visitantes", { method: "POST" });
                 let visitasData = await visitasRes.json();
-                document.getElementById("visitantes").innerText = visitasData.visitantes || "Error";
+                
+                // Animación de contador
+                const visitantesElement = document.getElementById("visitantes");
+                const targetVisitors = visitasData.visitantes || 0;
+                let currentVisitors = 0;
+                
+                visitantesElement.classList.remove('loading');
+                
+                const interval = setInterval(() => {
+                    currentVisitors += Math.ceil(targetVisitors / 20);
+                    if (currentVisitors >= targetVisitors) {
+                        currentVisitors = targetVisitors;
+                        clearInterval(interval);
+                        showNotification("¡Datos actualizados correctamente!");
+                    }
+                    visitantesElement.textContent = currentVisitors;
+                }, 100);
+                
             } catch (error) {
-                document.getElementById("visitantes").innerText = "Error";
+                document.getElementById("ip").textContent = "Error al cargar";
+                document.getElementById("visitantes").textContent = "Error al cargar";
+                document.getElementById("ip").classList.remove('loading');
+                document.getElementById("visitantes").classList.remove('loading');
             }
         }
 
         obtenerDatos();
 
-        // Tiempo activo persistente
+        // Tiempo activo con barra de progreso
         let startTime = localStorage.getItem("startTime");
         if (!startTime) {
             startTime = Date.now();
@@ -217,10 +791,42 @@
         }
 
         setInterval(() => {
-            document.getElementById("clock").innerText = new Date().toLocaleTimeString();
+            // Actualizar reloj
+            const now = new Date();
+            document.getElementById("clock").innerText = now.toLocaleTimeString();
+            
+            // Tiempo activo
             let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-            document.getElementById("tiempoActivo").innerText = `${elapsedTime} segundos`;
+            let hours = Math.floor(elapsedTime / 3600);
+            let minutes = Math.floor((elapsedTime % 3600) / 60);
+            let seconds = elapsedTime % 60;
+            
+            let formattedTime = '';
+            if (hours > 0) {
+                formattedTime += `${hours}h `;
+            }
+            if (minutes > 0 || hours > 0) {
+                formattedTime += `${minutes}m `;
+            }
+            formattedTime += `${seconds}s`;
+            
+            document.getElementById("tiempoActivo").innerText = formattedTime;
+            
+            // Actualizar barra de progreso (ciclo de un día)
+            const dayProgress = (elapsedTime % 86400) / 86400 * 100;
+            document.getElementById("progressBar").style.width = `${dayProgress}%`;
         }, 1000);
+        
+        // Efecto de hover para stats-box
+        document.querySelectorAll('.stat-box').forEach(box => {
+            box.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+            
+            box.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
     </script>
 
 </body>
