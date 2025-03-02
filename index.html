@@ -646,11 +646,12 @@
         <i class="fas fa-volume-up" id="volumeIcon"></i>
     </div>
 
-    <!-- Música de fondo -->
-<audio id="bgMusic" loop>
-    <source src="AllVideo_01740943539567.mp3" type="audio/mpeg">
-    Tu navegador no soporta el elemento de audio.
-</audio>
+    <!-- Música de fondo con opciones mejoradas -->
+    <audio id="bgMusic" loop preload="auto" crossorigin="anonymous">
+        <source src="AllVideo_01740943539567.mp3" type="audio/mpeg">
+        <source src="./AllVideo_01740943539567.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
 
     <div class="stats-container">
         <div class="stat-box">
@@ -734,23 +735,47 @@
             }, 3000);
         }
 
-        // Control de volumen
+        // Manejo de errores para el audio
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.addEventListener('error', function(e) {
+            console.error('Error loading audio:', e);
+            showNotification('Error al cargar el audio');
+        });
+
+        // Evento para confirmar carga de audio
+        bgMusic.addEventListener('loadeddata', function() {
+            console.log('Audio cargado correctamente');
+        });
+
+        // Control de volumen mejorado
         const volumeControl = document.getElementById('volumeControl');
         const volumeIcon = document.getElementById('volumeIcon');
-        const bgMusic = document.getElementById('bgMusic');
         let isMuted = true;
 
         volumeControl.addEventListener('click', function() {
             if (isMuted) {
-                bgMusic.play();
-                volumeIcon.classList.remove('fa-volume-up');
-                volumeIcon.classList.add('fa-volume-mute');
-                isMuted = false;
+                // Intenta reproducir con manejo de promesas
+                const playPromise = bgMusic.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        console.log('Audio reproducido correctamente');
+                        volumeIcon.classList.remove('fa-volume-up');
+                        volumeIcon.classList.add('fa-volume-mute');
+                        isMuted = false;
+                        showNotification('Reproduciendo música de fondo');
+                    })
+                    .catch(error => {
+                        console.error('Error reproduciendo audio:', error);
+                        showNotification('Error al reproducir audio. Intenta de nuevo.');
+                    });
+                }
             } else {
                 bgMusic.pause();
                 volumeIcon.classList.remove('fa-volume-mute');
                 volumeIcon.classList.add('fa-volume-up');
                 isMuted = true;
+                showNotification('Música en pausa');
             }
         });
 
@@ -813,69 +838,69 @@
         obtenerDatos();
 
         // Tiempo activo con barra de progreso
-        let startTime = localStorage.getItem("startTime");
-        if (!startTime) {
-            startTime = Date.now();
-            localStorage.setItem("startTime", startTime);
-        }
+let startTime = localStorage.getItem("startTime");
+if (!startTime) {
+    startTime = Date.now();
+    localStorage.setItem("startTime", startTime);
+}
 
-        setInterval(() => {
-            // Actualizar reloj
-            const now = new Date();
-            document.getElementById("clock").innerText = now.toLocaleTimeString();
-            
-            // Tiempo activo
-            let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-            let hours = Math.floor(elapsedTime / 3600);
-            let minutes = Math.floor((elapsedTime % 3600) / 60);
-            let seconds = elapsedTime % 60;
-            
-            let formattedTime = '';
-            if (hours > 0) {
-                formattedTime += `${hours}h `;
-            }
-            if (minutes > 0 || hours > 0) {
-                formattedTime += `${minutes}m `;
-            }
-            formattedTime += `${seconds}s`;
-            
-            document.getElementById("tiempoActivo").innerText = formattedTime;
-            
-            // Actualizar barra de progreso (ciclo de un día)
-            const dayProgress = (elapsedTime % 86400) / 86400 * 100;
-            document.getElementById("progressBar").style.width = `${dayProgress}%`;
-        }, 1000);
-        
-        // Efecto de hover para stats-box
-        document.querySelectorAll('.stat-box').forEach(box => {
-            box.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-10px)';
-            });
-            
-            box.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
-        
-        // Añadir efecto de parpadeo a las etiquetas de estado
-        setInterval(() => {
-            document.querySelectorAll('.status-badge').forEach(badge => {
-                badge.style.opacity = badge.style.opacity === '0.7' ? '1' : '0.7';
-            });
-        }, 1000);
-        
-        // Efectos extras de desplazamiento
-        window.addEventListener('scroll', function() {
-            const scrollY = window.scrollY;
-            
-            // Efecto parallax para elementos con clase parallax
-            document.querySelectorAll('.stat-box').forEach((element, index) => {
-                const speed = 0.05;
-                const yPos = -(scrollY * speed * (index * 0.1 + 1));
-                element.style.backgroundPosition = `center ${yPos}px`;
-            });
-        });
-    </script>
+setInterval(() => {
+    // Actualizar reloj
+    const now = new Date();
+    document.getElementById("clock").innerText = now.toLocaleTimeString();
+    
+    // Tiempo activo
+    let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+    let hours = Math.floor(elapsedTime / 3600);
+    let minutes = Math.floor((elapsedTime % 3600) / 60);
+    let seconds = elapsedTime % 60;
+    
+    let formattedTime = '';
+    if (hours > 0) {
+        formattedTime += `${hours}h `;
+    }
+    if (minutes > 0 || hours > 0) {
+        formattedTime += `${minutes}m `;
+    }
+    formattedTime += `${seconds}s`;
+    
+    document.getElementById("tiempoActivo").innerText = formattedTime;
+    
+    // Actualizar barra de progreso (ciclo de un día)
+    const dayProgress = (elapsedTime % 86400) / 86400 * 100;
+    document.getElementById("progressBar").style.width = `${dayProgress}%`;
+}, 1000);
+
+// Efecto de hover para stats-box
+document.querySelectorAll('.stat-box').forEach(box => {
+    box.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px)';
+    });
+    
+    box.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+});
+
+// Añadir efecto de parpadeo a las etiquetas de estado
+setInterval(() => {
+    document.querySelectorAll('.status-badge').forEach(badge => {
+        badge.style.opacity = badge.style.opacity === '0.7' ? '1' : '0.7';
+    });
+}, 1000);
+
+// Efectos extras de desplazamiento
+window.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    
+    // Efecto parallax para elementos con clase parallax
+    document.querySelectorAll('.stat-box').forEach((element, index) => {
+        const speed = 0.05;
+        const yPos = -(scrollY * speed * (index * 0.1 + 1));
+        element.style.backgroundPosition = `center ${yPos}px`;
+    });
+});
+</script>
 
 </body>
 </html>
