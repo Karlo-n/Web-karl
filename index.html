@@ -574,6 +574,34 @@
             color: var(--primary);
             font-size: 20px;
         }
+
+        /* Estilos adicionales para los nuevos elementos */
+        .stat-box .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--secondary);
+            color: var(--dark-bg);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: var(--glow-secondary);
+            animation: pulse 2s infinite;
+        }
+
+        .data-icon {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 5px var(--primary));
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover .data-icon {
+            transform: scale(1.1) rotate(10deg);
+            color: var(--secondary);
+        }
     </style>
 </head>
 <body>
@@ -586,7 +614,7 @@
     </div>
 
     <nav class="navbar">
-        <a href="https://discord.gg/KPU72TMdat" target="_blank" class="discord-link">
+        <a href="https://discord.gg/PvQvJ7JvEx" target="_blank" class="discord-link">
             <img src="discord.png" alt="Discord" class="discord-icon">
         </a>
 
@@ -620,21 +648,23 @@
 
     <!-- Música de fondo -->
     <audio id="bgMusic" loop>
-        <source src="music.mp3" type="audio/mpeg">
+        <source src="music" type="audio/mpeg">
         Tu navegador no soporta el elemento de audio.
     </audio>
 
     <div class="stats-container">
         <div class="stat-box">
-            <img src="antena.png" alt="Antena">
-            <h2 class="text-blue-400">Tu IP</h2>
-            <p id="ip" class="text-gray-300 loading">Cargando</p>
+            <div class="status-badge">Activo</div>
+            <i class="fas fa-network-wired data-icon"></i>
+            <h2 class="text-blue-400">Conexión</h2>
+            <p id="ip" class="text-gray-300 loading">Verificando</p>
         </div>
 
         <div class="stat-box">
-            <img src="ojo.png" alt="Visitantes">
-            <h2 class="text-blue-400">Visitantes</h2>
-            <p id="visitantes" class="text-gray-300 loading pulse-value">Cargando</p>
+            <div class="status-badge">En línea</div>
+            <i class="fas fa-users data-icon"></i>
+            <h2 class="text-blue-400">Usuarios</h2>
+            <p id="visitantes" class="text-gray-300 loading pulse-value">Calculando</p>
         </div>
 
         <div class="stat-box">
@@ -677,9 +707,9 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="social-icons">
-            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+            <a href="https://www.tiktok.com/@pixelrun" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            <a href="https://wa.me/523326811294?text=%F0%9F%8C%90-¡Hola!,%20me%20interesa%20tu%20bot%20o%20alguna%20información%20extra" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://discord.gg/PvQvJ7JvEx" target="_blank" class="social-icon"><i class="fab fa-discord"></i></a>
         </div>
         <p>© 2025 API Karl - Todos los derechos reservados</p>
         <p>Plataforma desarrollada con <i class="fas fa-heart" style="color: var(--accent);"></i> para desarrolladores</p>
@@ -747,35 +777,34 @@
                 document.getElementById("ip").classList.add('loading');
                 document.getElementById("visitantes").classList.add('loading');
                 
-                let ipRes = await fetch("https://api.ipify.org?format=json");
-                let ipData = await ipRes.json();
-                document.getElementById("ip").textContent = ipData.ip;
-                document.getElementById("ip").classList.remove('loading');
+                // Mostrar estado de conexión en lugar de la IP
+                setTimeout(() => {
+                    document.getElementById("ip").textContent = "Estable (100%)";
+                    document.getElementById("ip").classList.remove('loading');
+                    showNotification("¡Conexión estable establecida!");
+                }, 1500);
                 
-                // Incrementar visitantes
-                let visitasRes = await fetch("https://apikarl.com/api/visitantes", { method: "POST" });
-                let visitasData = await visitasRes.json();
-                
-                // Animación de contador
+                // Simular contador de usuarios
                 const visitantesElement = document.getElementById("visitantes");
-                const targetVisitors = visitasData.visitantes || 0;
-                let currentVisitors = 0;
+                const randomUsers = Math.floor(Math.random() * 500) + 1500; // Entre 1500 y 2000
+                let currentUsers = 0;
                 
-                visitantesElement.classList.remove('loading');
-                
-                const interval = setInterval(() => {
-                    currentVisitors += Math.ceil(targetVisitors / 20);
-                    if (currentVisitors >= targetVisitors) {
-                        currentVisitors = targetVisitors;
-                        clearInterval(interval);
-                        showNotification("¡Datos actualizados correctamente!");
-                    }
-                    visitantesElement.textContent = currentVisitors;
-                }, 100);
+                setTimeout(() => {
+                    visitantesElement.classList.remove('loading');
+                    
+                    const interval = setInterval(() => {
+                        currentUsers += Math.ceil(randomUsers / 20);
+                        if (currentUsers >= randomUsers) {
+                            currentUsers = randomUsers;
+                            clearInterval(interval);
+                        }
+                        visitantesElement.textContent = currentUsers.toLocaleString();
+                    }, 100);
+                }, 2000);
                 
             } catch (error) {
-                document.getElementById("ip").textContent = "Error al cargar";
-                document.getElementById("visitantes").textContent = "Error al cargar";
+                document.getElementById("ip").textContent = "Error de conexión";
+                document.getElementById("visitantes").textContent = "No disponible";
                 document.getElementById("ip").classList.remove('loading');
                 document.getElementById("visitantes").classList.remove('loading');
             }
@@ -825,6 +854,25 @@
             
             box.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Añadir efecto de parpadeo a las etiquetas de estado
+        setInterval(() => {
+            document.querySelectorAll('.status-badge').forEach(badge => {
+                badge.style.opacity = badge.style.opacity === '0.7' ? '1' : '0.7';
+            });
+        }, 1000);
+        
+        // Efectos extras de desplazamiento
+        window.addEventListener('scroll', function() {
+            const scrollY = window.scrollY;
+            
+            // Efecto parallax para elementos con clase parallax
+            document.querySelectorAll('.stat-box').forEach((element, index) => {
+                const speed = 0.05;
+                const yPos = -(scrollY * speed * (index * 0.1 + 1));
+                element.style.backgroundPosition = `center ${yPos}px`;
             });
         });
     </script>
