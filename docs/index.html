@@ -783,119 +783,259 @@ getRandomMeme().then(meme => {
             
             <a href="https://apikarl.com/docs/ejemplos" class="btn"><i class="fas fa-book-open"></i> Ver más ejemplos</a>
         </div>
+
+        <!-- Sección de Endpoints de Utilidad -->
+        <div class="section fade-in" id="utilidad-section">
+            <h2><i class="fas fa-tools"></i> Endpoints de Utilidad</h2>
+            <p>Nuestra colección de endpoints de utilidad proporciona herramientas potentes para mejorar la funcionalidad de tus aplicaciones y servidores de Discord.</p>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>🚀 Boost Card</h3>
+                    <p>Genera una imagen de un boost con detalles personalizables.</p>
+                    <p><b>Parámetros:</b> avatar, username, background, avatarposicion, usernameposicion</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-globe"></i>
+                    <h3>🌍 Traductor</h3>
+                    <p>Convierte texto a diferentes idiomas en segundos.</p>
+                    <p><b>Parámetros:</b> texto, idioma</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-door-open"></i>
+                    <h3>🎉 Bienvenida</h3>
+                    <p>Crea una imagen de bienvenida para nuevos usuarios en tu servidor.</p>
+                    <p><b>Parámetros:</b> avatar, texto1, texto2, texto3, background (OPCIONAL: color, texto1posicion, texto2posicion, texto3posicion, avatarposicion)</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-qrcode"></i>
+                    <h3>📌 Texto a QR</h3>
+                    <p>Convierte cualquier texto en un código QR para compartir fácilmente.</p>
+                    <p><b>Parámetros:</b> texto</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-award"></i>
+                    <h3>🏆 Carta Ranked</h3>
+                    <p>Genera una tarjeta con estadísticas de nivel de usuario en juegos o servidores.</p>
+                    <p><b>Parámetros:</b> avatar, username, xp, maxxp, nivel, background</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>📈 Carta Subida Ranked</h3>
+                    <p>Genera una imagen mostrando la subida de nivel o rango en un sistema de ranking.</p>
+                    <p><b>Parámetros:</b> avatar, username, nivel actual, nivel proximo, background</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-robot"></i>
+                    <h3>🤖 Roblox Data</h3>
+                    <p>Obtén información detallada de un usuario, grupo, inventario o más de Roblox.</p>
+                    <p><b>Parámetros:</b> usuario (OPCIONAL: foto=true para capturar pantalla)</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>✅ Verificación Roblox</h3>
+                    <p>Comprueba si la descripción de un usuario de Roblox coincide con la proporcionada.</p>
+                    <p><b>Parámetros:</b> id, descripcion</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-camera"></i>
+                    <h3>📷 Screenshot</h3>
+                    <p>Toma fotos a las páginas web.</p>
+                    <p><b>Parámetros:</b> url (opcional: dimension)</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>🤖 Deepseek</h3>
+                    <p>Observa las respuestas de una AI.</p>
+                    <p><b>Parámetros:</b> prompt (opcional: rol)</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-home"></i>
+                    <h3>🏡 IP</h3>
+                    <p>Obtén información por IP.</p>
+                    <p><b>Parámetros:</b> (opcional: ip)</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fab fa-youtube"></i>
+                    <h3>🟥 YouTube</h3>
+                    <p>Obtén información de canales.</p>
+                    <p><b>Parámetros:</b> channel=nombre_canal (opcional: tipo=reciente,famoso,short_reciente,short_famoso,tiktok,foto=si)</p>
+                </div>
+            </div>
+            
+            <a href="https://apikarl.com/docs/utilidad" class="btn"><i class="fas fa-tools"></i> Ver detalles completos</a>
+        </div>
+
+        <!-- Sección de Endpoints de Diversión -->
+        <div class="section fade-in" id="diversion-section">
+            <h2><i class="fas fa-gamepad"></i> Endpoints de Diversión</h2>
+            <p>Nuestra colección de endpoints de diversión añade elementos interactivos y entretenidos a tus aplicaciones y servidores.</p>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <i class="fas fa-kiss-wink-heart"></i>
+                    <h3>💋 Kiss</h3>
+                    <p>Genera 100 imágenes de anime besándose aleatoriamente.</p>
+                    <p><b>Parámetro opcional:</b> json=true</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>❤️ Ship</h3>
+                    <p>Crea una carta de ship entre dos personas con 5 imágenes de fondo.</p>
+                    <p><b>Parámetros:</b> avatar1, avatar2</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-hand-paper"></i>
+                    <h3>✋ Slap</h3>
+                    <p>Genera 100 imágenes de anime dando golpes (slaps).</p>
+                    <p>Selección aleatoria.</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-bars"></i>
+                    <h3>🚔 Jail</h3>
+                    <p>Genera una imagen colocando a un usuario en prisión.</p>
+                    <p><b>Parámetros:</b> avatar1</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-music"></i>
+                    <h3>🎵 Lyric</h3>
+                    <p>Obtiene la letra de cualquier canción.</p>
+                    <p><b>Parámetros:</b> música</p>
+                </div>
+            </div>
+            
+            <a href="https://apikarl.com/docs/diversion" class="btn"><i class="fas fa-gamepad"></i> Ver detalles completos</a>
+        </div>
     </div>
 
     <!-- Footer -->
-<footer class="footer">
-    <div class="social-icons">
-        <a href="https://www.tiktok.com/@pixelrun" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
-        <a href="https://wa.me/523326811294?text=%F0%9F%8C%90-¡Hola!,%20me%20interesa%20tu%20bot%20o%20alguna%20información%20extra" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://discord.gg/PvQvJ7JvEx" target="_blank" class="social-icon"><i class="fab fa-discord"></i></a>
-    </div>
-    <p>© 2025 API Karl - Todos los derechos reservados</p>
-    <p>Plataforma desarrollada con <i class="fas fa-heart" style="color: var(--accent);"></i> para desarrolladores</p>
-</footer>
+    <footer class="footer">
+        <div class="social-icons">
+            <a href="https://www.tiktok.com/@pixelrun" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            <a href="https://wa.me/523326811294?text=%F0%9F%8C%90-¡Hola!,%20me%20interesa%20tu%20bot%20o%20alguna%20información%20extra" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://discord.gg/PvQvJ7JvEx" target="_blank" class="social-icon"><i class="fab fa-discord"></i></a>
+        </div>
+        <p>© 2025 API Karl - Todos los derechos reservados</p>
+        <p>Plataforma desarrollada con <i class="fas fa-heart" style="color: var(--accent);"></i> para desarrolladores</p>
+    </footer>
 
-<script>
-    // Mostrar loader inicial
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            document.getElementById('pageLoader').classList.add('loader-hidden');
-            showNotification("¡Documentación cargada correctamente!");
-        }, 1500);
-    });
+    <script>
+        // Mostrar loader inicial
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('pageLoader').classList.add('loader-hidden');
+                showNotification("¡Documentación cargada correctamente!");
+            }, 1500);
+        });
 
-    // Función para mostrar notificaciones
-    function showNotification(message) {
-        const notification = document.getElementById('notification');
-        document.getElementById('notificationText').textContent = message;
-        notification.classList.add('show');
-        
-        setTimeout(() => {
-            notification.classList.remove('show');
-        }, 3000);
-    }
-
-    // Función para el menú
-    function toggleMenu() {
-        let menu = document.getElementById("menu");
-        menu.classList.toggle("menu-visible");
-    }
-
-    // Cerrar el menú al hacer clic fuera de él
-    document.addEventListener('click', function(event) {
-        const menu = document.getElementById('menu');
-        const menuBtn = document.querySelector('.menu-btn');
-        
-        if (!menu.contains(event.target) && !menuBtn.contains(event.target) && menu.classList.contains('menu-visible')) {
-            menu.classList.remove('menu-visible');
+        // Función para mostrar notificaciones
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            document.getElementById('notificationText').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
-    });
-    
-    // Animaciones al hacer scroll
-    function checkSections() {
-        let sections = document.querySelectorAll(".section");
-        sections.forEach(section => {
-            let position = section.getBoundingClientRect().top;
-            let windowHeight = window.innerHeight;
-            if (position < windowHeight - 100) {
-                section.classList.add("visible");
+
+        // Función para el menú
+        function toggleMenu() {
+            let menu = document.getElementById("menu");
+            menu.classList.toggle("menu-visible");
+        }
+
+        // Cerrar el menú al hacer clic fuera de él
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('menu');
+            const menuBtn = document.querySelector('.menu-btn');
+            
+            if (!menu.contains(event.target) && !menuBtn.contains(event.target) && menu.classList.contains('menu-visible')) {
+                menu.classList.remove('menu-visible');
             }
         });
-    }
-    
-    // Comprobar secciones al cargar y al hacer scroll
-    window.addEventListener("load", checkSections);
-    window.addEventListener("scroll", checkSections);
-    
-    // Efecto hover para secciones
-    document.querySelectorAll('.section').forEach(section => {
-        section.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-        });
         
-        section.addEventListener('mouseleave', function() {
-            if (this.classList.contains('visible')) {
-                this.style.transform = 'translateY(0)';
-            } else {
-                this.style.transform = 'translateY(30px)';
-            }
-        });
-    });
-    
-    // Hover effect para los info-cards
-    document.querySelectorAll('.info-card').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-        });
+        // Animaciones al hacer scroll
+        function checkSections() {
+            let sections = document.querySelectorAll(".section");
+            sections.forEach(section => {
+                let position = section.getBoundingClientRect().top;
+                let windowHeight = window.innerHeight;
+                if (position < windowHeight - 100) {
+                    section.classList.add("visible");
+                }
+            });
+        }
         
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
-    
-    // Copiar código al hacer clic en los bloques de código
-    document.querySelectorAll('.code-block').forEach(block => {
-        block.addEventListener('click', function() {
-            const code = this.querySelector('pre').innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                showNotification("¡Código copiado al portapapeles!");
+        // Comprobar secciones al cargar y al hacer scroll
+        window.addEventListener("load", checkSections);
+        window.addEventListener("scroll", checkSections);
+        
+        // Efecto hover para secciones
+        document.querySelectorAll('.section').forEach(section => {
+            section.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            section.addEventListener('mouseleave', function() {
+                if (this.classList.contains('visible')) {
+                    this.style.transform = 'translateY(0)';
+                } else {
+                    this.style.transform = 'translateY(30px)';
+                }
             });
         });
         
-        // Agregar indicador de que se puede copiar
-        const copyIndicator = document.createElement('div');
-        copyIndicator.innerHTML = '<i class="fas fa-copy"></i>';
-        copyIndicator.style.position = 'absolute';
-        copyIndicator.style.top = '10px';
-        copyIndicator.style.right = '10px';
-        copyIndicator.style.color = 'var(--primary)';
-        copyIndicator.style.fontSize = '14px';
-        copyIndicator.style.cursor = 'pointer';
+        // Hover effect para los info-cards
+        document.querySelectorAll('.info-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
         
-        block.style.position = 'relative';
-        block.appendChild(copyIndicator);
-    });
-</script>
+        // Copiar código al hacer clic en los bloques de código
+        document.querySelectorAll('.code-block').forEach(block => {
+            // Agregar indicador de que se puede copiar
+            const copyIndicator = document.createElement('div');
+            copyIndicator.className = 'copy-indicator';
+            copyIndicator.innerHTML = '<i class="fas fa-copy"></i> Copiar';
+            block.appendChild(copyIndicator);
+            
+            // Evento para copiar código
+            copyIndicator.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevenir propagación al bloque
+                const code = block.querySelector('pre').innerText;
+                navigator.clipboard.writeText(code).then(() => {
+                    // Cambiar texto temporalmente
+                    copyIndicator.innerHTML = '<i class="fas fa-check"></i> Copiado';
+                    setTimeout(() => {
+                        copyIndicator.innerHTML = '<i class="fas fa-copy"></i> Copiar';
+                    }, 2000);
+                    
+                    showNotification("¡Código copiado al portapapeles!");
+                });
+            });
+        });
+    </script>
 </body>
 </html>
