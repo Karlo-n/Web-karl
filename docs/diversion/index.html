@@ -852,12 +852,12 @@
                     <i class="fas fa-dice"></i>
                 </div>
                 <div class="api-name">🃏 Juego 21</div>
-                <p class="api-description">Juega una partida del clásico juego 21 contra la IA. Cada jugador recibe hasta 4 cartas aleatorias y debe decidir si seguir o parar. Perfecto para añadir un elemento de juego a tus aplicaciones o servidores Discord.</p>
+                <p class="api-description">Juega una partida del clásico juego 21 contra la IA. Cada jugador recibe inicialmente 1 carta y luego debe decidir si seguir o plantarse. La API usa estructura REST para las distintas acciones del juego.</p>
                 <div class="api-meta">
                     <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 1-2s
                 </div>
                 <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: partidaId (ver si existe),partidaId + accion (seguir, parar, terminar)
+                    <i class="fas fa-code"></i> Endpoints: GET / (nueva partida), PUT /seguir, PUT /parar, PUT /terminar
                 </div>
                 <a href="https://api.apikarl.com/api/fun/21" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
             </div>
