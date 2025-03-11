@@ -16,7 +16,8 @@
   ],
   "rewrites": [
     { "source": "/docs", "destination": "/docs/index.html" },
-    { "source": "/docs/:path*", "destination": "/docs/:path*" }
+    { "source": "/docs/:path*", "destination": "/docs/:path*" },
+    { "source": "/((?!.*\\.).*)", "destination": "/404.html", "statusCode": 404 }
   ],
   "headers": [
     {
@@ -65,9 +66,5 @@
     }
   ],
   "cleanUrls": true,
-  "trailingSlash": false,
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "status": 404, "dest": "/404.html" }
-  ]
+  "trailingSlash": false
 }
