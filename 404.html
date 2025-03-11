@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Página no encontrada | API Karl</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuentes de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <style>
+        :root {
+            --primary: #4deeea;
+            --secondary: #74ee15;
+            --accent: #ffe700;
+            --dark-bg: #0a0f1a;
+            --card-bg: rgba(20, 25, 40, 0.9);
+            --glow-primary: 0 0 10px rgba(77, 238, 234, 0.7);
+            --glow-secondary: 0 0 10px rgba(116, 238, 21, 0.7);
+            --glow-accent: 0 0 10px rgba(255, 231, 0, 0.7);
+            --card-shadow: 0 4px 20px rgba(77, 238, 234, 0.2);
+            --text-shadow: 0 0 5px rgba(77, 238, 234, 0.7);
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            margin: 0;
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Fondo animado con partículas */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(20, 25, 40, 0.3) 10%, transparent 10%);
+            background-size: 30px 30px;
+            animation: backgroundAnimation 100s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundAnimation {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 1000px 1000px;
+            }
+        }
+
+        /* Líneas de malla futurista */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(rgba(77, 238, 234, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(77, 238, 234, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        /* Navbar mejorado */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(10, 15, 30, 0.95);
+            box-shadow: 0 0 20px rgba(77, 238, 234, 0.2);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(77, 238, 234, 0.2);
+        }
+
+        .navbar-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+            text-shadow: var(--text-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .discord-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(77, 238, 234, 0.1);
+            color: var(--primary);
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 2px var(--primary));
+        }
+
+        .discord-icon:hover {
+            transform: rotate(5deg) scale(1.1);
+            filter: drop-shadow(0 0 5px var(--primary));
+        }
+
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            transform: rotate(90deg);
+            color: var(--secondary);
+        }
+
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: rgba(20, 25, 40, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(77, 238, 234, 0.3);
+            min-width: 180px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 20;
+            border: 1px solid rgba(77, 238, 234, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .menu-visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .menu-content b {
+            display: block;
+            color: var(--primary);
+            margin: 10px 0 5px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(77, 238, 234, 0.2);
+            padding-bottom: 3px;
+        }
+
+        .menu-content a {
+            display: block;
+            padding: 8px 10px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            margin: 2px 0;
+        }
+
+        .menu-content a:hover {
+            background: rgba(77, 238, 234, 0.1);
+            transform: translateX(5px);
+            color: var(--primary);
+        }
+
+        /* Contenido principal */
+        .error-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            border: 1px solid rgba(77, 238, 234, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent, 
+                rgba(77, 238, 234, 0.05), 
+                transparent 30%
+            );
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error-code {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 150px;
+            font-weight: 900;
+            margin: 0;
+            line-height: 1;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: var(--glow-primary);
+            position: relative;
+            display: inline-block;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: var(--glow-primary);
+                transform: translate(0);
+            }
+            2% {
+                text-shadow: 2px 0 var(--primary), -2px 0 var(--secondary);
+                transform: translate(-2px, 2px);
+            }
+            4% {
+                text-shadow: -2px 0 var(--primary), 2px 0 var(--secondary);
+                transform: translate(2px, -2px);
+            }
+            6% {
+                text-shadow: 0 0 var(--accent);
+                transform: translate(0);
+            }
+            100% {
+                text-shadow: var(--glow-primary);
+                transform: translate(0);
+            }
+        }
+
+        .error-message {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .error-details {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 30px auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            background: rgba(10, 15, 30, 0.6);
+            border: 1px solid rgba(77, 238, 234, 0.3);
+            border-radius: 30px;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 30px;
+            padding: 7px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-primary);
+        }
+
+        .error-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .error-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--dark-bg);
+            font-weight: bold;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow-primary);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .error-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .error-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(77, 238, 234, 0.4);
+        }
+
+        .error-btn:hover::before {
+            left: 100%;
+        }
+
+        .robot-container {
+            position: relative;
+            height: 250px;
+            width: 250px;
+            margin: 0 auto 30px;
+        }
+
+        .robot {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(77, 238, 234, 0.1);
+            border-radius: 15px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(77, 238, 234, 0.3);
+            overflow: hidden;
+            animation: floatRobot 4s ease-in-out infinite;
+        }
+
+        @keyframes floatRobot {
+            0%, 100% {
+                transform: translate(-50%, -50%);
+            }
+            50% {
+                transform: translate(-50%, -60%);
+            }
+        }
+
+        .robot-head {
+            width: 80px;
+            height: 60px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 10px;
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: var(--glow-primary);
+        }
+
+        .robot-eye {
+            width: 20px;
+            height: 20px;
+            background: var(--dark-bg);
+            border-radius: 50%;
+            position: absolute;
+            top: 15px;
+            animation: blinkEye 3s infinite;
+        }
+
+        @keyframes blinkEye {
+            0%, 45%, 55%, 100% {
+                height: 20px;
+            }
+            50% {
+                height: 2px;
+            }
+        }
+
+        .robot-eye.left {
+            left: 15px;
+        }
+
+        .robot-eye.right {
+            right: 15px;
+        }
+
+        .robot-body {
+            width: 100px;
+            height: 70px;
+            background: rgba(116, 238, 21, 0.3);
+            border-radius: 10px;
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px rgba(116, 238, 21, 0.5);
+        }
+
+        .robot-arm {
+            width: 15px;
+            height: 50px;
+            background: rgba(255, 231, 0, 0.4);
+            position: absolute;
+            top: 100px;
+            box-shadow: 0 0 10px rgba(255, 231, 0, 0.6);
+        }
+
+        .robot-arm.left {
+            left: 25px;
+            transform: rotate(-20deg);
+            animation: moveArmLeft 3s infinite;
+        }
+
+        .robot-arm.right {
+            right: 25px;
+            transform: rotate(20deg);
+            animation: moveArmRight 3s infinite;
+        }
+
+        @keyframes moveArmLeft {
+            0%, 100% {
+                transform: rotate(-20deg);
+            }
+            50% {
+                transform: rotate(-40deg);
+            }
+        }
+
+        @keyframes moveArmRight {
+            0%, 100% {
+                transform: rotate(20deg);
+            }
+            50% {
+                transform: rotate(40deg);
+            }
+        }
+
+        .glitch-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(transparent, transparent 50%, rgba(77, 238, 234, 0.1) 50%, transparent 51%, transparent);
+            background-size: 100% 4px;
+            animation: glitchLine 2s linear infinite;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        @keyframes glitchLine {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 0 100%;
+            }
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 10px;
+            width: 100%;
+            background: rgba(77, 238, 234, 0.2);
+            box-shadow: 0 0 15px rgba(77, 238, 234, 0.5);
+            animation: scanAnimation 4s linear infinite;
+            z-index: 5;
+        }
+
+        @keyframes scanAnimation {
+            0% {
+                top: 0%;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .error-container {
+                width: 90%;
+                padding: 30px;
+                margin-top: 60px;
+            }
+
+            .error-code {
+                font-size: 100px;
+            }
+
+            .error-message {
+                font-size: 22px;
+            }
+
+            .error-details {
+                font-size: 16px;
+            }
+
+            .error-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Elementos flotantes de fondo */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            filter: blur(5px);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .element-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary), transparent);
+            top: -100px;
+            left: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .element-2 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--secondary), transparent);
+            bottom: -50px;
+            right: -50px;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        .element-3 {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--accent), transparent);
+            top: 50%;
+            right: 10%;
+            animation: float 18s ease-in-out infinite 2s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(-20px, 20px);
+            }
+            50% {
+                transform: translate(20px, -20px);
+            }
+            75% {
+                transform: translate(-20px, -20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="https://discord.gg/PvQvJ7JvEx" target="_blank" class="discord-link">
+            <div class="discord-icon">
+                <i class="fab fa-discord"></i>
+            </div>
+        </a>
+
+        <span class="navbar-title">API Karl - Error 404</span>
+
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+            <div id="menu" class="menu-content">
+                <b>API</b>
+                <a href="https://apikarl.com/docs/utilidad"><i class="fas fa-tools"></i> Utilidades</a>
+                <a href="https://apikarl.com/docs/diversion"><i class="fas fa-gamepad"></i> Divertido</a>
+                <b>Info</b>
+                <a href="http://apikarl.com"><i class="fas fa-home"></i> Casa</a>
+                <a href="https://apikarl.com/docs"><i class="fas fa-book"></i> Documentación</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Elementos de fondo flotantes -->
+    <div class="floating-element element-1"></div>
+    <div class="floating-element element-2"></div>
+    <div class="floating-element element-3"></div>
+
+    <!-- Contenido principal -->
+    <div class="error-container">
+        <div class="glitch-lines"></div>
+        <div class="scan-line"></div>
+
+        <div class="robot-container">
+            <div class="robot">
+                <div class="robot-head">
+                    <div class="robot-eye left"></div>
+                    <div class="robot-eye right"></div>
+                </div>
+                <div class="robot-body"></div>
+                <div class="robot-arm left"></div>
+                <div class="robot-arm right"></div>
+            </div>
+        </div>
+
+        <h1 class="error-code">404</h1>
+        <h2 class="error-message">PÁGINA NO ENCONTRADA</h2>
+        <p class="error-details">El endpoint o recurso que estás buscando no existe o ha sido movido a otra ubicación. Nuestros sistemas han rastreado el ciberespacio sin éxito.</p>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Buscar en API Karl...">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+
+        <div class="error-links">
+            <a href="https://apikarl.com" class="error-btn">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="https://apikarl.com/docs" class="error-btn">
+                <i class="fas fa-book"></i> Documentación
+            </a>
+            <a href="https://discord.gg/PvQvJ7JvEx" class="error-btn">
+                <i class="fab fa-discord"></i> Soporte
+            </a>
+            <a href="javascript:history.back()" class="error-btn">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Función para el menú
+        function toggleMenu() {
+            let menu = document.getElementById("menu");
+            menu.classList.toggle("menu-visible");
+        }
+
+        // Cerrar el menú al hacer clic fuera de él
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('menu');
+            const menuBtn = document.querySelector('.menu-btn');
+            
+            if (!menu.contains(event.target) && !menuBtn.contains(event.target) && menu.classList.contains('menu-visible')) {
+                menu.classList.remove('menu-visible');
+            }
+        });
+
+        // Búsqueda
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-input').value.trim();
+            if (searchTerm) {
+                window.location.href = `https://apikarl.com/search?q=${encodeURIComponent(searchTerm)}`;
+            }
+        });
+
+        // También permitir búsqueda con Enter
+        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value.trim();
+                if (searchTerm) {
+                    window.location.href = `https://apikarl.com/search?q=${encodeURIComponent(searchTerm)}`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
