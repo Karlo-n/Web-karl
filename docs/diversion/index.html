@@ -1,975 +1,610 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diversión | API Karl</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fuentes de Google -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+const express = require('express');
+const { createCanvas, loadImage, registerFont } = require('canvas');
+const path = require('path');
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+const router = express.Router();
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
+// Registrar fuente para Discord - idealmente usar Whitney, pero usamos una alternativa
+registerFont(path.join(__dirname, 'Oswald-VariableFont_wght.ttf'), { family: 'Oswald' });
 
-    <!-- Metadatos Open Graph -->
-    <meta property="og:title" content="Diversión | API Karl">
-    <meta property="og:description" content="APIs divertidas para animar tus aplicaciones y servidores de Discord con API Karl.">
-    <meta property="og:image" content="https://apikarl.com/preview.png">
-    <meta property="og:url" content="https://apikarl.com/docs/diversion">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Diversión | API Karl">
-    <meta name="twitter:description" content="Colección de APIs divertidas para integrar en tus proyectos con API Karl.">
-    <meta name="twitter:image" content="https://apikarl.com/preview.png">
+// Función para validar URL
+const isValidUrl = (string) => {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+};
 
-    <style>
-        :root {
-            --primary: #ff71ce;
-            --secondary: #01cdfe;
-            --accent: #ffe700;
-            --dark-bg: #0a0f1a;
-            --card-bg: rgba(20, 25, 40, 0.9);
-            --glow-primary: 0 0 10px rgba(255, 113, 206, 0.7);
-            --glow-secondary: 0 0 10px rgba(1, 205, 254, 0.7);
-            --glow-accent: 0 0 10px rgba(255, 231, 0, 0.7);
-            --card-shadow: 0 4px 20px rgba(255, 113, 206, 0.2);
-            --text-shadow: 0 0 5px rgba(255, 113, 206, 0.7);
+// Estilos para el texto (solo el morado-azul que siempre se usará)
+const ESTILOS_TEXTO = {
+    // Estilo morado-azul (único estilo que se usará)
+    moradoAzul: {
+        usuario: {
+            // Una fuente más ornamentada para el nombre de usuario
+            fuente: "bold 18px 'Oswald'",
+            color: "#9966ff", // Morado
+            sombra: "0 0 5px #5500ff"
+        },
+        mensaje: {
+            // Una fuente diferente para el texto de mensaje
+            fuente: "italic 15px 'Oswald'",
+            color: "#66ccff", // Azul claro
+            sombra: "0 0 3px #0066ff"
         }
+    }
+};
 
-        body {
-            background: var(--dark-bg);
-            color: white;
-            font-family: 'Rajdhani', sans-serif;
-            overflow-x: hidden;
-            position: relative;
-            margin: 0;
-            line-height: 1.6;
-        }
-
-        /* Fondo animado con partículas */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle, rgba(20, 25, 40, 0.3) 10%, transparent 10%);
-            background-size: 30px 30px;
-            animation: backgroundAnimation 100s linear infinite;
-            z-index: -1;
-        }
-
-        @keyframes backgroundAnimation {
-            0% {
-                background-position: 0 0;
-            }
-            100% {
-                background-position: 1000px 1000px;
-            }
-        }
-
-        /* Líneas de malla futurista */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(rgba(255, 113, 206, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 113, 206, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: -1;
-        }
-
-        /* Navbar mejorado */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background: rgba(10, 15, 30, 0.95);
-            box-shadow: 0 0 20px rgba(255, 113, 206, 0.2);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 113, 206, 0.2);
-        }
-
-        .navbar-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
-            font-weight: bold;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: 2px;
-            text-shadow: var(--text-shadow);
-            transition: all 0.3s ease;
-        }
-
-        .discord-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 113, 206, 0.1);
-            color: var(--primary);
-            font-size: 22px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            filter: drop-shadow(0 0 2px var(--primary));
-        }
-
-        .discord-icon:hover {
-            transform: rotate(5deg) scale(1.1);
-            filter: drop-shadow(0 0 5px var(--primary));
-        }
-
-        .menu-btn {
-            font-size: 24px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .menu-btn:hover {
-            transform: rotate(90deg);
-            color: var(--secondary);
-        }
-
-        .menu-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .menu-content {
-            display: none;
-            position: absolute;
-            top: 40px;
-            right: 0;
-            background: rgba(20, 25, 40, 0.95);
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 0 20px rgba(255, 113, 206, 0.3);
-            min-width: 180px;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            z-index: 20;
-            border: 1px solid rgba(255, 113, 206, 0.2);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .menu-visible {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .menu-content b {
-            display: block;
-            color: var(--primary);
-            margin: 10px 0 5px;
-            font-size: 14px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255, 113, 206, 0.2);
-            padding-bottom: 3px;
-        }
-
-        .menu-content a {
-            display: block;
-            padding: 8px 10px;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            margin: 2px 0;
-        }
-
-        .menu-content a:hover {
-            background: rgba(255, 113, 206, 0.1);
-            transform: translateX(5px);
-            color: var(--primary);
-        }
-
-        /* Contenido */
-        .content {
-            max-width: 1200px;
-            margin: 120px auto 40px;
-            padding: 0 20px;
-            z-index: 1;
-        }
-
-        /* Título de sección */
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-title h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-        }
-
-        .section-title p {
-            max-width: 700px;
-            margin: 20px auto;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.1rem;
-        }
-
-        /* Grid de tarjetas de API */
-        .api-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-        }
-
-        /* Tarjeta de API */
-        .api-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            border: 1px solid rgba(255, 113, 206, 0.1);
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.5s forwards;
-            animation-delay: calc(var(--delay) * 0.1s);
-            box-shadow: var(--card-shadow);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .api-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(
-                transparent, 
-                rgba(255, 113, 206, 0.05), 
-                transparent 30%
-            );
-            animation: rotate 20s linear infinite;
-            z-index: -1;
-        }
-
-        @keyframes rotate {
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .api-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(255, 113, 206, 0.3);
-        }
-
-        .api-icon {
-            font-size: 36px;
-            margin-bottom: 15px;
-            color: var(--primary);
-            background: rgba(255, 113, 206, 0.1);
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(255, 113, 206, 0.3);
-        }
-
-        .api-card:hover .api-icon {
-            transform: scale(1.1) rotate(10deg);
-            color: var(--dark-bg);
-            background: var(--primary);
-            box-shadow: 0 0 20px rgba(255, 113, 206, 0.7);
-        }
-
-        .api-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--secondary);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .api-description {
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 15px;
-            flex-grow: 1;
-        }
-
-        .api-meta {
-            background: rgba(10, 15, 25, 0.6);
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 10px;
-            border-left: 3px solid var(--primary);
-        }
-
-        .api-meta i {
-            color: var(--primary);
-            margin-right: 5px;
-        }
-
-        .api-btn {
-            display: inline-block;
-            padding: 12px 25px;
-            margin-top: 15px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: var(--dark-bg);
-            font-weight: bold;
-            font-family: 'Orbitron', sans-serif;
-            border-radius: 30px;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: var(--glow-primary);
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .api-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: all 0.5s ease;
-        }
-
-        .api-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255, 113, 206, 0.4);
-        }
-
-        .api-btn:hover::before {
-            left: 100%;
-        }
-
-        /* Notificación mejorada con z-index mayor */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(20, 25, 40, 0.9);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 113, 206, 0.3);
-            transform: translateX(200%);
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            z-index: 10000; /* Z-index muy alto para estar por encima de todo */
-            border-left: 4px solid var(--primary);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .notification-icon {
-            color: var(--primary);
-            font-size: 20px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 15px 20px;
-            }
-
-            .content {
-                padding: 0 15px;
-                margin-top: 100px;
-            }
-
-            .api-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .section-title h2 {
-                font-size: 2rem;
-            }
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 30px 0;
-            margin-top: 60px;
-            background: rgba(10, 15, 30, 0.8);
-            position: relative;
-            border-top: 1px solid rgba(255, 113, 206, 0.2);
-        }
-
-        .footer p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            margin: 5px 0;
-        }
-
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .social-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 113, 206, 0.1);
-            color: var(--primary);
-            transition: all 0.3s ease;
-            font-size: 18px;
-        }
-
-        .social-icon:hover {
-            transform: translateY(-5px);
-            background: var(--primary);
-            color: var(--dark-bg);
-            box-shadow: var(--glow-primary);
-        }
-
-        /* Categoría de filtros */
-        .filter-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .filter-btn {
-            background: rgba(20, 25, 40, 0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 113, 206, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: var(--dark-bg);
-            transform: translateY(-3px);
-            box-shadow: var(--glow-primary);
-        }
-
-        /* Loader inicial */
-        .page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark-bg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-
-        .loader-hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-content {
-            text-align: center;
-        }
-
-        .loader-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 113, 206, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s infinite ease;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Estrellas flotantes para el fondo */
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -2;
-        }
-        
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #fff;
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: twinkle 4s infinite;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
-        }
-    </style>
-</head>
-<body>
-    <!-- Fondo de estrellas -->
-    <div class="stars" id="stars"></div>
+// Función para dibujar pequeños boosts en el fondo
+function dibujarMiniBoosters(ctx, ancho, alto, colores = ["#ff73fa", "#bd5dff"]) {
+    // Crear varios mini diamantes de boost en el fondo
+    const miniBoosts = [
+        { x: ancho * 0.15, y: alto * 0.25, tamaño: 8 },
+        { x: ancho * 0.25, y: alto * 0.75, tamaño: 6 },
+        { x: ancho * 0.45, y: alto * 0.35, tamaño: 5 },
+        { x: ancho * 0.65, y: alto * 0.65, tamaño: 7 },
+        { x: ancho * 0.75, y: alto * 0.15, tamaño: 6 },
+        { x: ancho * 0.85, y: alto * 0.85, tamaño: 5 },
+        { x: ancho * 0.35, y: alto * 0.55, tamaño: 4 },
+        { x: ancho * 0.55, y: alto * 0.25, tamaño: 6 },
+        { x: ancho * 0.72, y: alto * 0.45, tamaño: 5 },
+        { x: ancho * 0.92, y: alto * 0.35, tamaño: 4 },
+    ];
     
-    <!-- Loader inicial -->
-    <div class="page-loader" id="pageLoader">
-        <div class="loader-content">
-            <div class="loader-spinner"></div>
-            <h2 style="margin-top: 20px; font-family: 'Orbitron', sans-serif; color: var(--primary); position: absolute; left: 46%; top: 55%;">DIVERSION API</h2>
-        </div>
-    </div>
-
-    <!-- Notificación -->
-    <div class="notification" id="notification">
-        <div class="notification-content">
-            <i class="fas fa-info-circle notification-icon"></i>
-            <span id="notificationText">¡Bienvenido a las APIs divertidas de API Karl!</span>
-        </div>
-    </div>
-
-    <!-- Navbar -->
-    <nav class="navbar">
-        <a href="https://discord.gg/PvQvJ7JvEx" target="_blank" class="discord-link">
-            <div class="discord-icon">
-                <i class="fab fa-discord"></i>
-            </div>
-        </a>
-
-        <span class="navbar-title">API Karl - Diversión</span>
-
-        <div class="menu-container">
-            <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-            <div id="menu" class="menu-content">
-                <b>API</b>
-                <a href="https://apikarl.com/docs/utilidad"><i class="fas fa-tools"></i> Utilidades</a>
-                <a href="https://apikarl.com/docs/diversion"><i class="fas fa-gamepad"></i> Divertido</a>
-                <b>Info</b>
-                <a href="http://apikarl.com"><i class="fas fa-home"></i> Casa</a>
-                <a href="http://apikarl.com/docs"><i class="fas fa-book"></i> Documentación</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Contenido principal -->
-    <div class="content">
-        <!-- Título de sección -->
-        <div class="section-title">
-            <h2><i class="fas fa-gamepad"></i> Diversión API</h2>
-            <p>Explora nuestra colección de APIs divertidas que añadirán elementos interactivos y entretenidos a tus aplicaciones y servidores de Discord. Perfectas para animar tu comunidad y crear momentos memorables.</p>
-        </div>
-
-        <!-- Filtros de categoría -->
-        <div class="filter-container">
-            <button class="filter-btn active" data-filter="all">Todas</button>
-            <button class="filter-btn" data-filter="imagen">Imágenes</button>
-            <button class="filter-btn" data-filter="anime">Anime</button>
-            <button class="filter-btn" data-filter="social">Social</button>
-            <button class="filter-btn" data-filter="media">Media</button>
-        </div>
-
-        <!-- Grid de tarjetas de API -->
-        <div class="api-grid">
-            <!-- Kiss -->
-            <div class="api-card" data-category="anime" style="--delay: 1">
-                <div class="api-icon">
-                    <i class="fas fa-kiss-wink-heart"></i>
-                </div>
-                <div class="api-name">💋 Kiss</div>
-                <p class="api-description">Genera 100 imágenes de anime besándose aleatoriamente. Ideal para reacciones románticas en servidores de Discord o para añadir un toque kawaii a tus aplicaciones.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 1-2s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetro opcional: json=true
-                </div>
-                <a href="https://api.apikarl.com/api/fun/kiss" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-
-            <!-- Ship -->
-            <div class="api-card" data-category="social" style="--delay: 2">
-                <div class="api-icon">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <div class="api-name">❤️ Ship</div>
-                <p class="api-description">Crea una carta de ship entre dos personas con 5 imágenes de fondo. Perfecto para juegos sociales en tu comunidad y para crear momentos divertidos entre usuarios.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: Sí | <i class="fas fa-stopwatch"></i> Respuesta: 1-3s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: avatar1, avatar2
-                </div>
-                <a href="https://api.apikarl.com/api/fun/ship" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-
-            <!-- Slap -->
-            <div class="api-card" data-category="anime" style="--delay: 3">
-                <div class="api-icon">
-                    <i class="fas fa-hand-paper"></i>
-                </div>
-                <div class="api-name">✋ Slap</div>
-                <p class="api-description">Genera 100 imágenes de anime dando golpes (slaps). Perfecto para reacciones humorísticas y juegos de rol ligero en chats y servidores de Discord.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 1-2s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Selección aleatoria automática
-                </div>
-                <a href="https://api.apikarl.com/api/fun/slap" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-
-            <!-- Jail -->
-            <div class="api-card" data-category="imagen" style="--delay: 4">
-                <div class="api-icon">
-                    <i class="fas fa-bars"></i>
-                </div>
-                <div class="api-name">🚔 Jail</div>
-                <p class="api-description">Genera una imagen colocando a un usuario en prisión. Ideal para sistemas de moderación humorísticos o para reaccionar a mensajes controversiales de forma amistosa.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: Sí | <i class="fas fa-stopwatch"></i> Respuesta: 1-2s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: avatar1
-                </div>
-                <a href="https://api.apikarl.com/api/fun/jail" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-
-            <!-- Lyric -->
-            <div class="api-card" data-category="media" style="--delay: 5">
-                <div class="api-icon">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="api-name">🎵 Lyric</div>
-                <p class="api-description">Obtiene la letra de cualquier canción. Perfecto para integración con bots de música o para aplicaciones que necesiten mostrar letras de canciones en tiempo real.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 1-2s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: música
-                </div>
-                <a href="https://api.apikarl.com/api/fun/lyric" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-
-            <!-- MAGIK (Nuevo) -->
-            <div class="api-card" data-category="imagen" style="--delay: 6">
-                <div class="api-icon">
-                    <i class="fas fa-magic"></i>
-                </div>
-                <div class="api-name">✨ MAGIK</div>
-                <p class="api-description">Aplica efectos de distorsión mágica a cualquier imagen. Transforma fotos normales en creaciones surrealistas con diferentes niveles de intensidad personalizables.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 2-3s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: imagen, nivel (opcional: 1-10)
-                </div>
-                <a href="https://api.apikarl.com/api/fun/magik" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-
-            <!-- Blanco y Negro (Nuevo) -->
-            <div class="api-card" data-category="imagen" style="--delay: 7">
-                <div class="api-icon">
-                    <i class="fas fa-adjust"></i>
-                </div>
-                <div class="api-name">⚪⚫ Blanco y Negro</div>
-                <p class="api-description">Convierte cualquier imagen a blanco y negro con ajustes de contraste precisos. Añade un toque nostálgico o artístico a tus fotos con este filtro clásico pero siempre elegante.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 1s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: imagen, contraste (opcional: 1-5)
-                </div>
-                <a href="https://api.apikarl.com/api/fun/byn" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-
-            <!-- Invertido Imágenes (Nuevo) -->
-            <div class="api-card" data-category="imagen" style="--delay: 8">
-                <div class="api-icon">
-                    <i class="fas fa-exchange-alt"></i>
-                </div>
-                <div class="api-name">🔄 Invertido</div>
-                <p class="api-description">Invierte los colores de cualquier imagen creando un efecto negativo impactante. Perfecto para crear versiones alternativas de logos, avatares o fotos de perfil.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 1s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: imagen
-                </div>
-                <a href="https://api.apikarl.com/api/fun/invertir" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-            
-            <!-- Pixel Art -->
-            <div class="api-card" data-category="imagen" style="--delay: 11">
-                <div class="api-icon">
-                    <i class="fas fa-th"></i>
-                </div>
-                <div class="api-name">🎮 Pixel Art</div>
-                <p class="api-description">Transforma cualquier imagen en arte pixelado con estilo retro. Perfecto para crear avatares únicos o dar un toque de nostalgia gaming a tus aplicaciones.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 2s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: imagen, escala (opcional: 4-32)
-                </div>
-                <a href="https://api.apikarl.com/api/fun/pixel" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-            
-            <!-- Comic Filter -->
-            <div class="api-card" data-category="imagen" style="--delay: 12">
-                <div class="api-icon">
-                    <i class="fas fa-comments"></i>
-                </div>
-                <div class="api-name">💬 Comic Filter</div>
-                <p class="api-description">Convierte fotos en ilustraciones estilo cómic con efectos de color y trazos. Dale un aspecto de viñeta a cualquier imagen con solo una petición.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 2-3s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: imagen, intensidad (opcional: 1-5)
-                </div>
-                <a href="https://api.apikarl.com/api/fun/comic" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-
-            <div class="api-card" data-category="social" style="--delay: 9">
-                <div class="api-icon">
-                    <i class="fas fa-question-circle"></i>
-                </div>
-                <div class="api-name">❓ Trivia</div>
-                <p class="api-description">Genera preguntas de trivia en múltiples categorías y niveles de dificultad. Ideal para crear juegos de conocimiento, eventos interactivos o sistemas de recompensas en servidores de Discord.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 1s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: categoria, dificultad, tipo
-                </div>
-                <a href="https://api.apikarl.com/api/fun/trivia" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-            
-            <div class="api-card" data-category="social" style="--delay: 13">
-                <div class="api-icon">
-                    <i class="fas fa-balance-scale"></i>
-                </div>
-                <div class="api-name">🤔 Would You Rather</div>
-                <p class="api-description">Genera divertidos dilemas "¿Qué preferirías?" para animar conversaciones y conocer mejor a tus amigos. Incluye estadísticas de respuestas y categorías temáticas personalizables.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 1-2s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Parámetros: categoria
-                </div>
-                <a href="https://api.apikarl.com/api/fun/would-you-rather/generate" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-
-            <div class="api-card" data-category="social" style="--delay: 14">
-                <div class="api-icon">
-                    <i class="fas fa-dice"></i>
-                </div>
-                <div class="api-name">🃏 Juego 21</div>
-                <p class="api-description">Juega una partida del clásico juego 21 contra la IA. Cada jugador recibe inicialmente 1 carta y luego debe decidir si seguir o plantarse. La API usa estructura REST para las distintas acciones del juego.</p>
-                <div class="api-meta">
-                    <i class="fas fa-key"></i> Requiere API Key: No | <i class="fas fa-stopwatch"></i> Respuesta: 1-2s
-                </div>
-                <div class="api-meta">
-                    <i class="fas fa-code"></i> Endpoints: GET / (nueva partida), PUT /seguir, PUT /parar, PUT /terminar
-                </div>
-                <a href="https://api.apikarl.com/api/fun/21" class="api-btn"><i class="fas fa-external-link-alt"></i> Probar API</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="social-icons">
-            <a href="https://www.tiktok.com/@pixelrun" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
-            <a href="https://wa.me/523326811294?text=%F0%9F%8C%90-¡Hola!,%20me%20interesa%20tu%20bot%20o%20alguna%20información%20extra" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://discord.gg/PvQvJ7JvEx" target="_blank" class="social-icon"><i class="fab fa-discord"></i></a>
-        </div>
-        <p>© 2025 API Karl - Todos los derechos reservados</p>
-        <p>Plataforma desarrollada con <i class="fas fa-heart" style="color: var(--accent);"></i> para desarrolladores</p>
-    </footer>
-
-    <script>
-        // Crear estrellas para el fondo
-        function createStars() {
-            const stars = document.getElementById('stars');
-            const starsCount = 100;
-            
-            for (let i = 0; i < starsCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.animationDelay = `${Math.random() * 4}s`;
-                stars.appendChild(star);
-            }
-        }
+    miniBoosts.forEach(boost => {
+        // Mini diamante
+        ctx.globalAlpha = 0.3; // Transparente para no distraer
+        ctx.beginPath();
+        ctx.moveTo(boost.x, boost.y + boost.tamaño * 0.5);
+        ctx.lineTo(boost.x - boost.tamaño * 0.4, boost.y);
+        ctx.lineTo(boost.x, boost.y - boost.tamaño * 0.5);
+        ctx.lineTo(boost.x + boost.tamaño * 0.4, boost.y);
+        ctx.closePath();
         
-        // Llamar a la función al cargar
-        createStars();
+        const gradiente = ctx.createLinearGradient(
+            boost.x - boost.tamaño * 0.4, boost.y - boost.tamaño * 0.5,
+            boost.x + boost.tamaño * 0.4, boost.y + boost.tamaño * 0.5
+        );
+        gradiente.addColorStop(0, colores[0]);
+        gradiente.addColorStop(1, colores[1]);
         
-        // Mostrar loader inicial
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('pageLoader').classList.add('loader-hidden');
-                showNotification("¡Bienvenido a las APIs divertidas de API Karl!");
-            }, 1500);
-        });
-
-        // Función para mostrar notificaciones
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            document.getElementById('notificationText').textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // Función para el menú
-        function toggleMenu() {
-            let menu = document.getElementById("menu");
-            menu.classList.toggle("menu-visible");
-        }
-
-        // Cerrar el menú al hacer clic fuera de él
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('menu');
-            const menuBtn = document.querySelector('.menu-btn');
-            
-            if (!menu.contains(event.target) && !menuBtn.contains(event.target) && menu.classList.contains('menu-visible')) {
-                menu.classList.remove('menu-visible');
-            }
-        });
+        ctx.fillStyle = gradiente;
+        ctx.fill();
         
-        // Filtrar tarjetas por categoría
-        document.querySelectorAll('.filter-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                // Remover clase activa de todos los botones
-                document.querySelectorAll('.filter-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                
-                // Añadir clase activa al botón clickeado
-                this.classList.add('active');
-                
-                // Obtener categoría a filtrar
-                const filterValue = this.getAttribute('data-filter');
-                
-                // Filtrar tarjetas
-                document.querySelectorAll('.api-card').forEach(card => {
-                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-                        card.style.display = 'block';
+        // Resetear alpha
+        ctx.globalAlpha = 1.0;
+    });
+}
+
+// Función para crear fondo en estilo morado-azul
+function crearFondoMoradoAzul(ctx, ancho, alto) {
+    // Colores fijos para el tema morado-azul
+    const colores = ["#6600ff", "#00ccff"]; // Morado a azul
+    
+    // Crear degradado base
+    const gradient = ctx.createLinearGradient(0, 0, ancho, alto);
+    gradient.addColorStop(0, colores[0]);
+    gradient.addColorStop(1, colores[1]);
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, ancho, alto);
+    
+    // Añadir patrón de diamantes
+    ctx.strokeStyle = "rgba(255,255,255,0.2)";
+    ctx.lineWidth = 1;
+    
+    const tamañoDiamante = 40;
+    for (let y = -tamañoDiamante; y < alto + tamañoDiamante; y += tamañoDiamante) {
+        for (let x = -tamañoDiamante; x < ancho + tamañoDiamante; x += tamañoDiamante) {
+            ctx.beginPath();
+            ctx.moveTo(x, y + tamañoDiamante/2);
+            ctx.lineTo(x + tamañoDiamante/2, y);
+            ctx.lineTo(x + tamañoDiamante, y + tamañoDiamante/2);
+            ctx.lineTo(x + tamañoDiamante/2, y + tamañoDiamante);
+            ctx.closePath();
+            ctx.stroke();
+        }
+    }
+    
+    // Añadir brillos/partículas
+    for (let i = 0; i < 30; i++) {
+        const x = Math.random() * ancho;
+        const y = Math.random() * alto;
+        const tamaño = Math.random() * 3 + 1;
+        
+        // Brillo con resplandor
+        const gradiente = ctx.createRadialGradient(x, y, 0, x, y, tamaño * 4);
+        gradiente.addColorStop(0, "rgba(255,255,255,0.8)");
+        gradiente.addColorStop(0.5, "rgba(255,255,255,0.2)");
+        gradiente.addColorStop(1, "rgba(255,255,255,0)");
+        
+        ctx.beginPath();
+        ctx.arc(x, y, tamaño * 4, 0, Math.PI * 2);
+        ctx.fillStyle = gradiente;
+        ctx.fill();
+        
+        // Punto central brillante
+        ctx.beginPath();
+        ctx.arc(x, y, tamaño, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255,255,255,0.9)";
+        ctx.fill();
+    }
+    
+    // Añadir viñeta para dar profundidad
+    const viñeta = ctx.createRadialGradient(
+        ancho / 2, alto / 2, alto / 3,
+        ancho / 2, alto / 2, alto
+    );
+    viñeta.addColorStop(0, "rgba(0,0,0,0)");
+    viñeta.addColorStop(1, "rgba(0,0,0,0.5)");
+    
+    ctx.fillStyle = viñeta;
+    ctx.fillRect(0, 0, ancho, alto);
+    
+    // Líneas decorativas en las esquinas
+    ctx.strokeStyle = "rgba(180,230,255,0.5)";
+    ctx.lineWidth = 2;
+    
+    // Tamaño de las líneas decorativas
+    const long = 25;
+    
+    // Esquina superior izquierda
+    ctx.beginPath();
+    ctx.moveTo(0, long);
+    ctx.lineTo(0, 0);
+    ctx.lineTo(long, 0);
+    ctx.stroke();
+    
+    // Esquina superior derecha
+    ctx.beginPath();
+    ctx.moveTo(ancho - long, 0);
+    ctx.lineTo(ancho, 0);
+    ctx.lineTo(ancho, long);
+    ctx.stroke();
+    
+    // Esquina inferior izquierda
+    ctx.beginPath();
+    ctx.moveTo(0, alto - long);
+    ctx.lineTo(0, alto);
+    ctx.lineTo(long, alto);
+    ctx.stroke();
+    
+    // Esquina inferior derecha
+    ctx.beginPath();
+    ctx.moveTo(ancho - long, alto);
+    ctx.lineTo(ancho, alto);
+    ctx.lineTo(ancho, alto - long);
+    ctx.stroke();
+    
+    return colores;
+}
+
+// Función para crear efectos de brillo en los bordes
+function crearEfectosBorde(ctx, ancho, alto) {
+    // Crear gradiente en los bordes para dar efecto iluminado
+    const altoBorde = 8; // Aumentado para más brillo
+    const gradienteSuperior = ctx.createLinearGradient(0, 0, 0, altoBorde);
+    gradienteSuperior.addColorStop(0, "rgba(255,115,250,0.8)");
+    gradienteSuperior.addColorStop(1, "rgba(255,115,250,0)");
+    
+    ctx.fillStyle = gradienteSuperior;
+    ctx.fillRect(0, 0, ancho, altoBorde);
+    
+    const gradienteInferior = ctx.createLinearGradient(0, alto - altoBorde, 0, alto);
+    gradienteInferior.addColorStop(0, "rgba(255,115,250,0)");
+    gradienteInferior.addColorStop(1, "rgba(255,115,250,0.8)");
+    
+    ctx.fillStyle = gradienteInferior;
+    ctx.fillRect(0, alto - altoBorde, ancho, altoBorde);
+    
+    const anchoLateral = 8; // Aumentado para más brillo
+    const gradienteIzquierdo = ctx.createLinearGradient(0, 0, anchoLateral, 0);
+    gradienteIzquierdo.addColorStop(0, "rgba(255,115,250,0.8)");
+    gradienteIzquierdo.addColorStop(1, "rgba(255,115,250,0)");
+    
+    ctx.fillStyle = gradienteIzquierdo;
+    ctx.fillRect(0, 0, anchoLateral, alto);
+    
+    const gradienteDerecho = ctx.createLinearGradient(ancho - anchoLateral, 0, ancho, 0);
+    gradienteDerecho.addColorStop(0, "rgba(255,115,250,0)");
+    gradienteDerecho.addColorStop(1, "rgba(255,115,250,0.8)");
+    
+    ctx.fillStyle = gradienteDerecho;
+    ctx.fillRect(ancho - anchoLateral, 0, anchoLateral, alto);
+    
+    // Añadir un resplandor adicional en las esquinas
+    const radioEsquina = 20;
+    const esquinas = [
+        { x: 0, y: 0 },                // Superior izquierda
+        { x: ancho, y: 0 },            // Superior derecha
+        { x: 0, y: alto },             // Inferior izquierda
+        { x: ancho, y: alto }          // Inferior derecha
+    ];
+    
+    esquinas.forEach(esquina => {
+        const gradienteEsquina = ctx.createRadialGradient(
+            esquina.x, esquina.y, 0,
+            esquina.x, esquina.y, radioEsquina
+        );
+        gradienteEsquina.addColorStop(0, "rgba(255,115,250,0.9)"); // Más intenso
+        gradienteEsquina.addColorStop(0.6, "rgba(189,93,255,0.5)"); // Transición a morado
+        gradienteEsquina.addColorStop(1, "rgba(189,93,255,0)");
+        
+        ctx.fillStyle = gradienteEsquina;
+        ctx.fillRect(
+            Math.max(0, esquina.x - radioEsquina),
+            Math.max(0, esquina.y - radioEsquina),
+            radioEsquina * (esquina.x === 0 ? 1 : -1) + (esquina.x === 0 ? 0 : ancho),
+            radioEsquina * (esquina.y === 0 ? 1 : -1) + (esquina.y === 0 ? 0 : alto)
+        );
+    });
+}
+
+// Función para dividir el texto en múltiples líneas con control estricto de límites
+function dividirTexto(ctx, texto, anchoMaximo, tamaño) {
+    // Establecer la fuente para medir el texto
+    ctx.font = `${tamaño}px Oswald`;
+    
+    // Si el texto es muy corto, devolverlo sin cambios
+    if (ctx.measureText(texto).width <= anchoMaximo) {
+        return [texto];
+    }
+    
+    // Dividir el texto en palabras
+    const palabras = texto.split(' ');
+    const lineas = [];
+    let lineaActual = '';
+    
+    // Verificar si todo el texto es demasiado largo incluso con el tamaño más pequeño
+    // Si es así, truncarlo antes de procesar
+    const textoTruncadoIndice = determinarLongitudMaxima(ctx, texto, anchoMaximo * 2.5, tamaño);
+    const textoTruncado = textoTruncadoIndice < texto.length ? 
+                           texto.substring(0, textoTruncadoIndice) + '...' : 
+                           texto;
+    
+    // Procesar cada palabra del texto potencialmente truncado
+    const palabrasTruncadas = textoTruncado.split(' ');
+    
+    for (const palabra of palabrasTruncadas) {
+        const lineaTentativa = lineaActual.length === 0 ? palabra : `${lineaActual} ${palabra}`;
+        const medidaTexto = ctx.measureText(lineaTentativa).width;
+        
+        if (medidaTexto <= anchoMaximo) {
+            lineaActual = lineaTentativa;
+        } else {
+            // Si una sola palabra es más larga que el ancho máximo, dividirla
+            if (lineaActual.length === 0) {
+                let palabraParcial = '';
+                for (let i = 0; i < palabra.length; i++) {
+                    const tentativo = palabraParcial + palabra[i];
+                    if (ctx.measureText(tentativo).width <= anchoMaximo) {
+                        palabraParcial = tentativo;
                     } else {
-                        card.style.display = 'none';
+                        if (palabraParcial.length > 0) {
+                            lineas.push(palabraParcial);
+                        }
+                        palabraParcial = palabra[i];
                     }
-                });
-                
-                showNotification("Filtrando por: " + filterValue.charAt(0).toUpperCase() + filterValue.slice(1));
-            });
-        });
-        
-        // Animaciones al hacer scroll
-        function checkCards() {
-            document.querySelectorAll('.api-card').forEach((card, index) => {
-                const rect = card.getBoundingClientRect();
-                if (rect.top < window.innerHeight - 50) {
-                    card.style.animationDelay = `${index * 0.1}s`;
-                    card.style.animationName = 'fadeInUp';
                 }
+                if (palabraParcial.length > 0) {
+                    lineaActual = palabraParcial;
+                }
+            } else {
+                lineas.push(lineaActual);
+                lineaActual = palabra;
+            }
+            
+            // Si ya tenemos demasiadas líneas, parar el procesamiento
+            if (lineas.length >= 1) { // Solo permitir 2 líneas en total (1 + la actual)
+                if (palabra !== palabrasTruncadas[palabrasTruncadas.length - 1]) {
+                    lineaActual += '...';
+                }
+                break;
+            }
+        }
+    }
+    
+    // Añadir la última línea si queda algo
+    if (lineaActual.length > 0) {
+        lineas.push(lineaActual);
+    }
+    
+    return lineas;
+}
+
+// Función auxiliar para determinar cuántos caracteres caben en el espacio disponible
+function determinarLongitudMaxima(ctx, texto, anchoMaximo, tamaño) {
+    ctx.font = `${tamaño}px Oswald`;
+    
+    if (ctx.measureText(texto).width <= anchoMaximo) {
+        return texto.length;
+    }
+    
+    // Búsqueda binaria para determinar cuántos caracteres caben
+    let min = 0;
+    let max = texto.length;
+    let mid;
+    
+    while (min < max - 1) {
+        mid = Math.floor((min + max) / 2);
+        const subTexto = texto.substring(0, mid);
+        
+        if (ctx.measureText(subTexto).width <= anchoMaximo) {
+            min = mid;
+        } else {
+            max = mid;
+        }
+    }
+    
+    return min;
+}
+
+// Función para crear efectos especiales adicionales para morado-azul
+function crearEfectosEspeciales(ctx, ancho, alto) {
+    // Crear efecto de luz horizontal central
+    const altoLuz = 15;
+    const yPosicion = alto / 2;
+    const gradienteLuz = ctx.createLinearGradient(0, yPosicion - altoLuz/2, ancho, yPosicion + altoLuz/2);
+    gradienteLuz.addColorStop(0, "rgba(102, 0, 255, 0)"); // Morado
+    gradienteLuz.addColorStop(0.5, "rgba(102, 102, 255, 0.1)"); // Mezcla
+    gradienteLuz.addColorStop(1, "rgba(0, 204, 255, 0)"); // Azul
+    
+    ctx.fillStyle = gradienteLuz;
+    ctx.fillRect(0, yPosicion - altoLuz/2, ancho, altoLuz);
+    
+    // Ondas de luz sutiles en tonos azul y morado
+    const numOndas = 3;
+    for (let i = 0; i < numOndas; i++) {
+        const yOnda = alto * (i + 1) / (numOndas + 1);
+        
+        ctx.beginPath();
+        ctx.moveTo(0, yOnda);
+        
+        // Crear una onda sinusoidal
+        for (let x = 0; x < ancho; x += 5) {
+            const amplitud = 2;
+            const frecuencia = 0.02;
+            const y = yOnda + Math.sin(x * frecuencia) * amplitud;
+            ctx.lineTo(x, y);
+        }
+        
+        // Alternar colores entre morado y azul
+        ctx.strokeStyle = i % 2 === 0 ? 
+            "rgba(102, 0, 255, 0.1)" : // Morado
+            "rgba(0, 204, 255, 0.1)";  // Azul
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+}
+
+// Función para crear efectos de brillo en los bordes específicos para morado-azul
+function crearEfectosBorde(ctx, ancho, alto) {
+    // Crear gradiente en los bordes para dar efecto iluminado
+    const altoBorde = 8;
+    const gradienteSuperior = ctx.createLinearGradient(0, 0, 0, altoBorde);
+    gradienteSuperior.addColorStop(0, "rgba(102,0,255,0.8)"); // Morado
+    gradienteSuperior.addColorStop(1, "rgba(102,0,255,0)");
+    
+    ctx.fillStyle = gradienteSuperior;
+    ctx.fillRect(0, 0, ancho, altoBorde);
+    
+    const gradienteInferior = ctx.createLinearGradient(0, alto - altoBorde, 0, alto);
+    gradienteInferior.addColorStop(0, "rgba(0,204,255,0)"); // Azul
+    gradienteInferior.addColorStop(1, "rgba(0,204,255,0.8)");
+    
+    ctx.fillStyle = gradienteInferior;
+    ctx.fillRect(0, alto - altoBorde, ancho, altoBorde);
+    
+    const anchoLateral = 8;
+    const gradienteIzquierdo = ctx.createLinearGradient(0, 0, anchoLateral, 0);
+    gradienteIzquierdo.addColorStop(0, "rgba(102,0,255,0.8)"); // Morado
+    gradienteIzquierdo.addColorStop(1, "rgba(102,0,255,0)");
+    
+    ctx.fillStyle = gradienteIzquierdo;
+    ctx.fillRect(0, 0, anchoLateral, alto);
+    
+    const gradienteDerecho = ctx.createLinearGradient(ancho - anchoLateral, 0, ancho, 0);
+    gradienteDerecho.addColorStop(0, "rgba(0,204,255,0)"); // Azul
+    gradienteDerecho.addColorStop(1, "rgba(0,204,255,0.8)");
+    
+    ctx.fillStyle = gradienteDerecho;
+    ctx.fillRect(ancho - anchoLateral, 0, anchoLateral, alto);
+    
+    // Añadir un resplandor adicional en las esquinas
+    const radioEsquina = 25;
+    const esquinas = [
+        { x: 0, y: 0, color: "rgba(102,0,255,0.9)" },      // Superior izquierda - Morado
+        { x: ancho, y: 0, color: "rgba(102,204,255,0.9)" }, // Superior derecha - Azul claro
+        { x: 0, y: alto, color: "rgba(102,0,255,0.9)" },    // Inferior izquierda - Morado
+        { x: ancho, y: alto, color: "rgba(0,204,255,0.9)" } // Inferior derecha - Azul
+    ];
+    
+    esquinas.forEach(esquina => {
+        const gradienteEsquina = ctx.createRadialGradient(
+            esquina.x, esquina.y, 0,
+            esquina.x, esquina.y, radioEsquina
+        );
+        gradienteEsquina.addColorStop(0, esquina.color);
+        gradienteEsquina.addColorStop(0.6, "rgba(102,102,255,0.3)"); // Mezcla morado-azul
+        gradienteEsquina.addColorStop(1, "rgba(102,102,255,0)");
+        
+        ctx.fillStyle = gradienteEsquina;
+        ctx.fillRect(
+            Math.max(0, esquina.x - radioEsquina),
+            Math.max(0, esquina.y - radioEsquina),
+            radioEsquina * (esquina.x === 0 ? 1 : -1) + (esquina.x === 0 ? 0 : ancho),
+            radioEsquina * (esquina.y === 0 ? 1 : -1) + (esquina.y === 0 ? 0 : alto)
+        );
+    });
+}
+
+router.get('/', async (req, res) => {
+    try {
+        // Extraer parámetros - solo los necesarios
+        const { avatar, texto, username } = req.query;
+        
+        // Verificar parámetros mínimos
+        if (!avatar) {
+            return res.status(400).json({ 
+                error: 'Falta el parámetro avatar en la URL',
+                ejemplo: '/boostcard?avatar=https://tu-avatar.jpg&username=User123&texto=¡Muchas gracias por el boost!' 
             });
         }
         
-        // Comprobar cards al cargar y al hacer scroll
-        window.addEventListener("load", checkCards);
-        window.addEventListener("scroll", checkCards);
-    </script>
-</body>
-</html>
+        // Validar URL de avatar
+        if (!isValidUrl(avatar)) {
+            return res.status(400).json({ error: 'La URL del avatar no es válida' });
+        }
+        
+        // Valores predeterminados
+        const nombreUsuario = username || 'User.Bot';
+        const mensajeTexto = texto || '¡Muchas gracias por apoyar nuestro server con tu boost!';
+        
+        // Dimensiones de la tarjeta
+        const ANCHO = 550;
+        const ALTO = 90;
+        
+        // Crear canvas
+        const canvas = createCanvas(ANCHO, ALTO);
+        const ctx = canvas.getContext('2d');
+        
+        // Dibujar fondo negro con bordes redondeados
+        ctx.fillStyle = "#1e1e2e"; // Fondo discord oscuro
+        
+        // Dibujar rectángulo con esquinas redondeadas
+        const radioEsquina = 18;
+        ctx.beginPath();
+        ctx.moveTo(radioEsquina, 0);
+        ctx.lineTo(ANCHO - radioEsquina, 0);
+        ctx.quadraticCurveTo(ANCHO, 0, ANCHO, radioEsquina);
+        ctx.lineTo(ANCHO, ALTO - radioEsquina);
+        ctx.quadraticCurveTo(ANCHO, ALTO, ANCHO - radioEsquina, ALTO);
+        ctx.lineTo(radioEsquina, ALTO);
+        ctx.quadraticCurveTo(0, ALTO, 0, ALTO - radioEsquina);
+        ctx.lineTo(0, radioEsquina);
+        ctx.quadraticCurveTo(0, 0, radioEsquina, 0);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Aplicar fondo morado-azul
+        const colores = crearFondoMoradoAzul(ctx, ANCHO, ALTO);
+        
+        // Añadir borde brillante
+        ctx.strokeStyle = colores[0]; // Morado
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+        
+        // Añadir efectos decorativos
+        crearEfectosBorde(ctx, ANCHO, ALTO);
+        crearEfectosEspeciales(ctx, ANCHO, ALTO);
+        dibujarMiniBoosters(ctx, ANCHO, ALTO, colores);
+        dibujarDestellos(ctx, ANCHO, ALTO);
+        
+        // Cargar imagen de avatar
+        const imagenAvatar = await loadImage(avatar);
+        
+        // Tamaño y posición del avatar
+        const radioAvatar = ALTO / 2 - 13;
+        const xAvatar = 35;
+        const yAvatar = ALTO / 2;
+        
+        // Dibujar resplandor alrededor del avatar
+        dibujarResplandorAvatar(ctx, xAvatar, yAvatar, radioAvatar);
+        
+        // Crear recorte circular para el avatar
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(xAvatar, yAvatar, radioAvatar, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+        
+        // Dibujar avatar dentro del círculo
+        ctx.drawImage(imagenAvatar, xAvatar - radioAvatar, yAvatar - radioAvatar, radioAvatar * 2, radioAvatar * 2);
+        ctx.restore();
+        
+        // Añadir borde al avatar
+        ctx.beginPath();
+        ctx.arc(xAvatar, yAvatar, radioAvatar, 0, Math.PI * 2);
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Dibujar nombre de usuario con estilo morado
+        // Los estilos están definidos manualmente aquí en lugar de usar la variable ESTILOS_TEXTO
+        // Estilo morado para el usuario
+        ctx.font = "bold 18px 'Oswald'";
+        ctx.fillStyle = "#9966ff"; // Morado
+        ctx.textAlign = "left";
+        
+        // Aplicar sombra
+        ctx.shadowColor = "rgba(0,0,0,0.7)";
+        ctx.shadowBlur = 3;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+        
+        ctx.fillText(nombreUsuario, xAvatar + radioAvatar + 20, yAvatar - 10);
+        
+        // Resetear sombra
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        
+        // Calcular el espacio disponible para el texto
+        const inicioTextoX = xAvatar + radioAvatar + 20;
+        const finTextoX = ANCHO - 75;
+        const anchoDisponible = finTextoX - inicioTextoX;
+        
+        // Dividir el texto si es necesario y ajustar tamaño
+        let tamañoFuente = 15;
+        // Reducir el tamaño si el texto es muy largo
+        if (mensajeTexto.length > 150) {
+            tamañoFuente = 12;
+        } else if (mensajeTexto.length > 100) {
+            tamañoFuente = 13;
+        } else if (mensajeTexto.length > 60) {
+            tamañoFuente = 14;
+        }
+        
+        const lineasTexto = dividirTexto(ctx, mensajeTexto, anchoDisponible, tamañoFuente);
+        const lineasMostradas = lineasTexto;
+        
+        // Dibujar cada línea de texto con estilo azul
+        // Estilo azul para el mensaje
+        ctx.font = `italic ${tamañoFuente}px 'Oswald'`;
+        ctx.fillStyle = "#66ccff"; // Azul claro
+        
+        // Aplicar sombra
+        ctx.shadowColor = "rgba(0,0,0,0.7)";
+        ctx.shadowBlur = 2;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+        
+        lineasMostradas.forEach((linea, indice) => {
+            const yTexto = yAvatar + 5 + (indice * (tamañoFuente + 2));
+            ctx.fillText(linea, inicioTextoX, yTexto);
+        });
+        
+        // Resetear sombra
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        
+        // Dibujar diamante de Discord Boost con colores morado-rosa fijos
+        dibujarDiamante(ctx, ANCHO - 40, ALTO / 2, 35, ["#ff73fa", "#bd5dff", "#a93efd"]);
+        
+        // Enviar imagen
+        res.setHeader('Content-Type', 'image/png');
+        res.end(canvas.toBuffer());
+    } catch (error) {
+        console.error('Error en la generación de la tarjeta:', error);
+        res.status(500).json({ 
+            error: 'Error al generar la imagen', 
+            details: error.message
+        });
+    }
+});
+
+module.exports = router;
