@@ -1,70 +1,41 @@
 {
   "version": 2,
   "builds": [
+    { "src": "server.js", "use": "@vercel/node" },
     { "src": "*.html", "use": "@vercel/static" },
-    { "src": "docs/**/*.html", "use": "@vercel/static" },
-    { "src": "docs/**/*.png", "use": "@vercel/static" },
-    { "src": "docs/utilidad/**/*.html", "use": "@vercel/static" },
-    { "src": "docs/diversion/**/*.html", "use": "@vercel/static" },
-    { "src": "*.css", "use": "@vercel/static" },
-    { "src": "*.js", "use": "@vercel/static" },
-    { "src": "*.png", "use": "@vercel/static" },
-    { "src": "*.jpg", "use": "@vercel/static" },
-    { "src": "*.svg", "use": "@vercel/static" },
-    { "src": "*.mp3", "use": "@vercel/static" },
-    { "src": "*.json", "use": "@vercel/static" }
+    { "src": "login/*.html", "use": "@vercel/static" },
+    { "src": "register/*.html", "use": "@vercel/static" },
+    { "src": "dashboard/*.html", "use": "@vercel/static" },
+    { "src": "auth/*.html", "use": "@vercel/static" },
+    { "src": "scripts/*.js", "use": "@vercel/static" },
+    { "src": "styles.css", "use": "@vercel/static" },
+    { "src": "styles/*.css", "use": "@vercel/static" },
+    { "src": "images/**/*", "use": "@vercel/static" },
+    { "src": "assets/**/*", "use": "@vercel/static" },
+    { "src": "fonts/**/*", "use": "@vercel/static" },
+    { "src": "**/*.{jpg,jpeg,png,gif,ico,svg,webp}", "use": "@vercel/static" },
+    { "src": "**/*.{woff,woff2,ttf,eot}", "use": "@vercel/static" },
+    { "src": "favicon.ico", "use": "@vercel/static" }
   ],
   "rewrites": [
-    { "source": "/docs", "destination": "/docs/index.html" },
-    { "source": "/docs/:path*", "destination": "/docs/:path*" },
-    { "source": "/((?!.*\\.).*)", "destination": "/404.html", "statusCode": 404 }
+    { "source": "/auth/callback", "destination": "/server.js" },
+    { "source": "/auth/discord", "destination": "/server.js" },
+    { "source": "/api/(.*)", "destination": "/server.js" },
+    { "source": "/dashboard", "destination": "/dashboard/index.html" },
+    { "source": "/login", "destination": "/login/index.html" },
+    { "source": "/register", "destination": "/register/index.html" },
+    { "source": "/scripts/(.*)", "destination": "/scripts/$1" },
+    { "source": "/styles/(.*)", "destination": "/styles/$1" },
+    { "source": "/styles.css", "destination": "/styles.css" },
+    { "source": "/images/(.*)", "destination": "/images/$1" },
+    { "source": "/assets/(.*)", "destination": "/assets/$1" },
+    { "source": "/fonts/(.*)", "destination": "/fonts/$1" },
+    { "source": "/(.*)", "destination": "/server.js" }
   ],
-  "headers": [
-    {
-      "source": "/(.*)\\.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.css",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.png|jpg|svg|webp",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.mp3",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "audio/mpeg"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "key": "Accept-Ranges",
-          "value": "bytes"
-        }
-      ]
-    }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false
+  "env": {
+    "DISCORD_CLIENT_ID": "1350340936017776670",
+    "DISCORD_CLIENT_SECRET": "MB2IyLkZklQ0VvJgiLJT_rFDVGGYKBuv",
+    "DISCORD_REDIRECT_URI": "https://dashboard.apikarl.com/auth/callback",
+    "JWT_SECRET": "y5JxVf8iP3sZr7Wc2KqLt9Ap4Mu6Bn1Hg0Xd8Ej5Ck7Fo2Qs9Vb3Nm6Lp1Rt7Yz"
+  }
 }
